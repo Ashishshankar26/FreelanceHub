@@ -1,0 +1,15 @@
+import mongoose from "mongoose";
+import { env, assertRuntimeConfig } from "./env.js";
+
+export async function connectDatabase() {
+  assertRuntimeConfig();
+
+  mongoose.set("strictQuery", true);
+
+  await mongoose.connect(env.mongoUri, {
+    autoIndex: !env.isProduction,
+    serverSelectionTimeoutMS: 10000,
+  });
+
+  return mongoose.connection;
+}
