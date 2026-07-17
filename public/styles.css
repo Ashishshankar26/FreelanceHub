@@ -4039,8 +4039,8 @@ body {
   margin: 0;
   color: #101510;
   font-family: Outfit, "Times New Roman", serif;
-  font-size: clamp(0.9rem, 1.4vw, 1.1rem);
-  font-weight: 600;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -4113,20 +4113,19 @@ body {
 
 .service-card .price-row > span {
   color: #59675e;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 500;
 }
 
 .service-card .price-row strong {
   color: #111610;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .service-open-action {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
 }
 
 .service-open-action i {
