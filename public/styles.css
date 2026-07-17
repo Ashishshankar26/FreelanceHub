@@ -3951,6 +3951,15 @@ body {
 .service-card:nth-child(7) { background: #e8f0e0; }
 .service-card:nth-child(8) { background: #f0f0e0; }
 .service-card:nth-child(9) { background: #e0e4f0; }
+.service-card:nth-child(10) { background: #eaf0e4; }
+.service-card:nth-child(11) { background: #e8e4f0; }
+.service-card:nth-child(12) { background: #f0ece0; }
+.service-card:nth-child(13) { background: #dff0ea; }
+.service-card:nth-child(14) { background: #f0e4e8; }
+.service-card:nth-child(15) { background: #e4eaf0; }
+.service-card:nth-child(16) { background: #e8f0e0; }
+.service-card:nth-child(17) { background: #f0f0e0; }
+.service-card:nth-child(18) { background: #e0e4f0; }
 
 .service-card:hover {
   border-color: transparent;
@@ -6984,6 +6993,15 @@ body.app-mode .marketplace-page .services-section {
 [data-theme="dark"] .service-card:nth-child(7) { background: #141c12; }
 [data-theme="dark"] .service-card:nth-child(8) { background: #1c1c12; }
 [data-theme="dark"] .service-card:nth-child(9) { background: #10121c; }
+[data-theme="dark"] .service-card:nth-child(10) { background: var(--soft); }
+[data-theme="dark"] .service-card:nth-child(11) { background: #14161c; }
+[data-theme="dark"] .service-card:nth-child(12) { background: #1a1a16; }
+[data-theme="dark"] .service-card:nth-child(13) { background: #101c18; }
+[data-theme="dark"] .service-card:nth-child(14) { background: #1c1416; }
+[data-theme="dark"] .service-card:nth-child(15) { background: #12161c; }
+[data-theme="dark"] .service-card:nth-child(16) { background: #141c12; }
+[data-theme="dark"] .service-card:nth-child(17) { background: #1c1c12; }
+[data-theme="dark"] .service-card:nth-child(18) { background: #10121c; }
 [data-theme="dark"] .finance-chart-panel h3,
 [data-theme="dark"] .finance-summary-panel h3,
 [data-theme="dark"] .wallet-topup-panel h3,
