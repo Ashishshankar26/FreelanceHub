@@ -3940,17 +3940,17 @@ body {
   overflow: hidden;
   border: 0;
   border-radius: 24px;
-  background: #eef4ea;
+  background: #f5f0f0;
   box-shadow: 0 12px 26px rgba(33, 48, 38, 0.12);
 }
-
-.service-card:nth-child(3n + 2) {
-  background: #f0f4f8;
-}
-
-.service-card:nth-child(3n) {
-  background: #fdf2f1;
-}
+.service-card:nth-child(2) { background: #f0f0f5; }
+.service-card:nth-child(3) { background: #f5f2ea; }
+.service-card:nth-child(4) { background: #eaf5f5; }
+.service-card:nth-child(5) { background: #f5edf0; }
+.service-card:nth-child(6) { background: #eef2f5; }
+.service-card:nth-child(7) { background: #f0f5ea; }
+.service-card:nth-child(8) { background: #f5f5ea; }
+.service-card:nth-child(9) { background: #ecf0f5; }
 
 .service-card:hover {
   border-color: transparent;
@@ -6975,6 +6975,15 @@ body.app-mode .marketplace-page .services-section {
   background: var(--paper);
   border-color: var(--line);
 }
+[data-theme="dark"] .service-card { background: var(--soft); }
+[data-theme="dark"] .service-card:nth-child(2) { background: #121c1e; }
+[data-theme="dark"] .service-card:nth-child(3) { background: #191d1e; }
+[data-theme="dark"] .service-card:nth-child(4) { background: #0e1c1a; }
+[data-theme="dark"] .service-card:nth-child(5) { background: #1b1a1c; }
+[data-theme="dark"] .service-card:nth-child(6) { background: #141c1e; }
+[data-theme="dark"] .service-card:nth-child(7) { background: #141e16; }
+[data-theme="dark"] .service-card:nth-child(8) { background: #1b1e14; }
+[data-theme="dark"] .service-card:nth-child(9) { background: #11171e; }
 [data-theme="dark"] .finance-chart-panel h3,
 [data-theme="dark"] .finance-summary-panel h3,
 [data-theme="dark"] .wallet-topup-panel h3,
