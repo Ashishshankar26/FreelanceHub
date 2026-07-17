@@ -4497,22 +4497,22 @@ body {
 }
 
 .dashboard-card-mint {
-  background: var(--dc-mint-bg, #d8ecdf);
+  background: var(--dc-mint-bg, #d0e8d8);
   color: var(--dc-mint-color, #1d725f);
 }
 
 .dashboard-card-blue {
-  background: var(--dc-blue-bg, #d8e8f5);
+  background: var(--dc-blue-bg, #d0e2f5);
   color: var(--dc-blue-color, #416eac);
 }
 
 .dashboard-card-amber {
-  background: var(--dc-amber-bg, #f5edd4);
+  background: var(--dc-amber-bg, #f0e8cc);
   color: var(--dc-amber-color, #a26f1f);
 }
 
 .dashboard-card-coral {
-  background: var(--dc-coral-bg, #f5e0dd);
+  background: var(--dc-coral-bg, #f0d8d5);
   color: var(--dc-coral-color, #b75d4b);
 }
 
