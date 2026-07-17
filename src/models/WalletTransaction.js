@@ -37,7 +37,7 @@ const walletTransactionSchema = new mongoose.Schema(
     },
     paymentProvider: {
       type: String,
-      enum: ["demo", "cashfree", "stripe"],
+      enum: ["demo"],
       required: true,
     },
     description: {
@@ -45,18 +45,6 @@ const walletTransactionSchema = new mongoose.Schema(
       trim: true,
       maxlength: 240,
     },
-    cashfreeOrderId: {
-      type: String,
-      index: true,
-      sparse: true,
-    },
-    cashfreePaymentId: String,
-    stripeCheckoutSessionId: {
-      type: String,
-      index: true,
-      sparse: true,
-    },
-    stripePaymentIntentId: String,
     completedAt: Date,
   },
   { timestamps: true },

@@ -82,7 +82,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentProvider: {
       type: String,
-      enum: ["demo", "cashfree", "stripe"],
+      enum: ["demo"],
       default: "demo",
       index: true,
     },
@@ -104,27 +104,13 @@ const orderSchema = new mongoose.Schema(
     currency: {
       type: String,
       required: true,
-      default: "usd",
+      default: "INR",
     },
     dueAt: Date,
     fundedAt: Date,
     submittedAt: Date,
     completedAt: Date,
     disputedAt: Date,
-    cashfreeOrderId: {
-      type: String,
-      index: true,
-    },
-    cashfreeCfOrderId: String,
-    cashfreePaymentSessionId: String,
-    cashfreePaymentId: String,
-    stripeCheckoutSessionId: {
-      type: String,
-      index: true,
-    },
-    stripePaymentIntentId: String,
-    stripeTransferId: String,
-    stripeTransferGroup: String,
     disputeReason: {
       type: String,
       trim: true,

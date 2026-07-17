@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=5" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
-    <script src="app.js" defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="app.js?v=5" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -31,6 +32,24 @@
 
       <div class="header-actions">
         <button class="ghost-button hidden" type="button" id="dashboardButton">Dashboard</button>
+        <button class="circle-button" type="button" id="themeToggle" aria-label="Toggle theme">
+          <i data-lucide="moon"></i>
+        </button>
+        <div class="notification-wrap" id="notificationWrap">
+          <button class="circle-button" type="button" id="notificationButton" aria-expanded="false" aria-label="Open notifications">
+            <i data-lucide="bell"></i>
+            <span class="notification-badge hidden" id="notificationBadge">0</span>
+          </button>
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="clearNotificationsButton">Clear all</button>
+            </div>
+            <div class="notification-list" id="notificationList">
+              <div class="notification-empty">No notifications yet</div>
+            </div>
+          </div>
+        </div>
         <button class="ghost-button hidden" type="button" id="logoutButton">Log out</button>
         <button class="ghost-button" type="button" id="signinButton">Sign in</button>
         <button class="join-button" type="button" id="joinButton">Join</button>
@@ -247,6 +266,8 @@
             <small>Unread updates</small>
           </article>
         </div>
+        
+        <div class="dashboard-widgets-grid" id="dashboardWidgets"></div>
 
         <section class="dashboard-next" aria-labelledby="nextStepsTitle">
           <div class="panel-heading">
@@ -259,6 +280,27 @@
             </button>
           </div>
           <div class="dashboard-next-grid" id="dashboardNextSteps"></div>
+        </section>
+
+        <section class="dashboard-activity hidden" id="dashboardActivityPanel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Timeline</p>
+              <h3>Recent activity</h3>
+            </div>
+          </div>
+          <div class="activity-timeline" id="activityTimeline"></div>
+        </section>
+        
+        <section class="dashboard-emails hidden" id="dashboardEmailPanel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">System Logs</p>
+              <h3>Demo Email Logs</h3>
+            </div>
+            <span class="demo-chip"><i data-lucide="flask-conical"></i> Demo mode</span>
+          </div>
+          <div class="email-log-list" id="emailLogList"></div>
         </section>
 
         <div class="dashboard-workspace">
@@ -328,7 +370,7 @@
         </div>
       </section>
 
-      <section class="workspace-page wallet-page hidden" id="walletPage" data-app-page="wallet" aria-labelledby="walletTitle">
+      <section class="workspace-page wallet-page app-page hidden" id="walletPage" data-app-page="wallet" aria-labelledby="walletTitle">
         <div class="workspace-page-heading">
           <div>
             <p class="eyebrow">Your payment workspace</p>
@@ -387,7 +429,7 @@
         </div>
       </section>
 
-      <section class="workspace-page finance-page hidden" id="financePage" data-app-page="finance" aria-labelledby="financeTitle">
+      <section class="workspace-page finance-page app-page hidden" id="financePage" data-app-page="finance" aria-labelledby="financeTitle">
         <div class="workspace-page-heading">
           <div>
             <p class="eyebrow">Financial tracker</p>
@@ -407,7 +449,12 @@
               <div><p class="eyebrow">Cash movement</p><h3>Flow over time</h3></div>
               <span class="chart-legend"><i></i> Inflow <i></i> Outflow</span>
             </div>
-            <div class="finance-chart" id="financeChart" aria-label="Six month finance chart"></div>
+            
+          <canvas id="financeChartCanvas" aria-label="Six month finance chart" style="width:100%;height:210px;"></canvas>
+          <div class="chart-toggle" style="margin-top:8px; text-align:center;">
+            <button class="mini-button" id="chartLineBtn" type="button">Line Chart</button>
+            <button class="mini-button" id="chartPieBtn" type="button" style="margin-left:8px;">Pie Chart</button>
+          </div>
           </article>
           <article class="finance-summary-panel">
             <p class="eyebrow">At a glance</p>
@@ -419,6 +466,202 @@
               <span><small>Project volume</small><strong id="financeVolume">₹0</strong></span>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section class="workspace-page gateway-page hidden app-page" id="gatewayPage" data-app-page="gateway" aria-labelledby="gatewayTitle">
+        <div class="gateway-container">
+          <div class="gateway-sidebar">
+            <div class="gateway-lock">
+              <i data-lucide="shield-check"></i>
+              <span>Secure Escrow Checkout</span>
+            </div>
+            <div class="gateway-summary">
+              <h3>Order Summary</h3>
+              <div class="summary-line">
+                <span id="gatewayItemTitle">Wallet Top-Up</span>
+                <strong id="gatewayItemPrice">₹0.00</strong>
+              </div>
+              <div class="summary-line fee-line">
+                <span>Platform Processing Fee (0.00%)</span>
+                <strong>₹0.00</strong>
+              </div>
+              <div class="summary-divider"></div>
+              <div class="summary-line total-line">
+                <span>Total Amount Due</span>
+                <strong id="gatewayTotalAmount">₹0.00</strong>
+              </div>
+            </div>
+            <div class="gateway-badges">
+              <span><i data-lucide="lock"></i> 256-bit SSL Encryption</span>
+              <span><i data-lucide="badge-check"></i> Certified Escrow Ledger</span>
+            </div>
+          </div>
+          <div class="gateway-main-panel">
+            <div class="gateway-header-row">
+              <h2 id="gatewayTitle">Select Payment Method</h2>
+              <button class="circle-button" type="button" id="cancelGatewayButton" aria-label="Cancel checkout">
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+            <div class="gateway-tab-row">
+              <button class="gateway-tab active" type="button" data-gateway-tab="card">
+                <i data-lucide="credit-card"></i> Card Payment
+              </button>
+              <button class="gateway-tab" type="button" data-gateway-tab="upi">
+                <i data-lucide="smartphone"></i> UPI Scan Code
+              </button>
+            </div>
+            
+            <!-- Card Checkout Panel -->
+            <div class="gateway-panel-content" id="gatewayCardPanel">
+              <div class="card-interactive-wrapper">
+                <div class="flip-card">
+                  <div class="flip-card-inner" id="cardFlipInner">
+                    <!-- Front -->
+                    <div class="flip-card-front">
+                      <div class="card-brand-row">
+                        <i data-lucide="sparkles" class="card-sparkle"></i>
+                        <span class="card-network-logo">VISA</span>
+                      </div>
+                      <div class="card-chip"></div>
+                      <div class="card-number-display" id="previewNumber">•••• •••• •••• ••••</div>
+                      <div class="card-details-row">
+                        <div class="card-holder-col">
+                          <span class="card-label">CARDHOLDER</span>
+                          <span class="card-val" id="previewHolder">YOUR NAME</span>
+                        </div>
+                        <div class="card-expires-col">
+                          <span class="card-label">EXPIRES</span>
+                          <span class="card-val" id="previewExpiry">MM/YY</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="flip-card-back">
+                      <div class="card-black-strip"></div>
+                      <div class="card-cvv-box">
+                        <span class="card-label">CVV</span>
+                        <div class="card-cvv-whitebar" id="previewCvv">•••</div>
+                      </div>
+                      <div class="card-back-brand">VISA Secure</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="gateway-form">
+                <label>
+                  <span>Card Number</span>
+                  <input type="text" id="gatewayCardNo" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="cc-number" />
+                </label>
+                <label>
+                  <span>Cardholder Name</span>
+                  <input type="text" id="gatewayCardName" placeholder="John Doe" maxlength="40" autocomplete="cc-name" />
+                </label>
+                <div class="form-row-2">
+                  <label>
+                    <span>Expiration Date</span>
+                    <input type="text" id="gatewayCardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp" />
+                  </label>
+                  <label>
+                    <span>CVV / CVC</span>
+                    <input type="password" id="gatewayCardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
+                  </label>
+                </div>
+                <button class="join-button wide" type="button" id="gatewayPayCardButton">
+                  <span>Pay Securely</span>
+                  <i data-lucide="shield-check"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- UPI Checkout Panel -->
+            <div class="gateway-panel-content hidden" id="gatewayUpiPanel">
+              <div class="upi-qr-wrapper">
+                <div class="upi-qr-box">
+                  <div class="upi-qr-image" id="upiQrCodeContainer"></div>
+                  <div class="upi-qr-spinner" id="upiQrSpinner">
+                    <i data-lucide="loader-2" class="spin"></i>
+                    <span>Waiting for scanner...</span>
+                  </div>
+                </div>
+                <div class="upi-timer">
+                  <i data-lucide="clock"></i>
+                  <span>Scan QR code within <strong id="upiTimerMinutes">03:00</strong></span>
+                </div>
+              </div>
+              <div class="upi-details">
+                <p>Alternatively, trigger via Virtual Payment Address (VPA):</p>
+                <div class="upi-vpa-row">
+                  <input type="text" id="gatewayUpiVpa" placeholder="username@upi" />
+                  <button class="join-button" type="button" id="gatewayPayUpiButton">Pay</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Processing State -->
+            <div class="gateway-processing hidden" id="gatewayProcessing">
+              <div class="processing-animation">
+                <div class="pulse-ring"></div>
+                <i data-lucide="lock" class="processing-icon"></i>
+              </div>
+              <h3>Authorizing Transaction</h3>
+              <p id="gatewayProcessingText">Securing escrow deposit ledger...</p>
+              <div class="processing-progress-bar"><span id="gatewayProgressBarInner"></span></div>
+            </div>
+            
+            <!-- Receipt Screen -->
+            <div class="gateway-receipt-panel hidden" id="gatewayReceiptPanel">
+              <div class="receipt-checkmark">
+                <i data-lucide="check-circle-2"></i>
+              </div>
+              <h2>Payment Successful</h2>
+              <p class="receipt-success-text">Your funds have been deposited in the platform escrow ledger.</p>
+              
+              <div class="receipt-details" id="receiptPrintableArea">
+                <div class="receipt-header">
+                  <h3>FreelanceHub Transaction Receipt</h3>
+                  <span class="receipt-date" id="receiptDate">Date: --/--/----</span>
+                </div>
+                <div class="receipt-row">
+                  <span>Transaction ID</span>
+                  <strong id="receiptTxId">TXN-xxxxxxx</strong>
+                </div>
+                <div class="receipt-row">
+                  <span>Merchant/Platform</span>
+                  <strong>FreelanceHub Escrow</strong>
+                </div>
+                <div class="receipt-row">
+                  <span>Sender Account</span>
+                  <strong id="receiptUser">User Name</strong>
+                </div>
+                <div class="receipt-row">
+                  <span>Payment Provider</span>
+                  <strong>FH Demo Ledger</strong>
+                </div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-row">
+                  <span>Amount Credited</span>
+                  <strong id="receiptAmount">₹0.00</strong>
+                </div>
+                <div class="receipt-row">
+                  <span>Status</span>
+                  <span class="status-badge-succeeded">SUCCEEDED</span>
+                </div>
+              </div>
+              
+              <div class="receipt-actions">
+                <button class="circle-button" type="button" id="receiptPrintButton" title="Print Receipt">
+                  <i data-lucide="printer"></i>
+                </button>
+                <button class="join-button" type="button" id="receiptCloseButton">
+                  <span>Return to Workspace</span>
+                  <i data-lucide="arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -514,6 +757,10 @@
           </div>
         </div>
       </section>
+      
+      <footer class="workspace-footer">
+        <p>Protected by FreelanceHub Escrow &copy; 2026. All transactions are securely held until milestones are verified.</p>
+      </footer>
     </main>
 
     <dialog class="market-dialog" id="joinDialog">
@@ -544,6 +791,9 @@
           <input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters" />
         </label>
         <button class="join-button wide" type="submit" value="default" id="authSubmit">Create account</button>
+        
+        <div class="auth-divider"><span>or</span></div>
+        <div id="googleAuthButton" class="google-auth-wrapper"></div>
       </form>
     </dialog>
 
@@ -612,6 +862,61 @@
         </button>
       </form>
     </dialog>
+
+    <dialog class="market-dialog" id="paymentDialog">
+      <form method="dialog" id="paymentForm">
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">Secure Checkout</p>
+            <h2 id="paymentTitle">Processing Payment</h2>
+          </div>
+          <button class="circle-button" value="cancel" type="submit" aria-label="Cancel payment" title="Cancel">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="payment-gateway-sim">
+          <div class="payment-amount-display">
+            <span>Amount to pay</span>
+            <strong id="paymentGatewayAmount">₹0</strong>
+          </div>
+          <div class="payment-loader hidden" id="paymentLoader">
+            <i data-lucide="loader-2" class="spin"></i>
+            <p>Processing payment securely...</p>
+          </div>
+          <div class="payment-methods" id="paymentMethods">
+            <button class="payment-method-btn" type="button" data-method="card">
+              <i data-lucide="credit-card"></i> Pay via Card
+            </button>
+            <button class="payment-method-btn" type="button" data-method="upi">
+              <i data-lucide="smartphone"></i> Pay via UPI
+            </button>
+          </div>
+          <div class="payment-card-form hidden" id="paymentCardForm">
+            <input type="text" placeholder="Card Number" value="4242 4242 4242 4242" readonly />
+            <div class="payment-card-row">
+              <input type="text" placeholder="MM/YY" value="12/26" readonly />
+              <input type="text" placeholder="CVC" value="123" readonly />
+            </div>
+            <button class="join-button wide" type="button" id="confirmPaymentBtn">Confirm Payment</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="floating-wallet hidden" id="floatingWallet">
+      <button class="floating-wallet-toggle" id="floatingWalletToggle" aria-label="Toggle wallet menu">
+        <i data-lucide="wallet"></i>
+      </button>
+      <div class="floating-wallet-menu">
+        <div class="floating-wallet-header">
+          <span>Balance</span>
+          <strong id="floatingWalletBalance">₹0</strong>
+        </div>
+        <div class="floating-wallet-actions">
+          <button type="button" data-app-page-nav="wallet">Add Funds</button>
+        </div>
+      </div>
+    </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>

@@ -2,18 +2,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const paymentProvider = (process.env.PAYMENT_PROVIDER || "demo").toLowerCase();
 const requiredInProduction = [
   "MONGODB_URI",
   "JWT_SECRET",
   "SMTP_HOST",
   "SMTP_USER",
   "SMTP_PASS",
-  ...(paymentProvider === "cashfree"
-    ? ["CASHFREE_CLIENT_ID", "CASHFREE_CLIENT_SECRET"]
-    : paymentProvider === "stripe"
-      ? ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"]
-      : []),
 ];
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -32,22 +26,7 @@ export const env = {
   mongoUri: process.env.MONGODB_URI || "",
   jwtSecret: process.env.JWT_SECRET || "development-only-change-me",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
-  paymentProvider,
-  cashfree: {
-    clientId: process.env.CASHFREE_CLIENT_ID || "",
-    clientSecret: process.env.CASHFREE_CLIENT_SECRET || "",
-    webhookSecret: process.env.CASHFREE_WEBHOOK_SECRET || "",
-    environment: (process.env.CASHFREE_ENV || "sandbox").toLowerCase(),
-    apiVersion: process.env.CASHFREE_API_VERSION || "2025-01-01",
-    currency: (process.env.CASHFREE_CURRENCY || "inr").toUpperCase(),
-    baseUrl:
-      (process.env.CASHFREE_ENV || "sandbox").toLowerCase() === "production"
-        ? "https://api.cashfree.com/pg"
-        : "https://sandbox.cashfree.com/pg",
-  },
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
-  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
-  stripeCurrency: (process.env.STRIPE_CURRENCY || "usd").toLowerCase(),
+  paymentProvider: "demo",
   platformFeePercent: Number(process.env.PLATFORM_FEE_PERCENT || 12),
   smtp: {
     host: process.env.SMTP_HOST || "",
@@ -57,6 +36,7 @@ export const env = {
     pass: process.env.SMTP_PASS || "",
     from: process.env.MAIL_FROM || "FreelanceHub <no-reply@freelancehub.local>",
   },
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
   openai: {
     apiKey: process.env.OPENAI_API_KEY || "",
     model: process.env.OPENAI_MODEL || "gpt-5.6",

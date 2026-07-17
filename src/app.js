@@ -16,7 +16,6 @@ import { ordersRouter } from "./routes/orders.js";
 import { onboardingRouter } from "./routes/onboarding.js";
 import { paymentsRouter } from "./routes/payments.js";
 import { servicesRouter } from "./routes/services.js";
-import { cashfreeWebhookHandler, stripeWebhookHandler } from "./routes/webhooks.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,10 +30,10 @@ export function createApp() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "https://unpkg.com", "https://sdk.cashfree.com"],
-          styleSrc: ["'self'"],
-          imgSrc: ["'self'", "data:"],
-          connectSrc: ["'self'"],
+          scriptSrc: ["'self'", "https://unpkg.com", "https://accounts.google.com"],
+          styleSrc: ["'self'", "https://accounts.google.com"],
+          imgSrc: ["'self'", "data:", "*.googleusercontent.com"],
+          connectSrc: ["'self'", "https://accounts.google.com"],
           fontSrc: ["'self'"],
           objectSrc: ["'none'"],
           baseUri: ["'self'"],
@@ -52,8 +51,7 @@ export function createApp() {
     }),
   );
 
-  app.post("/api/webhooks/stripe", express.raw({ type: "application/json" }), stripeWebhookHandler);
-  app.post("/api/webhooks/cashfree", express.raw({ type: "application/json" }), cashfreeWebhookHandler);
+
 
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: true }));

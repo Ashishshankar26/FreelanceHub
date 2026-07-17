@@ -1,4 +1,4 @@
-const currency = new Intl.NumberFormat("en-US", {
+const currency = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
   maximumFractionDigits: 0,
@@ -23,6 +23,14 @@ const demoServices = [
   serviceStub("ai-agent", "ai", "I will prototype AI agents for your help center", "Theo N.", 220, 5, 4.94, 126),
 ];
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+      console.log('Unregistered rogue service worker from sem 5');
+    }
+  });
+}
 const state = {
   user: null,
   authMode: "signup",
@@ -35,6 +43,19 @@ const state = {
   wallet: null,
   appPage: "overview",
   apiAvailable: true,
+  financeChartType: "line",
+  notifications: [
+    {
+      id: "welcome",
+      icon: "info",
+      type: "info",
+      text: "Welcome to FreelanceHub! Explore handpicked escrow-backed services.",
+      time: new Date(),
+      read: false
+    }
+  ],
+  notificationTimer: null,
+  upiTimer: null,
 };
 
 const selectors = {
@@ -93,6 +114,7 @@ const selectors = {
   dashboardSubcopy: document.querySelector("#dashboardSubcopy"),
   dashboardProgress: document.querySelector("#dashboardProgress"),
   dashboardProgressBar: document.querySelector("#dashboardProgressBar"),
+  dashboardWidgets: document.querySelector("#dashboardWidgets"),
   dashboardNextSteps: document.querySelector("#dashboardNextSteps"),
   dashboardFunds: document.querySelector("#dashboardFunds"),
   dashboardActive: document.querySelector("#dashboardActive"),
@@ -126,18 +148,125 @@ const selectors = {
   financeSummaryCopy: document.querySelector("#financeSummaryCopy"),
   financeWalletBalance: document.querySelector("#financeWalletBalance"),
   financeVolume: document.querySelector("#financeVolume"),
+  chartLineBtn: document.querySelector("#chartLineBtn"),
+  chartPieBtn: document.querySelector("#chartPieBtn"),
   toast: document.querySelector("#toast"),
+  
+  themeToggle: document.querySelector("#themeToggle"),
+  googleAuthButton: document.querySelector("#googleAuthButton"),
+  
+  paymentDialog: document.querySelector("#paymentDialog"),
+  paymentForm: document.querySelector("#paymentForm"),
+  paymentTitle: document.querySelector("#paymentTitle"),
+  paymentGatewayAmount: document.querySelector("#paymentGatewayAmount"),
+  paymentLoader: document.querySelector("#paymentLoader"),
+  paymentMethods: document.querySelector("#paymentMethods"),
+  paymentCardForm: document.querySelector("#paymentCardForm"),
+  confirmPaymentBtn: document.querySelector("#confirmPaymentBtn"),
+  
+  floatingWallet: document.querySelector("#floatingWallet"),
+  floatingWalletToggle: document.querySelector("#floatingWalletToggle"),
+  floatingWalletBalance: document.querySelector("#floatingWalletBalance"),
+  
+  dashboardActivityPanel: document.querySelector("#dashboardActivityPanel"),
+  activityTimeline: document.querySelector("#activityTimeline"),
+  dashboardEmailPanel: document.querySelector("#dashboardEmailPanel"),
+  emailLogList: document.querySelector("#emailLogList"),
+  
+  // Notification system selectors
+  notificationWrap: document.querySelector("#notificationWrap"),
+  notificationButton: document.querySelector("#notificationButton"),
+  notificationBadge: document.querySelector("#notificationBadge"),
+  notificationPanel: document.querySelector("#notificationPanel"),
+  notificationList: document.querySelector("#notificationList"),
+  clearNotificationsButton: document.querySelector("#clearNotificationsButton"),
+
+  // Dedicated Payment Gateway Page selectors
+  gatewayPage: document.querySelector("#gatewayPage"),
+  cancelGatewayButton: document.querySelector("#cancelGatewayButton"),
+  gatewayItemTitle: document.querySelector("#gatewayItemTitle"),
+  gatewayItemPrice: document.querySelector("#gatewayItemPrice"),
+  gatewayTotalAmount: document.querySelector("#gatewayTotalAmount"),
+  gatewayPayCardButton: document.querySelector("#gatewayPayCardButton"),
+  gatewayPayUpiButton: document.querySelector("#gatewayPayUpiButton"),
+  gatewayCardNo: document.querySelector("#gatewayCardNo"),
+  gatewayCardName: document.querySelector("#gatewayCardName"),
+  gatewayCardExpiry: document.querySelector("#gatewayCardExpiry"),
+  gatewayCardCvv: document.querySelector("#gatewayCardCvv"),
+  gatewayUpiVpa: document.querySelector("#gatewayUpiVpa"),
+  gatewayCardPanel: document.querySelector("#gatewayCardPanel"),
+  gatewayUpiPanel: document.querySelector("#gatewayUpiPanel"),
+  gatewayProcessing: document.querySelector("#gatewayProcessing"),
+  gatewayProcessingText: document.querySelector("#gatewayProcessingText"),
+  gatewayProgressBarInner: document.querySelector("#gatewayProgressBarInner"),
+  gatewayReceiptPanel: document.querySelector("#gatewayReceiptPanel"),
+  receiptDate: document.querySelector("#receiptDate"),
+  receiptTxId: document.querySelector("#receiptTxId"),
+  receiptUser: document.querySelector("#receiptUser"),
+  receiptAmount: document.querySelector("#receiptAmount"),
+  receiptPrintButton: document.querySelector("#receiptPrintButton"),
+  receiptCloseButton: document.querySelector("#receiptCloseButton"),
+  upiTimerMinutes: document.querySelector("#upiTimerMinutes"),
+  upiQrCodeContainer: document.querySelector("#upiQrCodeContainer"),
+  upiQrSpinner: document.querySelector("#upiQrSpinner"),
+  
+  // Interactive credit card preview selectors
+  cardFlipInner: document.querySelector("#cardFlipInner"),
+  previewNumber: document.querySelector("#previewNumber"),
+  previewHolder: document.querySelector("#previewHolder"),
+  previewExpiry: document.querySelector("#previewExpiry"),
+  previewCvv: document.querySelector("#previewCvv"),
 };
 
 async function init() {
+  initTheme();
   bindEvents();
+  initGoogleAuth();
   setAuthMode("signup");
+  
+  initLogoNav();
+  initNotificationToggle();
+  initInteractiveCard();
+  renderNotifications();
+  
   await Promise.allSettled([loadCurrentUser(), loadServices()]);
   handleCheckoutReturn();
   refreshIcons();
 }
 
+function initTheme() {
+  const isDark = localStorage.getItem("theme") === "dark" || 
+    (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const iconElement = selectors.themeToggle.querySelector("i, svg");
+  if (isDark) {
+    document.documentElement.setAttribute("data-theme", "dark");
+    if (iconElement) iconElement.outerHTML = '<i data-lucide="sun"></i>';
+  } else {
+    if (iconElement) iconElement.outerHTML = '<i data-lucide="moon"></i>';
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const iconElement = selectors.themeToggle.querySelector("i, svg");
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("theme", "light");
+    if (iconElement) iconElement.outerHTML = '<i data-lucide="moon"></i>';
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+    if (iconElement) iconElement.outerHTML = '<i data-lucide="sun"></i>';
+  }
+  lucide.createIcons();
+  // Re-render canvas charts so they pick up the new color scheme
+  if (state.dashboard?.finance) {
+    renderFinance(state.dashboard.finance);
+  }
+}
+
 function bindEvents() {
+  selectors.themeToggle.addEventListener("click", toggleTheme);
   selectors.menuButton.addEventListener("click", () => {
     selectors.body.classList.toggle("menu-open");
     const open = selectors.body.classList.contains("menu-open");
@@ -243,6 +372,78 @@ function bindEvents() {
     });
   });
   selectors.walletTopupButton.addEventListener("click", addWalletFunds);
+  
+  if (selectors.chartLineBtn) {
+    selectors.chartLineBtn.addEventListener("click", () => {
+      state.financeChartType = "line";
+      updateChartToggleUI();
+      if (state.dashboard && state.dashboard.finance) {
+        renderFinance(state.dashboard.finance);
+      }
+    });
+  }
+  if (selectors.chartPieBtn) {
+    selectors.chartPieBtn.addEventListener("click", () => {
+      state.financeChartType = "pie";
+      updateChartToggleUI();
+      if (state.dashboard && state.dashboard.finance) {
+        renderFinance(state.dashboard.finance);
+      }
+    });
+  }
+  
+  if (selectors.floatingWalletToggle) {
+    selectors.floatingWalletToggle.addEventListener("click", () => {
+      selectors.floatingWallet.classList.toggle("open");
+    });
+  }
+  
+  // Close float menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (selectors.floatingWallet && selectors.floatingWallet.classList.contains("open") && !selectors.floatingWallet.contains(e.target)) {
+      selectors.floatingWallet.classList.remove("open");
+    }
+  });
+  
+  if (selectors.paymentMethods) {
+    selectors.paymentMethods.querySelectorAll('.payment-method-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectors.paymentMethods.classList.add('hidden');
+        selectors.paymentCardForm.classList.remove('hidden');
+      });
+    });
+  }
+}
+
+function initGoogleAuth() {
+  if (window.google?.accounts?.id) {
+    window.google.accounts.id.initialize({
+      client_id: "678943507030-1i0os5s8s3o900jhaq6i9q6vf952jtd7.apps.googleusercontent.com",
+      callback: handleGoogleCallback,
+    });
+    window.google.accounts.id.renderButton(
+      selectors.googleAuthButton,
+      { theme: "outline", size: "large", width: 280, shape: "rectangular" }
+    );
+  }
+}
+
+async function handleGoogleCallback(response) {
+  try {
+    const payload = await api("/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ token: response.credential, role: "client" }),
+    });
+    state.user = payload.user;
+    selectors.joinDialog.close();
+    updateAuthUI();
+    await loadDashboard();
+    openDashboard();
+    maybeStartOnboarding();
+    showToast(payload.isNew ? "Account created via Google." : "Logged in via Google.");
+  } catch (error) {
+    showToast(error.message);
+  }
 }
 
 async function api(path, options = {}) {
@@ -406,44 +607,36 @@ async function submitOrderForm(event) {
   if (!state.selectedService) return;
 
   const formData = new FormData(selectors.orderForm);
-  try {
-    const payload = await api("/orders/checkout", {
-      method: "POST",
-      body: JSON.stringify({
-        serviceId: state.selectedService.id,
-        requirements: formData.get("requirements"),
-      }),
-    });
-    if (payload.paymentProvider === "demo") {
-      selectors.orderDialog.close();
-      showToast("Demo payment funded in your FreelanceHub ledger.");
-      await loadDashboard();
-      openDashboard();
-      return;
-    }
-    if (payload.paymentProvider === "cashfree") {
-      if (typeof window.Cashfree !== "function") {
-        throw new Error("Cashfree Checkout could not load. Refresh the page and try again.");
-      }
-
-      const cashfree = window.Cashfree({ mode: payload.paymentMode || "sandbox" });
-      await cashfree.checkout({
-        paymentSessionId: payload.paymentSessionId,
-        redirectTarget: "_self",
+  const serviceId = state.selectedService.id;
+  const requirements = formData.get("requirements");
+  const price = state.selectedService.price;
+  
+  selectors.orderDialog.close();
+  
+  openGatewayPage({
+    type: "service_purchase",
+    title: state.selectedService.title,
+    amount: price,
+    fee: 0,
+    total: price,
+    checkoutAction: async () => {
+      const payload = await api("/orders/checkout", {
+        method: "POST",
+        body: JSON.stringify({
+          serviceId,
+          requirements,
+        }),
       });
-      return;
+      return payload;
     }
-
-    window.location.href = payload.checkoutUrl;
-  } catch (error) {
-    showToast(error.message);
-  }
+  });
 }
 
 function openAuthDialog(mode) {
   setAuthMode(mode);
   selectors.authForm.reset();
   selectors.joinDialog.showModal();
+  initGoogleAuth();
   refreshIcons();
 }
 
@@ -774,13 +967,14 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
     openAuthDialog("login");
     return;
   }
-  const allowedPages = ["overview", "marketplace", "wallet", "finance"];
+  const allowedPages = ["overview", "marketplace", "wallet", "finance", "gateway"];
   const nextPage = allowedPages.includes(page) ? page : "overview";
   state.appPage = nextPage;
   selectors.body.classList.add("app-mode");
   selectors.dashboardSection.classList.remove("hidden");
   selectors.walletPage.classList.remove("hidden");
   document.querySelector("#financePage")?.classList.remove("hidden");
+  selectors.gatewayPage?.classList.remove("hidden");
   selectors.appPages.forEach((item) => item.classList.toggle("active", item.dataset.appPage === nextPage));
   selectors.appNavButtons.forEach((button) => button.classList.toggle("active", button.dataset.appPageNav === nextPage));
   selectors.userMenu.classList.add("hidden");
@@ -788,7 +982,10 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
 
   if (!skipLoad && nextPage === "overview") await loadDashboard();
   if (nextPage === "wallet") await loadWallet();
-  if (nextPage === "finance" && !state.dashboard) await loadDashboard();
+  if (nextPage === "finance") {
+    if (!state.dashboard) await loadDashboard();
+    else renderFinance(state.dashboard.finance || {});
+  }
   if (scroll) document.querySelector(`[data-app-page="${nextPage}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -824,6 +1021,24 @@ async function loadDashboard() {
     updateAuthUI();
     renderDashboard(payload);
     renderFinance(payload.finance || {});
+    
+    if (payload.emailLog && payload.emailLog.length > 0) {
+      payload.emailLog.forEach(email => {
+        const textStr = `Email Sent: [${email.subject}] to ${email.to}`;
+        const exists = state.notifications.some(n => n.text === textStr);
+        if (!exists) {
+          state.notifications.unshift({
+            id: "email_" + email.createdAt + "_" + Math.floor(Math.random() * 1000),
+            icon: "mail",
+            type: "info",
+            text: textStr,
+            time: new Date(email.createdAt),
+            read: true
+          });
+        }
+      });
+      renderNotifications();
+    }
   } catch (error) {
     showToast(error.message);
   }
@@ -844,6 +1059,10 @@ function renderWallet(wallet) {
   const balance = Number(wallet.balance || 0);
   const isDemo = wallet.provider === "demo";
   selectors.walletBalance.textContent = currency.format(balance);
+  if (selectors.floatingWalletBalance) {
+    selectors.floatingWalletBalance.textContent = currency.format(balance);
+    selectors.floatingWallet.classList.remove("hidden");
+  }
   selectors.walletCredits.textContent = `${currency.format(wallet.credits || 0)} added`;
   selectors.walletProviderLabel.textContent = isDemo ? "Demo payments" : `${String(wallet.provider || "payment").toUpperCase()} payments`;
   selectors.walletBalanceCopy.textContent = isDemo
@@ -882,28 +1101,28 @@ async function addWalletFunds() {
     showToast("Enter an amount of at least ₹50.");
     return;
   }
-  selectors.walletTopupButton.disabled = true;
-  try {
-    const payload = await api("/payments/wallet/top-up", {
-      method: "POST",
-      body: JSON.stringify({ amount, phone: selectors.walletPhone.value.trim() }),
-    });
-    if (payload.paymentProvider === "demo") {
-      showToast(`${currency.format(amount)} added to your demo wallet.`);
-      await Promise.all([loadWallet(), loadDashboard()]);
-      return;
+  
+  openGatewayPage({
+    type: "wallet_topup",
+    title: "Wallet Credit Top-Up",
+    amount: amount,
+    fee: 0,
+    total: amount,
+    checkoutAction: async () => {
+      const payload = await api("/payments/wallet/top-up", {
+        method: "POST",
+        body: JSON.stringify({ amount, phone: selectors.walletPhone.value.trim() }),
+      });
+      return payload;
     }
-    if (payload.paymentProvider === "cashfree") {
-      if (typeof window.Cashfree !== "function") throw new Error("Cashfree Checkout could not load. Refresh the page and try again.");
-      const cashfree = window.Cashfree({ mode: payload.paymentMode || "sandbox" });
-      await cashfree.checkout({ paymentSessionId: payload.paymentSessionId, redirectTarget: "_self" });
-      return;
-    }
-    window.location.href = payload.checkoutUrl;
-  } catch (error) {
-    showToast(error.message);
-  } finally {
-    selectors.walletTopupButton.disabled = false;
+  });
+}
+
+function updateChartToggleUI() {
+  if (selectors.chartLineBtn && selectors.chartPieBtn) {
+    const isLine = state.financeChartType !== "pie";
+    selectors.chartLineBtn.classList.toggle("active", isLine);
+    selectors.chartPieBtn.classList.toggle("active", !isLine);
   }
 }
 
@@ -912,6 +1131,9 @@ function renderFinance(finance) {
   const outgoing = Number(finance.outgoing || 0);
   const protectedFunds = Number(finance.protectedFunds || 0);
   const completed = Number(finance.completedValue || 0);
+  
+  updateChartToggleUI();
+  
   selectors.financeIncoming.textContent = currency.format(incoming);
   selectors.financeOutgoing.textContent = currency.format(outgoing);
   selectors.financeProtected.textContent = currency.format(protectedFunds);
@@ -920,14 +1142,255 @@ function renderFinance(finance) {
   selectors.financeWalletBalance.textContent = currency.format(finance.walletBalance || 0);
   selectors.financeVolume.textContent = currency.format(completed || protectedFunds || 0);
   const monthly = Array.isArray(finance.monthly) ? finance.monthly : [];
-  const maximum = Math.max(1, ...monthly.flatMap((month) => [Number(month.incoming || 0), Number(month.outgoing || 0)]));
-  selectors.financeChart.innerHTML = monthly
-    .map((month) => {
-      const incomingHeight = Math.max(month.incoming ? 8 : 2, Math.round((Number(month.incoming || 0) / maximum) * 100));
-      const outgoingHeight = Math.max(month.outgoing ? 8 : 2, Math.round((Number(month.outgoing || 0) / maximum) * 100));
-      return `<div class="finance-chart-column"><div class="finance-bars"><span class="finance-bar incoming" style="--bar-height:${incomingHeight}%" title="Inflow ${currency.format(month.incoming || 0)}"></span><span class="finance-bar outgoing" style="--bar-height:${outgoingHeight}%" title="Outflow ${currency.format(month.outgoing || 0)}"></span></div><small>${escapeHtml(month.label || "")}</small></div>`;
-    })
-    .join("") || `<div class="finance-chart-empty">Your movement will appear here as wallet and project activity grows.</div>`;
+  
+  const canvas = document.getElementById('financeChartCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const displayWidth = rect.width || canvas.clientWidth || 400;
+    const displayHeight = rect.height || canvas.clientHeight || 210;
+    canvas.width = displayWidth * dpr;
+    canvas.height = displayHeight * dpr;
+    canvas.style.width = displayWidth + 'px';
+    canvas.style.height = displayHeight + 'px';
+    ctx.scale(dpr, dpr);
+    const width = displayWidth;
+    const height = displayHeight;
+    ctx.clearRect(0, 0, width, height);
+
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+    if (state.financeChartType === "pie") {
+      const total = incoming + outgoing;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const radius = Math.min(width, height) / 2 - 25;
+      const innerRadius = radius * 0.55;
+
+      if (total === 0) {
+        // Draw empty state circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)';
+        ctx.lineWidth = 15;
+        ctx.stroke();
+
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '13px sans-serif';
+        ctx.fillText('No transaction data', centerX, centerY);
+      } else {
+        const incomingAngle = (incoming / total) * 2 * Math.PI;
+        const outgoingAngle = (outgoing / total) * 2 * Math.PI;
+
+        let startAngle = -Math.PI / 2;
+
+        // Draw Inflow slice (green)
+        if (incoming > 0) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, startAngle, startAngle + incomingAngle);
+          ctx.arc(centerX, centerY, innerRadius, startAngle + incomingAngle, startAngle, true);
+          ctx.closePath();
+          ctx.fillStyle = '#2d805e';
+          ctx.fill();
+          startAngle += incomingAngle;
+        }
+
+        // Draw Outflow slice (red)
+        if (outgoing > 0) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, startAngle, startAngle + outgoingAngle);
+          ctx.arc(centerX, centerY, innerRadius, startAngle + outgoingAngle, startAngle, true);
+          ctx.closePath();
+          ctx.fillStyle = '#e05355';
+          ctx.fill();
+        }
+
+        // Draw center text
+        ctx.fillStyle = isDark ? '#ffffff' : '#17201c';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        ctx.font = 'bold 15px Georgia, serif';
+        ctx.fillText(currency.format(total), centerX, centerY - 8);
+        ctx.font = '10px sans-serif';
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : '#555';
+        ctx.fillText('Total Volume', centerX, centerY + 12);
+
+        // Draw percentages inside slices if large enough
+        let currentStart = -Math.PI / 2;
+        if (incoming > 0) {
+          const midAngle = currentStart + incomingAngle / 2;
+          const textX = centerX + ((radius + innerRadius) / 2) * Math.cos(midAngle);
+          const textY = centerY + ((radius + innerRadius) / 2) * Math.sin(midAngle);
+          if (incoming / total > 0.12) {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(Math.round((incoming / total) * 100) + '%', textX, textY);
+          }
+          currentStart += incomingAngle;
+        }
+        if (outgoing > 0) {
+          const midAngle = currentStart + outgoingAngle / 2;
+          const textX = centerX + ((radius + innerRadius) / 2) * Math.cos(midAngle);
+          const textY = centerY + ((radius + innerRadius) / 2) * Math.sin(midAngle);
+          if (outgoing / total > 0.12) {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(Math.round((outgoing / total) * 100) + '%', textX, textY);
+          }
+        }
+      }
+    } else {
+      if (monthly.length) {
+        const maximum = Math.max(1, ...monthly.flatMap(m => [Number(m.incoming || 0), Number(m.outgoing || 0)]));
+        const paddingLeft = 55;
+        const paddingRight = 20;
+        const paddingTop = 20;
+        const paddingBottom = 30;
+        const chartWidth = width - paddingLeft - paddingRight;
+        const chartHeight = height - paddingTop - paddingBottom;
+
+        // Draw horizontal grid lines
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)';
+        ctx.lineWidth = 1;
+        for (let j = 0; j <= 3; j++) {
+          const y = paddingTop + (chartHeight / 3) * j;
+          ctx.beginPath();
+          ctx.moveTo(paddingLeft, y);
+          ctx.lineTo(width - paddingRight, y);
+          ctx.stroke();
+          
+          // Y-axis value labels
+          ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : '#888888';
+          ctx.textAlign = 'right';
+          ctx.font = '9px sans-serif';
+          const val = Math.round(maximum - (maximum / 3) * j);
+          ctx.fillText(currency.format(val), paddingLeft - 8, y + 3);
+        }
+
+        // Draw axes
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft, paddingTop);
+        ctx.lineTo(paddingLeft, height - paddingBottom);
+        ctx.lineTo(width - paddingRight, height - paddingBottom);
+        ctx.stroke();
+
+        const pointCount = monthly.length;
+        const stepX = chartWidth / (pointCount - 1);
+
+        // Gradients
+        let inflowGrad = ctx.createLinearGradient(0, paddingTop, 0, height - paddingBottom);
+        inflowGrad.addColorStop(0, 'rgba(45, 128, 94, 0.2)');
+        inflowGrad.addColorStop(1, 'rgba(45, 128, 94, 0.0)');
+
+        let outflowGrad = ctx.createLinearGradient(0, paddingTop, 0, height - paddingBottom);
+        outflowGrad.addColorStop(0, 'rgba(224, 83, 85, 0.2)');
+        outflowGrad.addColorStop(1, 'rgba(224, 83, 85, 0.0)');
+
+        // Draw Inflow Area
+        ctx.beginPath();
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.lineTo(paddingLeft + (pointCount - 1) * stepX, height - paddingBottom);
+        ctx.lineTo(paddingLeft, height - paddingBottom);
+        ctx.closePath();
+        ctx.fillStyle = inflowGrad;
+        ctx.fill();
+
+        // Draw Inflow Line
+        ctx.beginPath();
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = '#2d805e';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        // Draw Outflow Area
+        ctx.beginPath();
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.lineTo(paddingLeft + (pointCount - 1) * stepX, height - paddingBottom);
+        ctx.lineTo(paddingLeft, height - paddingBottom);
+        ctx.closePath();
+        ctx.fillStyle = outflowGrad;
+        ctx.fill();
+
+        // Draw Outflow Line
+        ctx.beginPath();
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = '#e05355';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        // Draw points for inflow
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          ctx.fillStyle = '#2d805e';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        });
+
+        // Draw points for outflow
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          ctx.fillStyle = '#e05355';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        });
+
+        // Month labels
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : '#555';
+        ctx.textAlign = 'center';
+        ctx.font = '10px sans-serif';
+        monthly.forEach((m, i) => {
+          const x = paddingLeft + i * stepX;
+          ctx.fillText(m.label || '', x, height - paddingBottom + 16);
+        });
+      } else {
+        // Clear canvas if no data
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : '#aaa';
+        ctx.textAlign = 'center';
+        ctx.font = '12px sans-serif';
+        ctx.fillText('Your movement will appear here as wallet and project activity grows.', width / 2, height / 2);
+      }
+    }
+  }
   const health = incoming + outgoing ? Math.min(100, Math.round((incoming / (incoming + outgoing)) * 100)) : 0;
   selectors.financeRing.style.setProperty("--finance-progress", `${health}%`);
   selectors.financeRingValue.textContent = `${health}%`;
@@ -952,17 +1415,88 @@ function renderDashboard(payload) {
   const progress = Math.max(0, Math.min(100, payload.journey?.profileCompletion || 0));
   selectors.dashboardProgress.textContent = `${progress}%`;
   selectors.dashboardProgressBar.style.width = `${progress}%`;
+  
+  if (isFreelancer) {
+    selectors.dashboardWidgets.innerHTML = `
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Service Impressions</span><i data-lucide="eye"></i></div>
+        <div class="widget-value">${payload.stats.serviceImpressions || 0}</div>
+        <div class="widget-footer"><span class="badge">+12%</span> active listings</div>
+      </div>
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Response Rate</span><i data-lucide="zap"></i></div>
+        <div class="widget-value">${payload.stats.responseRate || 100}%</div>
+        <div class="widget-footer">Typically replies in < 1hr</div>
+      </div>
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Delivery Rate</span><i data-lucide="check-circle"></i></div>
+        <div class="widget-value">${payload.stats.deliveryRate || 100}%</div>
+        <div class="widget-footer">On time delivery score</div>
+      </div>
+    `;
+  } else {
+    selectors.dashboardWidgets.innerHTML = `
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Total Spend</span><i data-lucide="wallet"></i></div>
+        <div class="widget-value">${currency.format(payload.stats.earningsOrSpend || 0)}</div>
+        <div class="widget-footer">Across ${payload.stats.totalOrders || 0} completed orders</div>
+      </div>
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Escrow Security</span><i data-lucide="shield-check"></i></div>
+        <div class="widget-value">${payload.stats.securityIndex || 100}%</div>
+        <div class="widget-footer"><span class="badge">SECURE</span> Full coverage on active funds</div>
+      </div>
+      <div class="data-widget-card">
+        <div class="widget-header"><span>Avg Project Value</span><i data-lucide="trending-up"></i></div>
+        <div class="widget-value">${currency.format(payload.stats.averageValue || 0)}</div>
+        <div class="widget-footer">Based on order history</div>
+      </div>
+    `;
+  }
+  
   renderDashboardNextSteps(payload.journey?.nextSteps || []);
 
   if (!payload.orders.length) {
     selectors.orderList.innerHTML = `<div class="empty-state">No orders yet. ${payload.role === "client" ? "Pick a service above to start checkout." : "Publish a service to receive funded orders."}</div>`;
-    return;
+  } else {
+    selectors.orderList.innerHTML = payload.orders.map((order) => renderOrder(order, payload.role)).join("");
+    selectors.orderList.querySelectorAll("[data-order-action]").forEach((button) => {
+      button.addEventListener("click", () => handleOrderAction(button.dataset.orderAction, button.dataset.orderId));
+    });
   }
 
-  selectors.orderList.innerHTML = payload.orders.map((order) => renderOrder(order, payload.role)).join("");
-  selectors.orderList.querySelectorAll("[data-order-action]").forEach((button) => {
-    button.addEventListener("click", () => handleOrderAction(button.dataset.orderAction, button.dataset.orderId));
-  });
+  if (payload.recentActivity && payload.recentActivity.length > 0) {
+    selectors.dashboardActivityPanel.classList.remove("hidden");
+    selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => `
+      <div class="activity-item">
+        <h4>${escapeHtml(item.title)}</h4>
+        <span>${new Date(item.date).toLocaleString()}</span>
+      </div>
+    `).join("");
+  } else {
+    selectors.dashboardActivityPanel.classList.add("hidden");
+  }
+
+  if (payload.emailLog && payload.emailLog.length > 0) {
+    selectors.dashboardEmailPanel.classList.remove("hidden");
+    selectors.emailLogList.innerHTML = payload.emailLog.map(item => `
+      <div class="email-log-item">
+        <div class="email-log-item-header">
+          <span>To: ${escapeHtml(item.to)}</span>
+          <span>${new Date(item.createdAt).toLocaleString()}</span>
+        </div>
+        <div class="email-log-item-subject">${escapeHtml(item.subject)}</div>
+      </div>
+    `).join("");
+  } else {
+    selectors.dashboardEmailPanel.classList.add("hidden");
+  }
+  
+  if (selectors.floatingWalletBalance) {
+    selectors.floatingWalletBalance.textContent = currency.format(payload.finance?.walletBalance || 0);
+    selectors.floatingWallet.classList.remove("hidden");
+  }
+  refreshIcons();
 }
 
 function renderDashboardNextSteps(steps) {
@@ -1145,16 +1679,7 @@ async function submitServiceForm(event) {
 }
 
 async function connectPayouts() {
-  try {
-    const payload = await api("/payments/connect/onboard", { method: "POST" });
-    if (payload.demo) {
-      showToast("Demo payouts are recorded when a client releases an order.");
-      return;
-    }
-    window.location.href = payload.url;
-  } catch (error) {
-    showToast(error.message);
-  }
+  showToast("Demo payouts are recorded when a client releases an order.");
 }
 
 function handleCheckoutReturn() {
@@ -1179,7 +1704,7 @@ function normalizeService(service) {
     title: service.title,
     category: service.category,
     sellerName: service.seller?.name || service.sellerName || "FreelanceHub seller",
-    level: service.seller?.stripeOnboardingComplete ? "Verified payouts" : "Marketplace seller",
+    level: "Marketplace seller",
     rating: Number(service.ratingAverage || service.rating || 0) || 5,
     reviews: Number(service.ratingCount || service.reviews || 0),
     price: Number(service.price || 0),
@@ -1277,6 +1802,369 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => {
     selectors.toast.classList.remove("show");
   }, 3200);
+
+  let type = "info";
+  if (message.toLowerCase().includes("success") || message.toLowerCase().includes("added") || message.toLowerCase().includes("complete") || message.toLowerCase().includes("release") || message.toLowerCase().includes("publish") || message.toLowerCase().includes("sent")) {
+    type = "success";
+  } else if (message.toLowerCase().includes("fail") || message.toLowerCase().includes("error") || message.toLowerCase().includes("insufficient")) {
+    type = "warning";
+  }
+  addNotification(type, message);
+}
+
+function addNotification(type, text) {
+  const id = "notif_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+  const icon = type === "success" ? "check-circle" : type === "warning" ? "alert-triangle" : "info";
+  state.notifications.unshift({
+    id,
+    icon,
+    type,
+    text,
+    time: new Date(),
+    read: false
+  });
+  if (state.notifications.length > 30) state.notifications.pop();
+  renderNotifications();
+}
+
+function renderNotifications() {
+  const badge = selectors.notificationBadge;
+  const list = selectors.notificationList;
+  if (!badge || !list) return;
+
+  const unreadCount = state.notifications.filter(n => !n.read).length;
+  if (unreadCount > 0) {
+    badge.textContent = unreadCount;
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+
+  if (state.notifications.length === 0) {
+    list.innerHTML = `<div class="notification-empty">No notifications yet</div>`;
+    return;
+  }
+
+  list.innerHTML = state.notifications.map(n => `
+    <div class="notification-item ${n.read ? 'read' : 'unread'}" data-notif-id="${n.id}">
+      <span class="notification-item-icon ${n.type || 'info'}">
+        <i data-lucide="${n.icon}"></i>
+      </span>
+      <div class="notification-item-content">
+        <p>${escapeHtml(n.text)}</p>
+        <small>${formatTime(n.time)}</small>
+      </div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll(".notification-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const id = item.dataset.notifId;
+      const notif = state.notifications.find(n => n.id === id);
+      if (notif) {
+        notif.read = true;
+        renderNotifications();
+      }
+    });
+  });
+
+  refreshIcons();
+}
+
+function formatTime(date) {
+  const d = new Date(date);
+  const hours = String(d.getHours()).padStart(2, '0');
+  const mins = String(d.getMinutes()).padStart(2, '0');
+  return `${hours}:${mins}`;
+}
+
+function initNotificationToggle() {
+  const btn = selectors.notificationButton;
+  const panel = selectors.notificationPanel;
+  if (!btn || !panel) return;
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = !panel.classList.contains("hidden");
+    if (open) {
+      panel.classList.add("hidden");
+      btn.setAttribute("aria-expanded", "false");
+    } else {
+      panel.classList.remove("hidden");
+      btn.setAttribute("aria-expanded", "true");
+      state.notifications.forEach(n => n.read = true);
+      renderNotifications();
+    }
+  });
+
+  const clearBtn = selectors.clearNotificationsButton;
+  if (clearBtn) {
+    clearBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.notifications = [];
+      renderNotifications();
+    });
+  }
+
+  document.addEventListener("click", (e) => {
+    if (panel && !panel.classList.contains("hidden") && !selectors.notificationWrap.contains(e.target)) {
+      panel.classList.add("hidden");
+      btn.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+function initLogoNav() {
+  const logo = document.querySelector(".brand");
+  if (logo) {
+    logo.addEventListener("click", (e) => {
+      e.preventDefault();
+      selectors.body.classList.remove("app-mode");
+      selectors.appPages.forEach((item) => item.classList.remove("active"));
+      selectors.appNavButtons.forEach((btn) => btn.classList.remove("active"));
+      selectors.dashboardSection.classList.add("hidden");
+      selectors.walletPage.classList.add("hidden");
+      document.querySelector("#financePage")?.classList.add("hidden");
+      selectors.gatewayPage?.classList.add("hidden");
+      document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+}
+
+function initInteractiveCard() {
+  const card = document.querySelector(".flip-card");
+  if (!card) return;
+
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - (rect.width / 2);
+    const y = e.clientY - rect.top - (rect.height / 2);
+    const rotateX = -(y / (rect.height / 2)) * 12;
+    const rotateY = (x / (rect.width / 2)) * 12;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0deg) rotateY(0deg)";
+  });
+
+  const cardNoInput = document.querySelector("#gatewayCardNo");
+  const cardNameInput = document.querySelector("#gatewayCardName");
+  const cardExpiryInput = document.querySelector("#gatewayCardExpiry");
+  const cardCvvInput = document.querySelector("#gatewayCardCvv");
+
+  const previewNo = selectors.previewNumber;
+  const previewHolder = selectors.previewHolder;
+  const previewExp = selectors.previewExpiry;
+  const previewCv = selectors.previewCvv;
+
+  if (cardNoInput) {
+    cardNoInput.addEventListener("input", (e) => {
+      let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let parts = [];
+      for (let i = 0, len = val.length; i < len; i += 4) {
+        parts.push(val.substring(i, i + 4));
+      }
+      e.target.value = parts.join(' ').substring(0, 19);
+      if (previewNo) previewNo.textContent = e.target.value || "•••• •••• •••• ••••";
+    });
+  }
+
+  if (cardNameInput) {
+    cardNameInput.addEventListener("input", (e) => {
+      if (previewHolder) previewHolder.textContent = e.target.value.toUpperCase() || "YOUR NAME";
+    });
+  }
+
+  if (cardExpiryInput) {
+    cardExpiryInput.addEventListener("input", (e) => {
+      let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      if (val.length >= 2) {
+        e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+      } else {
+        e.target.value = val;
+      }
+      if (previewExp) previewExp.textContent = e.target.value || "MM/YY";
+    });
+  }
+
+  if (cardCvvInput) {
+    cardCvvInput.addEventListener("input", (e) => {
+      let val = e.target.value.replace(/[^0-9]/gi, '');
+      e.target.value = val;
+      if (previewCv) previewCv.textContent = "•".repeat(val.length) || "•••";
+    });
+
+    cardCvvInput.addEventListener("focus", () => {
+      card.classList.add("flipped");
+    });
+
+    cardCvvInput.addEventListener("blur", () => {
+      card.classList.remove("flipped");
+    });
+  }
+}
+
+function openGatewayPage(checkoutDetails) {
+  openAppPage("gateway", { scroll: true, skipLoad: true });
+
+  if (selectors.gatewayItemTitle) selectors.gatewayItemTitle.textContent = checkoutDetails.title;
+  if (selectors.gatewayItemPrice) selectors.gatewayItemPrice.textContent = currency.format(checkoutDetails.amount);
+  if (selectors.gatewayTotalAmount) selectors.gatewayTotalAmount.textContent = currency.format(checkoutDetails.total);
+
+  selectors.gatewayCardPanel?.classList.remove("hidden");
+  selectors.gatewayUpiPanel?.classList.add("hidden");
+  selectors.gatewayProcessing?.classList.add("hidden");
+  selectors.gatewayReceiptPanel?.classList.add("hidden");
+
+  document.querySelectorAll(".gateway-tab").forEach(tab => tab.classList.remove("active"));
+  const cardTab = document.querySelector("[data-gateway-tab='card']");
+  if (cardTab) cardTab.classList.add("active");
+
+  if (selectors.gatewayCardNo) selectors.gatewayCardNo.value = "";
+  if (selectors.gatewayCardName) selectors.gatewayCardName.value = "";
+  if (selectors.gatewayCardExpiry) selectors.gatewayCardExpiry.value = "";
+  if (selectors.gatewayCardCvv) selectors.gatewayCardCvv.value = "";
+  if (selectors.gatewayUpiVpa) selectors.gatewayUpiVpa.value = "";
+
+  if (selectors.previewNumber) selectors.previewNumber.textContent = "•••• •••• •••• ••••";
+  if (selectors.previewHolder) selectors.previewHolder.textContent = "YOUR NAME";
+  if (selectors.previewExpiry) selectors.previewExpiry.textContent = "MM/YY";
+  if (selectors.previewCvv) selectors.previewCvv.textContent = "•••";
+
+  stopUpiTimer();
+
+  const executePayment = async () => {
+    const isCard = !selectors.gatewayCardPanel?.classList.contains("hidden");
+    if (isCard) {
+      if (!selectors.gatewayCardNo?.value || !selectors.gatewayCardName?.value || !selectors.gatewayCardExpiry?.value || !selectors.gatewayCardCvv?.value) {
+        showToast("Please fill in all card details.");
+        return;
+      }
+    } else {
+      if (!selectors.gatewayUpiVpa?.value) {
+        showToast("Please enter your UPI Virtual Private Address.");
+        return;
+      }
+    }
+
+    selectors.gatewayCardPanel?.classList.add("hidden");
+    selectors.gatewayUpiPanel?.classList.add("hidden");
+    selectors.gatewayProcessing?.classList.remove("hidden");
+
+    const progress = selectors.gatewayProgressBarInner;
+    if (progress) progress.style.width = "0%";
+
+    const steps = [
+      { width: "25%", text: "Validating payment credentials..." },
+      { width: "55%", text: "Connecting to secure escrow vault..." },
+      { width: "85%", text: "Capturing settlement ledger..." },
+      { width: "100%", text: "Payment authorized successfully." }
+    ];
+
+    for (const step of steps) {
+      await new Promise(r => setTimeout(r, 600));
+      if (progress) progress.style.width = step.width;
+      if (selectors.gatewayProcessingText) selectors.gatewayProcessingText.textContent = step.text;
+    }
+
+    try {
+      const payload = await checkoutDetails.checkoutAction();
+      selectors.gatewayProcessing?.classList.add("hidden");
+      selectors.gatewayReceiptPanel?.classList.remove("hidden");
+
+      if (selectors.receiptDate) selectors.receiptDate.textContent = `Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+      if (selectors.receiptTxId) selectors.receiptTxId.textContent = payload.transactionId || `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
+      if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "Customer";
+      if (selectors.receiptAmount) selectors.receiptAmount.textContent = currency.format(checkoutDetails.total);
+
+      showToast("Transaction successfully completed.");
+
+      if (selectors.receiptCloseButton) {
+        selectors.receiptCloseButton.onclick = async () => {
+          await Promise.all([loadWallet(), loadDashboard()]);
+          openAppPage("overview");
+        };
+      }
+
+      if (selectors.receiptPrintButton) {
+        selectors.receiptPrintButton.onclick = () => {
+          window.print();
+        };
+      }
+    } catch (error) {
+      showToast(error.message);
+      selectors.gatewayProcessing?.classList.add("hidden");
+      if (isCard) {
+        selectors.gatewayCardPanel?.classList.remove("hidden");
+      } else {
+        selectors.gatewayUpiPanel?.classList.remove("hidden");
+      }
+    }
+  };
+
+  if (selectors.gatewayPayCardButton) selectors.gatewayPayCardButton.onclick = executePayment;
+  if (selectors.gatewayPayUpiButton) selectors.gatewayPayUpiButton.onclick = executePayment;
+
+  if (selectors.cancelGatewayButton) {
+    selectors.cancelGatewayButton.onclick = () => {
+      openAppPage("wallet");
+      showToast("Payment cancelled.");
+    };
+  }
+
+  document.querySelectorAll("[data-gateway-tab]").forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll(".gateway-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const target = tab.dataset.gatewayTab;
+      if (target === "card") {
+        selectors.gatewayCardPanel?.classList.remove("hidden");
+        selectors.gatewayUpiPanel?.classList.add("hidden");
+        stopUpiTimer();
+      } else {
+        selectors.gatewayCardPanel?.classList.add("hidden");
+        selectors.gatewayUpiPanel?.classList.remove("hidden");
+        startUpiTimer(executePayment);
+      }
+    };
+  });
+}
+
+function startUpiTimer(onExpire) {
+  stopUpiTimer();
+
+  const qrSpinner = selectors.upiQrSpinner;
+  if (qrSpinner) qrSpinner.classList.remove("hidden");
+
+  state.upiTimer = setTimeout(() => {
+    if (qrSpinner) qrSpinner.classList.add("hidden");
+    showToast("QR Code scanned. Enter UPI PIN on your mobile device.");
+
+    state.upiTimer = setTimeout(() => {
+      onExpire();
+    }, 3000);
+  }, 4000);
+
+  let seconds = 180;
+  const timerLabel = selectors.upiTimerMinutes;
+
+  const updateTimer = () => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    if (timerLabel) timerLabel.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    if (seconds > 0) {
+      seconds--;
+      state.upiCountdown = setTimeout(updateTimer, 1000);
+    }
+  };
+  updateTimer();
+}
+
+function stopUpiTimer() {
+  clearTimeout(state.upiTimer);
+  clearTimeout(state.upiCountdown);
 }
 
 function refreshIcons() {

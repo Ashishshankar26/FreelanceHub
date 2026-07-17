@@ -1,14 +1,17 @@
 import bcrypt from "bcryptjs";
 import { Router } from "express";
 import { z } from "zod";
+import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/User.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validate.js";
 import { sendLoginEmail, sendWelcomeEmail } from "../services/mailer.js";
 import { authCookieOptions, signAuthToken } from "../services/tokens.js";
+import { env } from "../config/env.js";
 
 export const authRouter = Router();
+const googleClient = new OAuth2Client(env.googleClientId);
 
 const signupSchema = z.object({
   body: z.object({
@@ -86,6 +89,69 @@ authRouter.post(
     const token = signAuthToken(user);
     res.cookie("fh_token", token, authCookieOptions());
     res.json({ user: user.toPublicJSON() });
+  }),
+);
+
+const googleAuthSchema = z.object({
+  body: z.object({
+    token: z.string().min(1),
+    role: z.enum(["client", "freelancer", "both"]).default("client"),
+  }),
+});
+
+authRouter.post(
+  "/google",
+  validate(googleAuthSchema),
+  asyncHandler(async (req, res) => {
+    const { token: credential, role } = req.validated.body;
+    let payload;
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: env.googleClientId,
+      });
+      payload = ticket.getPayload();
+    } catch (error) {
+      const e = new Error("Invalid Google token.");
+      e.statusCode = 401;
+      throw e;
+    }
+
+    const { sub: googleId, email, name, picture: avatar } = payload;
+
+    let user = await User.findOne({ email });
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      const roles = role === "both" ? ["client", "freelancer"] : [role];
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        avatar,
+        roles,
+        activeRole: roles[0],
+      });
+    } else {
+      // Link Google account if not linked
+      if (!user.googleId) {
+        user.googleId = googleId;
+        user.avatar = user.avatar || avatar;
+      }
+      user.lastLoginAt = new Date();
+      await user.save();
+    }
+
+    if (isNewUser) {
+      await sendWelcomeEmail(user);
+    } else {
+      await sendLoginEmail(user);
+    }
+
+    const token = signAuthToken(user);
+    res.cookie("fh_token", token, authCookieOptions());
+    res.json({ user: user.toPublicJSON(), isNew: isNewUser });
   }),
 );
 

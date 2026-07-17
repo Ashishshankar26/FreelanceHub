@@ -36,9 +36,16 @@ function shell(title, body) {
   `;
 }
 
+const emailLog = [];
+export function getEmailLog() {
+  return emailLog;
+}
+
 export async function sendEmail({ to, subject, html, text }) {
   if (!configured) {
     console.warn(`[mail skipped] ${subject} -> ${to}`);
+    emailLog.unshift({ to, subject, html, text, createdAt: new Date() });
+    if (emailLog.length > 50) emailLog.pop();
     return { skipped: true };
   }
 

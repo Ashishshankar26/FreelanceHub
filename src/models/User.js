@@ -19,9 +19,15 @@ const userSchema = new mongoose.Schema(
     },
     passwordHash: {
       type: String,
-      required: true,
+      required: false,
       select: false,
     },
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
+    avatar: String,
     roles: [
       {
         type: String,
@@ -52,12 +58,6 @@ const userSchema = new mongoose.Schema(
       clientFocus: { type: String, trim: true, maxlength: 240 },
       completedAt: Date,
     },
-    stripeCustomerId: String,
-    stripeAccountId: String,
-    stripeOnboardingComplete: {
-      type: Boolean,
-      default: false,
-    },
     phone: {
       type: String,
       trim: true,
@@ -77,6 +77,7 @@ userSchema.methods.toPublicJSON = function toPublicJSON() {
     id: this._id.toString(),
     name: this.name,
     email: this.email,
+    avatar: this.avatar,
     roles: this.roles,
     activeRole: this.activeRole,
     profile: this.profile,
@@ -87,7 +88,6 @@ userSchema.methods.toPublicJSON = function toPublicJSON() {
       clientFocus: this.onboarding?.clientFocus || "",
       completedAt: this.onboarding?.completedAt || null,
     },
-    stripeOnboardingComplete: this.stripeOnboardingComplete,
     createdAt: this.createdAt,
   };
 };
