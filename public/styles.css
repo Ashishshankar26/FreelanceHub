@@ -291,15 +291,14 @@ img {
   color: white;
 }
 
-.eyebrow {
-  margin: 0 0 4px;
-  color: currentColor;
-  font-size: 0.74rem;
-  font-weight: 900;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  opacity: 0.76;
-}
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--eyebrow-color);
+    opacity: 1;
+  }
 
 h1,
 h2,
@@ -371,15 +370,16 @@ h3 {
   flex-wrap: wrap;
   gap: 10px;
   color: rgba(255, 255, 255, 0.78);
-  font-weight: 850;
+  font-weight: 500;
 }
 
 .trend-row button {
   min-height: 32px;
   padding: 0 12px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 999px;
-  color: white;
+  border-radius: 5px;
+  color: #fffdf8;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
 .trusted-strip {
@@ -475,9 +475,7 @@ h3 {
 }
 
 .category-tile span {
-  min-width: 0;
-  font-weight: 900;
-  overflow-wrap: anywhere;
+  font-weight: 600;
 }
 
 .category-tile:hover,
@@ -495,13 +493,9 @@ h3 {
   background: var(--soft);
 }
 
-.service-filter button {
-  min-height: 34px;
-  padding: 0 12px;
-  border-radius: 6px;
-  font-weight: 850;
-  white-space: nowrap;
-}
+  .service-filter button {
+    font-weight: 500;
+  }
 
 .service-filter button.active {
   background: var(--paper);
@@ -659,7 +653,7 @@ h3 {
 .seller-level {
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 750;
+  font-weight: 500;
 }
 
 .save-button {
@@ -694,7 +688,7 @@ h3 {
   gap: 10px;
   color: var(--muted);
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .rating-row span:first-child {
@@ -816,7 +810,8 @@ h3 {
 
 .dashboard-card span {
   font-size: 0.82rem;
-  font-weight: 850;
+  font-weight: 450;
+  letter-spacing: 0.01em;
 }
 
 .dashboard-card strong {
@@ -871,15 +866,15 @@ h3 {
 
 .status-pill {
   display: inline-flex;
-  min-height: 28px;
   align-items: center;
-  padding: 4px 9px;
+  gap: 4px;
+  min-height: 24px;
+  padding: 0 10px;
   border-radius: 999px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--mint, #dff3ec);
+  color: var(--green, #13715f);
   font-size: 0.78rem;
-  font-weight: 900;
-  white-space: nowrap;
+  font-weight: 600;
 }
 
 .status-completed {
@@ -907,14 +902,7 @@ h3 {
 }
 
 .mini-button {
-  min-height: 34px;
-  padding: 0 11px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--paper);
-  color: var(--ink);
-  font-weight: 850;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  font-weight: 600;
 }
 
 .mini-button.active {
@@ -946,12 +934,7 @@ h3 {
 }
 
 .auth-tabs button {
-  min-height: 36px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 850;
+  font-weight: 600;
 }
 
 .auth-tabs button.active {
@@ -1028,7 +1011,7 @@ h3 {
   gap: 10px;
   min-height: 42px;
   color: var(--ink);
-  font-weight: 850;
+  font-weight: 450;
 }
 
 .feature-list i {
@@ -1051,8 +1034,9 @@ h3 {
 }
 
 .escrow-card-top span {
-  color: var(--muted);
-  font-weight: 850;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
 }
 
 .escrow-card-top strong {
@@ -1073,7 +1057,7 @@ h3 {
   background: var(--soft);
   color: var(--muted);
   font-size: 0.8rem;
-  font-weight: 900;
+  font-weight: 500;
   text-align: center;
 }
 
@@ -1194,12 +1178,11 @@ h3 {
   display: grid;
 }
 
-label {
-  display: grid;
-  gap: 8px;
-  color: var(--muted);
-  font-weight: 850;
-}
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
 
 label input,
 label select,
@@ -1235,22 +1218,21 @@ label textarea:focus,
 
 .toast {
   position: fixed;
-  z-index: 40;
-  right: 24px;
+  z-index: 999;
   bottom: 24px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   max-width: min(390px, calc(100vw - 32px));
   min-height: 44px;
   padding: 12px 14px;
   border-radius: var(--radius);
   background: var(--ink);
   color: white;
-  font-weight: 850;
+  font-weight: 500;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(12px);
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
 }
 
 .toast.show {
@@ -1335,7 +1317,8 @@ label textarea:focus,
   }
 
   .trusted-strip {
-    flex-wrap: wrap;
+    font-size: 0.82rem;
+    font-weight: 500;
   }
 
   .section-heading,
@@ -2074,7 +2057,7 @@ h2 {
   left: -34px;
   padding: 11px 13px;
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .visual-note-top i {
@@ -2174,7 +2157,7 @@ h2 {
 .seller-copy .eyebrow {
   color: var(--eyebrow-color);
   font-size: 0.72rem;
-  font-weight: 850;
+  font-weight: 500;
   letter-spacing: 0.04em;
   opacity: 1;
 }
@@ -2580,8 +2563,7 @@ h2 {
 }
 
 .feature-list span {
-  min-height: 38px;
-  font-size: 0.92rem;
+  font-weight: 450;
 }
 
 .feature-list i {
@@ -2665,12 +2647,9 @@ label textarea {
   border-radius: 5px;
 }
 
-.toast {
-  right: 18px;
-  bottom: 18px;
-  border-radius: 6px;
-  background: var(--toast-bg);
-}
+  .toast {
+    font-weight: 500;
+  }
 
 @keyframes hero-enter {
   from {
@@ -2988,9 +2967,8 @@ label textarea {
 }
 
 .dashboard-progress-card span {
-  color: #577066;
   font-size: 0.76rem;
-  font-weight: 780;
+  font-weight: 500;
 }
 
 .dashboard-progress-card strong {
@@ -3428,14 +3406,8 @@ label textarea {
 }
 
 .profile-copilot .ghost-button {
-  flex: 0 0 auto;
-  min-height: 36px;
-  border: 1px solid #b8d6c2;
-  border-radius: 6px;
-  background: var(--paper);
-  color: #206f5b;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .profile-copilot .ghost-button:disabled {
@@ -3688,7 +3660,7 @@ body {
   color: #090e0b;
   font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(3.3rem, 5.3vw, 5.9rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 0.88;
 }
 
@@ -3870,8 +3842,7 @@ body {
 
 .hero-protection-note span {
   font-size: 0.75rem;
-  font-weight: 850;
-  line-height: 1.14;
+  font-weight: 500;
 }
 
 .hero-escrow-note {
@@ -3957,7 +3928,7 @@ body {
 .services-section .section-heading h2,
 .category-section .section-heading h2 {
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .service-grid {
@@ -4059,7 +4030,7 @@ body {
   color: #101510;
   font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(1rem, 1.6vw, 1.35rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -4114,11 +4085,9 @@ body {
 }
 
 .service-card .service-title {
-  min-height: 0;
-  color: #111610;
-  font-size: 0.96rem;
-  font-weight: 800;
-  line-height: 1.32;
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  font-weight: 600;
+  color: #101510;
 }
 
 .specialist-card-bottom {
@@ -4142,17 +4111,8 @@ body {
 }
 
 .service-open-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 36px;
-  padding: 0 11px;
-  border-radius: 999px;
-  background: #111610;
-  color: #ecff6a;
   font-size: 0.72rem;
-  font-weight: 850;
-  white-space: nowrap;
+  font-weight: 500;
 }
 
 .service-open-action i {
@@ -4298,7 +4258,7 @@ body {
   }
 
   .service-card .seller-name {
-    font-size: 2.2rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -4315,7 +4275,7 @@ body {
 .dashboard-section .eyebrow {
   color: #5b705f;
   font-size: 0.7rem;
-  font-weight: 850;
+  font-weight: 500;
   letter-spacing: 0.06em;
 }
 
@@ -4326,7 +4286,7 @@ body {
 .footer-brand h2 {
   color: #142019;
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
@@ -4350,7 +4310,7 @@ body {
   color: #1c2e24;
   font-family: Outfit, "Times New Roman", serif;
   font-size: 1.04rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .section-actions {
@@ -4432,7 +4392,7 @@ body {
   color: #18271f;
   font-family: Outfit, "Times New Roman", serif;
   font-size: 1.08rem;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.08;
 }
 
@@ -4485,7 +4445,7 @@ body {
 .dashboard-welcome h2 {
   color: #142019;
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .dashboard-progress-card {
@@ -4539,7 +4499,7 @@ body {
 .dashboard-card strong {
   color: var(--dc-value, #111711);
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .dashboard-card > span:not(.dashboard-stat-icon),
@@ -4560,7 +4520,7 @@ body {
   color: var(--ink, #17231b);
   font-family: Outfit, "Times New Roman", serif;
   font-size: 1.45rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .dashboard-next-item {
@@ -4749,7 +4709,7 @@ body {
 .escrow-card-top strong {
   font-family: Outfit, "Times New Roman", serif;
   font-size: 3.2rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .escrow-flow span {
@@ -4816,7 +4776,7 @@ body {
 .footer-columns h3 {
   color: #17201c;
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .footer-columns a:hover {
@@ -4845,7 +4805,7 @@ body {
 .onboarding-shell h2 {
   color: #17201c;
   font-family: Outfit, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .auth-tabs {
@@ -5118,17 +5078,11 @@ label textarea:focus {
 
 .user-menu button {
   display: flex;
-  min-height: 36px;
+  min-height: 32px;
   align-items: center;
-  gap: 8px;
-  padding: 0 7px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  color: #26362c;
-  text-align: left;
-  font-size: 0.82rem;
-  font-weight: 780;
+  gap: 14px;
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 500;
 }
 
 .user-menu button:hover {
@@ -5209,7 +5163,7 @@ body.app-mode .marketplace-page .services-section {
   color: #17201c;
   font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(2.4rem, 4.2vw, 4.8rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 0.94;
 }
 
@@ -5224,7 +5178,7 @@ body.app-mode .marketplace-page .services-section {
   background: var(--editorial-lime);
   color: #26352a;
   font-size: 0.76rem;
-  font-weight: 850;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -5312,7 +5266,7 @@ body.app-mode .marketplace-page .services-section {
   gap: 6px;
   color: var(--editorial-lime);
   font-size: 0.76rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .wallet-status i {
@@ -5331,7 +5285,7 @@ body.app-mode .marketplace-page .services-section {
   color: var(--editorial-lime);
   font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(3.6rem, 6vw, 6.3rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 0.86;
 }
 
@@ -5374,11 +5328,11 @@ body.app-mode .marketplace-page .services-section {
 .wallet-ledger-panel h3,
 .finance-chart-panel h3,
 .finance-summary-panel h3 {
-  margin: 0;
-  color: #18251d;
+  color: #17201c;
   font-family: Outfit, "Times New Roman", serif;
   font-size: 1.65rem;
-  font-weight: 400;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .wallet-panel-icon-coral {
@@ -5398,7 +5352,7 @@ body.app-mode .marketplace-page .services-section {
   background: #fffefa;
   color: #304238;
   font-size: 0.82rem;
-  font-weight: 850;
+  font-weight: 500;
 }
 
 .wallet-presets button.active,
@@ -5424,7 +5378,7 @@ body.app-mode .marketplace-page .services-section {
   background: #fffefa;
   color: #567061;
   font-size: 1.1rem;
-  font-weight: 850;
+  font-weight: 500;
 }
 
 .wallet-amount-field input {
@@ -5435,7 +5389,7 @@ body.app-mode .marketplace-page .services-section {
   box-shadow: none !important;
   color: #18251d;
   font-size: 1.1rem;
-  font-weight: 850;
+  font-weight: 500;
 }
 
 .wallet-topup-button {
@@ -5482,7 +5436,7 @@ body.app-mode .marketplace-page .services-section {
   background: var(--editorial-lime);
   color: #26352a;
   font-size: 0.74rem;
-  font-weight: 850;
+  font-weight: 600;
   line-height: 32px;
 }
 
@@ -5576,7 +5530,7 @@ body.app-mode .marketplace-page .services-section {
   gap: 6px;
   color: var(--fs-label, #48594e);
   font-size: 0.77rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .finance-stat > span i {
@@ -5588,7 +5542,7 @@ body.app-mode .marketplace-page .services-section {
   color: var(--fs-value, #17201c);
   font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(1.9rem, 3vw, 2.7rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 0.96;
 }
 
@@ -6182,21 +6136,17 @@ body.app-mode .marketplace-page .services-section {
   position: relative;
 }
 .notification-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
+  display: inline-grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  border-radius: 999px;
   background: var(--coral);
   color: #fff;
   font-size: 0.68rem;
-  font-weight: 900;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(198, 91, 71, 0.4);
-  animation: pulseBadge 2s infinite;
+  font-weight: 600;
+  line-height: 1;
 }
 @keyframes pulseBadge {
   0% { transform: scale(1); }
@@ -6228,8 +6178,7 @@ body.app-mode .marketplace-page .services-section {
   background: var(--soft);
 }
 .notification-panel-header span {
-  font-weight: 850;
-  color: var(--ink);
+  font-weight: 500;
 }
 .notification-panel-header button {
   border: 0;
@@ -6327,15 +6276,11 @@ body.app-mode .marketplace-page .services-section {
   gap: 20px;
 }
 .gateway-lock {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: var(--mint);
-  color: var(--green-strong);
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: 850;
+  gap: 7px;
   font-size: 0.9rem;
+  font-weight: 600;
 }
 .gateway-lock i {
   width: 20px;
@@ -6365,9 +6310,9 @@ body.app-mode .marketplace-page .services-section {
   margin: 12px 0;
 }
 .summary-line.total-line {
+  color: #17201c;
   font-size: 1.05rem;
-  font-weight: 900;
-  color: var(--ink);
+  font-weight: 500;
 }
 .summary-line.total-line strong {
   color: var(--green-strong);
@@ -6416,17 +6361,7 @@ body.app-mode .marketplace-page .services-section {
   border: 1px solid var(--line);
 }
 .gateway-tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 850;
-  transition: all 0.2s ease;
+  font-weight: 500;
 }
 .gateway-tab.active {
   background: var(--paper);
@@ -6450,9 +6385,10 @@ body.app-mode .marketplace-page .services-section {
   margin-bottom: 16px;
 }
 .gateway-form label span {
+  display: block;
+  margin-bottom: 5px;
   font-size: 0.84rem;
-  font-weight: 800;
-  color: var(--muted);
+  font-weight: 500;
 }
 .gateway-form input {
   padding: 12px 14px;
@@ -6830,7 +6766,7 @@ body.app-mode .marketplace-page .services-section {
   color: var(--green-strong);
   padding: 2px 8px;
   border-radius: 99px;
-  font-weight: 850;
+  font-weight: 500;
   font-size: 0.74rem;
 }
 .receipt-actions {
@@ -7212,7 +7148,7 @@ body.app-mode .marketplace-page .services-section {
 .showcase-card-body { padding: 1.2rem 1.2rem 1.5rem; display: grid; gap: .5rem; }
 .showcase-card-body strong { font-size: 1rem; color: var(--ink); }
 .showcase-card-body p { font-size: .84rem; color: var(--muted); margin: 0; line-height: 1.5; }
-.showcase-tag { display: inline-block; font-size: .7rem; font-weight: 800; color: var(--green); background: var(--mint); padding: 3px 10px; border-radius: 999px; width: fit-content; }
+.showcase-tag { display: inline-block; font-size: .7rem; font-weight: 500; color: var(--green); background: var(--mint); padding: 3px 10px; border-radius: 999px; width: fit-content; }
 .showcase-cta { margin: 2.5rem 0 0; text-align: center; color: var(--muted); font-size: .9rem; }
 
 /* ── Seller CTA ── */
