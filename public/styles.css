@@ -7199,8 +7199,12 @@ body.app-mode .marketplace-page .services-section {
 .showcase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
 .showcase-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
 .showcase-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,.08); }
-.showcase-card-img { display: grid; place-items: center; height: 130px; color: rgba(255,255,255,.8); }
-.showcase-card-img i { width: 44px; height: 44px; }
+.showcase-card-img { display: grid; place-items: center; height: 130px; color: rgba(255,255,255,.9); position: relative; }
+.showcase-card-img::after { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.15); content: ""; }
+.showcase-card-img i { width: 44px; height: 44px; position: relative; z-index: 1; }
+.showcase-img-design { background: linear-gradient(135deg, #0b6c59, #0f8a72); }
+.showcase-img-ai { background: linear-gradient(135deg, #1a5276, #2d7aa8); }
+.showcase-img-marketing { background: linear-gradient(135deg, #a6583a, #c97a56); }
 .showcase-card-body { padding: 1.2rem 1.2rem 1.5rem; display: grid; gap: .5rem; }
 .showcase-card-body strong { font-size: 1rem; color: var(--ink); }
 .showcase-card-body p { font-size: .84rem; color: var(--muted); margin: 0; line-height: 1.5; }
