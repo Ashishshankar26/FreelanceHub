@@ -4159,6 +4159,7 @@ body {
   border: 1px solid rgba(23, 32, 28, 0.2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.5);
+  color: #17201c;
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
