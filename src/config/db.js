@@ -4,6 +4,8 @@ import { env, assertRuntimeConfig } from "./env.js";
 export async function connectDatabase() {
   assertRuntimeConfig();
 
+  if (!env.mongoUri) return null;
+
   mongoose.set("strictQuery", true);
 
   await mongoose.connect(env.mongoUri, {

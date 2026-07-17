@@ -3,11 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const requiredInProduction = [
-  "MONGODB_URI",
   "JWT_SECRET",
-  "SMTP_HOST",
-  "SMTP_USER",
-  "SMTP_PASS",
 ];
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -45,6 +41,6 @@ export const env = {
 
 export function assertRuntimeConfig() {
   if (!env.mongoUri) {
-    throw new Error("MONGODB_URI is required. Add your MongoDB Atlas connection string to .env.");
+    console.warn("Warning: MONGODB_URI not set. App will start without database connectivity.");
   }
 }

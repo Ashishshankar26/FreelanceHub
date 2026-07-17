@@ -4,7 +4,12 @@ import { env } from "./config/env.js";
 import { createApp } from "./app.js";
 
 async function main() {
-  await connectDatabase();
+  try {
+    await connectDatabase();
+  } catch (err) {
+    console.error("Database connection failed:", err.message);
+    console.log("Server will start without database. Only static pages will work.");
+  }
   const app = createApp();
   const server = createServer(app);
 
