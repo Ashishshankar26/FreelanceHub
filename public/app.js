@@ -541,10 +541,8 @@ function renderServiceCard(service) {
   const saved = state.saved.has(service.id);
   const category = categoryMeta[service.category] || categoryMeta.design;
   const deliveryLabel = service.deliveryDays === 1 ? "24h delivery" : `${service.deliveryDays} day delivery`;
-  const seed = String(service.id).replace(/\W/g, "");
   return `
     <article class="service-card" data-service-id="${service.id}" tabindex="0" aria-label="${escapeHtml(service.title)}">
-      <div class="service-image" style="background-image: url('https://picsum.photos/seed/${seed}/600/400')"></div>
       <div class="service-body">
         <div class="specialist-card-top">
           <span class="avatar">${escapeHtml(getInitials(service.sellerName))}</span>
@@ -1420,13 +1418,6 @@ function renderDashboard(payload) {
   
   if (isFreelancer) {
     selectors.dashboardWidgets.innerHTML = `
-      <div class="data-widget-card poster-widget" style="background-image: url('https://picsum.photos/seed/freelancerposter/800/400')">
-        <div class="poster-overlay"></div>
-        <div class="poster-content">
-          <h3>Pro Seller Toolkit</h3>
-          <p>Unlock advanced analytics and priority placement.</p>
-        </div>
-      </div>
       <div class="data-widget-card">
         <div class="widget-header"><span>Service Impressions</span><i data-lucide="eye"></i></div>
         <div class="widget-value">${payload.stats.serviceImpressions || 0}</div>
@@ -1445,13 +1436,6 @@ function renderDashboard(payload) {
     `;
   } else {
     selectors.dashboardWidgets.innerHTML = `
-      <div class="data-widget-card poster-widget" style="background-image: url('https://picsum.photos/seed/clientposter/800/400')">
-        <div class="poster-overlay"></div>
-        <div class="poster-content">
-          <h3>Elevate Your Brand</h3>
-          <p>Find top-tier specialists for your next big launch.</p>
-        </div>
-      </div>
       <div class="data-widget-card">
         <div class="widget-header"><span>Total Spend</span><i data-lucide="wallet"></i></div>
         <div class="widget-value">${currency.format(payload.stats.earningsOrSpend || 0)}</div>
