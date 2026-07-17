@@ -3940,17 +3940,17 @@ body {
   overflow: hidden;
   border: 0;
   border-radius: 24px;
-  background: #f5f0f0;
+  background: #eaf0e4;
   box-shadow: 0 12px 26px rgba(33, 48, 38, 0.12);
 }
-.service-card:nth-child(2) { background: #f0f0f5; }
-.service-card:nth-child(3) { background: #f5f2ea; }
-.service-card:nth-child(4) { background: #eaf5f5; }
-.service-card:nth-child(5) { background: #f5edf0; }
-.service-card:nth-child(6) { background: #eef2f5; }
-.service-card:nth-child(7) { background: #f0f5ea; }
-.service-card:nth-child(8) { background: #f5f5ea; }
-.service-card:nth-child(9) { background: #ecf0f5; }
+.service-card:nth-child(2) { background: #e8e4f0; }
+.service-card:nth-child(3) { background: #f0ece0; }
+.service-card:nth-child(4) { background: #dff0ea; }
+.service-card:nth-child(5) { background: #f0e4e8; }
+.service-card:nth-child(6) { background: #e4eaf0; }
+.service-card:nth-child(7) { background: #e8f0e0; }
+.service-card:nth-child(8) { background: #f0f0e0; }
+.service-card:nth-child(9) { background: #e0e4f0; }
 
 .service-card:hover {
   border-color: transparent;
@@ -6976,14 +6976,14 @@ body.app-mode .marketplace-page .services-section {
   border-color: var(--line);
 }
 [data-theme="dark"] .service-card { background: var(--soft); }
-[data-theme="dark"] .service-card:nth-child(2) { background: #121c1e; }
-[data-theme="dark"] .service-card:nth-child(3) { background: #191d1e; }
-[data-theme="dark"] .service-card:nth-child(4) { background: #0e1c1a; }
-[data-theme="dark"] .service-card:nth-child(5) { background: #1b1a1c; }
-[data-theme="dark"] .service-card:nth-child(6) { background: #141c1e; }
-[data-theme="dark"] .service-card:nth-child(7) { background: #141e16; }
-[data-theme="dark"] .service-card:nth-child(8) { background: #1b1e14; }
-[data-theme="dark"] .service-card:nth-child(9) { background: #11171e; }
+[data-theme="dark"] .service-card:nth-child(2) { background: #14161c; }
+[data-theme="dark"] .service-card:nth-child(3) { background: #1a1a16; }
+[data-theme="dark"] .service-card:nth-child(4) { background: #101c18; }
+[data-theme="dark"] .service-card:nth-child(5) { background: #1c1416; }
+[data-theme="dark"] .service-card:nth-child(6) { background: #12161c; }
+[data-theme="dark"] .service-card:nth-child(7) { background: #141c12; }
+[data-theme="dark"] .service-card:nth-child(8) { background: #1c1c12; }
+[data-theme="dark"] .service-card:nth-child(9) { background: #10121c; }
 [data-theme="dark"] .finance-chart-panel h3,
 [data-theme="dark"] .finance-summary-panel h3,
 [data-theme="dark"] .wallet-topup-panel h3,
