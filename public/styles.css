@@ -3562,7 +3562,7 @@ body {
   margin: 0 auto;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 28px;
+  border-radius: 16px;
   background: #171a19;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
 }
@@ -3939,7 +3939,7 @@ body {
 .service-card {
   overflow: hidden;
   border: 0;
-  border-radius: 24px;
+  border-radius: 14px;
   background: #dae6d4;
   box-shadow: 0 12px 26px rgba(33, 48, 38, 0.12);
 }
@@ -4166,7 +4166,7 @@ body {
   }
 
   .hero-shell {
-    border-radius: 18px;
+    border-radius: 12px;
   }
 
   .hero-browser-bar {
@@ -4353,7 +4353,7 @@ body {
   min-height: 154px;
   padding: 18px;
   border: 0;
-  border-radius: 20px;
+  border-radius: 12px;
   background: #eef4ea;
   box-shadow: 0 9px 22px rgba(35, 52, 42, 0.08);
 }
@@ -4477,7 +4477,7 @@ body {
 
 .dashboard-progress-card {
   border: 0;
-  border-radius: 18px;
+  border-radius: 10px;
   background: #d8e8d4;
 }
 
@@ -4492,7 +4492,7 @@ body {
 .dashboard-card {
   overflow: hidden;
   border: 1px solid var(--line, transparent);
-  border-radius: 20px;
+  border-radius: 12px;
   box-shadow: 0 10px 22px rgba(33, 48, 38, 0.09);
 }
 
@@ -4536,7 +4536,7 @@ body {
 
 .dashboard-next {
   border: 1px solid var(--line, #dbe5da);
-  border-radius: 24px;
+  border-radius: 14px;
   background: var(--soft, #e8f0e8);
   box-shadow: none;
 }
@@ -4552,7 +4552,7 @@ body {
 
 .dashboard-next-item {
   border: 1px solid var(--line, transparent);
-  border-radius: 18px;
+  border-radius: 12px;
   box-shadow: 0 5px 12px rgba(33, 48, 38, 0.05);
 }
 
@@ -4590,7 +4590,7 @@ body {
 .orders-panel,
 .seller-tools {
   border: 1px solid var(--line, #dce6db);
-  border-radius: 24px;
+  border-radius: 14px;
   background: var(--paper, #fffefa);
   box-shadow: none;
 }
@@ -4604,7 +4604,7 @@ body {
 
 .order-item {
   border: 1px solid var(--line, transparent);
-  border-radius: 16px;
+  border-radius: 10px;
   background: var(--soft, #e0eae0);
   box-shadow: none;
 }
@@ -4707,7 +4707,7 @@ body {
   position: relative;
   overflow: hidden;
   border: 0;
-  border-radius: 28px;
+  border-radius: 16px;
   background: var(--editorial-lime);
   box-shadow: 0 16px 30px rgba(33, 48, 38, 0.14);
 }
@@ -4765,7 +4765,7 @@ body {
 }
 
 .seller-art {
-  border-radius: 28px;
+  border-radius: 16px;
   background: #cce5da;
 }
 
@@ -4814,7 +4814,7 @@ body {
 
 .market-dialog {
   border: 0;
-  border-radius: 26px;
+  border-radius: 14px;
   background: #fffefa;
   box-shadow: 0 28px 70px rgba(12, 23, 17, 0.28);
 }
@@ -4869,7 +4869,7 @@ label textarea:focus {
 
 .role-choice {
   border: 0;
-  border-radius: 18px;
+  border-radius: 10px;
   background: #eef4ea;
   box-shadow: none;
 }
@@ -4911,7 +4911,7 @@ label textarea:focus {
 
 .profile-copilot {
   border: 0;
-  border-radius: 16px;
+  border-radius: 10px;
   background: #edf4e9;
 }
 
@@ -4960,7 +4960,7 @@ label textarea:focus {
 
   .category-tile {
     min-height: 144px;
-    border-radius: 18px;
+    border-radius: 10px;
   }
 
   .dashboard-card,
@@ -4969,7 +4969,7 @@ label textarea:focus {
   .dashboard-next,
   .escrow-card,
   .market-dialog {
-    border-radius: 20px;
+    border-radius: 12px;
   }
 
   .market-dialog form {
@@ -4990,7 +4990,7 @@ label textarea:focus {
     align-items: flex-start;
     min-height: 0;
     padding: 12px 14px;
-    border-radius: 16px;
+  border-radius: 10px;
   }
 }
 
@@ -5232,7 +5232,7 @@ body.app-mode .marketplace-page .services-section {
 .wallet-ledger-panel,
 .finance-chart-panel,
 .finance-summary-panel {
-  border-radius: 24px;
+  border-radius: 14px;
 }
 
 .wallet-balance-panel {
@@ -5548,7 +5548,7 @@ body.app-mode .marketplace-page .services-section {
   gap: 11px;
   min-height: 162px;
   padding: 19px;
-  border-radius: 20px;
+  border-radius: 12px;
 }
 
 .finance-stat > span {
@@ -5847,7 +5847,7 @@ body.app-mode .marketplace-page .services-section {
   .wallet-ledger-panel,
   .finance-chart-panel,
   .finance-summary-panel {
-    border-radius: 20px;
+    border-radius: 12px;
   }
 
   .wallet-balance-panel {
@@ -6296,95 +6296,7 @@ body.app-mode .marketplace-page .services-section {
 .gateway-sidebar {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  display: grid;
-  gap: 20px;
-}
-.gateway-lock {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.gateway-lock i {
-  width: 20px;
-  height: 20px;
-}
-.gateway-summary h3 {
-  font-size: 1.1rem;
-  margin-bottom: 16px;
-  color: var(--ink);
-}
-.summary-line {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-.summary-line strong {
-  color: var(--ink);
-}
-.summary-line.fee-line {
-  font-size: 0.85rem;
-}
-.summary-divider {
-  height: 1px;
-  background: var(--line);
-  margin: 12px 0;
-}
-.summary-line.total-line {
-  color: #17201c;
-  font-size: 1.05rem;
-  font-weight: 500;
-}
-.summary-line.total-line strong {
-  color: var(--green-strong);
-  font-size: 1.2rem;
-}
-.gateway-badges {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 750;
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
-}
-.gateway-badges span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.gateway-main-panel {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  display: grid;
-  gap: 24px;
-}
-.gateway-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.gateway-header-row h2 {
-  font-size: 1.45rem;
-  color: var(--ink);
-}
-.gateway-tab-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  background: var(--soft);
-  padding: 6px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--line);
 }
 .gateway-tab {
@@ -7163,7 +7075,7 @@ body.app-mode .marketplace-page .services-section {
 .info-poster-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
 .info-poster-inner h2 { font-size: 2rem; margin: .4rem 0 2.5rem; color: var(--ink); }
 .info-poster-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2.5rem; }
-.info-step { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.5rem; text-align: center; position: relative; transition: transform .2s, box-shadow .2s; }
+.info-step { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 2rem 1.5rem; text-align: center; position: relative; transition: transform .2s, box-shadow .2s; }
 .info-step:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
 .info-step-num { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; font-weight: 800; font-size: .75rem; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; }
 .info-step i { width: 36px; height: 36px; color: var(--green); margin-bottom: .75rem; }
@@ -7182,7 +7094,7 @@ body.app-mode .marketplace-page .services-section {
 .showcase-inner .eyebrow { color: var(--eyebrow-color); }
 .showcase-inner h2 { font-size: 2rem; margin: .4rem 0 2.5rem; color: var(--ink); }
 .showcase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
-.showcase-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+.showcase-card { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
 .showcase-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,.08); }
 .showcase-card-img { display: grid; place-items: center; height: 130px; color: rgba(255,255,255,.9); position: relative; }
 .showcase-card-img::after { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.15); content: ""; }
@@ -7216,14 +7128,14 @@ body.app-mode .marketplace-page .services-section {
 .dash-info-item span { font-size: .78rem; color: var(--muted); }
 
 /* ── Escrow Security Strip ── */
-.escrow-info-strip { margin-top: 2.5rem; padding: 2rem; background: var(--soft); border-radius: 14px; border: 1px solid var(--line); }
+.escrow-info-strip { margin-top: 2.5rem; padding: 2rem; background: var(--soft); border-radius: 10px; border: 1px solid var(--line); }
 .escrow-info-strip-inner { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; text-align: center; }
 .escrow-info-block i { width: 28px; height: 28px; color: var(--green); margin-bottom: .5rem; }
 .escrow-info-block h4 { font-size: .95rem; color: var(--ink); margin: 0 0 .3rem; }
 .escrow-info-block p { font-size: .8rem; color: var(--muted); margin: 0; line-height: 1.4; }
 
 /* ── Growth Tips Banner ── */
-.growth-tips-banner { margin-top: 2.5rem; padding: 2rem; background: linear-gradient(135deg, rgba(19,113,95,.06), rgba(19,113,95,.12)); border-radius: 14px; border: 1px solid var(--line); }
+.growth-tips-banner { margin-top: 2.5rem; padding: 2rem; background: linear-gradient(135deg, rgba(19,113,95,.06), rgba(19,113,95,.12)); border-radius: 10px; border: 1px solid var(--line); }
 .growth-tips-inner { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
 .growth-tip { text-align: center; }
 .growth-tip-icon { display: inline-flex; width: 44px; height: 44px; border-radius: 50%; background: var(--mint); place-items: center; justify-content: center; margin-bottom: .6rem; }
