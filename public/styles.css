@@ -4154,13 +4154,28 @@ body {
 }
 
 .service-open-action {
-  font-size: 0.72rem;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 0 22px;
+  border: 1px solid rgba(23, 32, 28, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.service-open-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(33, 48, 38, 0.14);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .service-open-action i {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
 }
 
 @media (max-width: 900px) {
