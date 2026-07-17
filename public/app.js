@@ -423,7 +423,7 @@ function initGoogleAuth() {
     });
     window.google.accounts.id.renderButton(
       selectors.googleAuthButton,
-      { theme: "outline", size: "large", width: 280, shape: "rectangular" }
+      { theme: "outline", size: "medium", shape: "rectangular" }
     );
   }
 }
