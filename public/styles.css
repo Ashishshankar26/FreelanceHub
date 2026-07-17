@@ -5046,7 +5046,7 @@ label textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
   min-width: 0;
   flex: 1;
   padding: 4px;
