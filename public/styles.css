@@ -98,10 +98,10 @@ img {
   position: sticky;
   z-index: 20;
   top: 0;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 24px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   min-height: 74px;
   padding: 0 clamp(18px, 4vw, 56px);
   background: rgba(var(--paper-rgb, 255, 255, 255), 0.7);
@@ -1273,9 +1273,6 @@ label textarea:focus,
 }
 
 @media (max-width: 1120px) {
-  .site-header {
-    grid-template-columns: auto auto;
-  }
 
   .main-nav {
     position: fixed;
@@ -1813,7 +1810,7 @@ body {
 
 .site-header {
   min-height: 72px;
-  gap: 24px;
+  gap: 20px;
   padding: 0 max(22px, calc((100vw - 1260px) / 2));
   border-bottom-color: var(--header-border);
   background: var(--header-bg);
@@ -5051,6 +5048,7 @@ label textarea:focus {
   justify-content: center;
   gap: 4px;
   min-width: 0;
+  flex: 1;
   padding: 4px;
   border: 1px solid #dce5dc;
   border-radius: 999px;
@@ -5195,10 +5193,6 @@ body.app-mode .workspace-footer {
   border-top: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.85rem;
-}
-
-body.app-mode .site-header {
-  grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
 body.app-mode .marketplace-page,
@@ -5855,7 +5849,6 @@ body.app-mode .marketplace-page .services-section {
 
 @media (max-width: 640px) {
   body.app-mode .site-header {
-    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 8px;
   }
 
