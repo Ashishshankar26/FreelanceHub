@@ -42,6 +42,7 @@
   --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   --paper-rgb: 15, 23, 42;
   color-scheme: dark;
+  --editorial-lime: #3d6b5a;
 }
 
 h1, h2, h3, h4, h5, h6, .brand {
@@ -738,8 +739,8 @@ h3 {
 }
 
 .data-widget-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 20px;
   display: flex;
@@ -752,7 +753,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -760,28 +761,28 @@ h3 {
 .data-widget-card .widget-header i {
   width: 18px;
   height: 18px;
-  color: var(--text-muted);
+  color: var(--muted);
 }
 
 .data-widget-card .widget-value {
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--ink);
   margin-top: 4px;
 }
 
 .data-widget-card .widget-footer {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--muted);
   display: flex;
   align-items: center;
   gap: 6px;
   padding-top: 8px;
-  border-top: 1px dashed var(--border);
+  border-top: 1px dashed var(--line);
 }
 
 .data-widget-card .widget-footer .badge {
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #1e3025;
   padding: 2px 6px;
   border-radius: 12px;
@@ -1617,6 +1618,7 @@ label textarea:focus,
   --soft: #162030;
   --green: #34d4b0;
   --green-strong: #1bbf9c;
+  --editorial-lime: #3d6b5a;
   --mint: #0d3530;
   --blue: #60b3fa;
   --blue-soft: #0c3d6e;
@@ -1815,17 +1817,17 @@ body {
 
 .brand {
   gap: 11px;
-  font-size: 1.23rem;
+  font-size: 1.38rem;
   font-weight: 850;
 }
 
 .brand-mark {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 7px;
   background: var(--brand-mark-bg);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
 .main-nav {
@@ -3544,7 +3546,7 @@ label textarea {
 :root {
   --editorial-ink: #17201c;
   --editorial-sage: #c9d9c1;
-  --editorial-lime: #e8ff47;
+  --editorial-lime: #d4e8d8;
   --editorial-coral: #ff787c;
   --editorial-blue: #5aaee8;
 }
@@ -3561,7 +3563,7 @@ body {
 .brand-mark {
   border-radius: 50%;
   background: var(--editorial-ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 0.98rem;
   text-transform: lowercase;
 }
@@ -3684,7 +3686,7 @@ body {
 .hero h1 {
   max-width: 620px;
   color: #090e0b;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(3.3rem, 5.3vw, 5.9rem);
   font-weight: 400;
   line-height: 0.88;
@@ -3724,7 +3726,7 @@ body {
 }
 
 .hero-path-title {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.52rem;
   line-height: 1;
 }
@@ -3887,7 +3889,7 @@ body {
 }
 
 .hero-escrow-note strong {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.7rem;
   line-height: 1;
 }
@@ -3954,7 +3956,7 @@ body {
 
 .services-section .section-heading h2,
 .category-section .section-heading h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -3967,16 +3969,16 @@ body {
   overflow: hidden;
   border: 0;
   border-radius: 24px;
-  background: var(--editorial-lime);
+  background: #eef4ea;
   box-shadow: 0 12px 26px rgba(33, 48, 38, 0.12);
 }
 
 .service-card:nth-child(3n + 2) {
-  background: #d8e6d2;
+  background: #f0f4f8;
 }
 
 .service-card:nth-child(3n) {
-  background: #f5c9ca;
+  background: #fdf2f1;
 }
 
 .service-card:hover {
@@ -4055,7 +4057,7 @@ body {
 .service-card .seller-name {
   margin: 0;
   color: #101510;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(1rem, 1.6vw, 1.35rem);
   font-weight: 400;
   line-height: 1;
@@ -4323,7 +4325,7 @@ body {
 .seller-copy h2,
 .footer-brand h2 {
   color: #142019;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -4346,7 +4348,7 @@ body {
 .trusted-strip .trust-intro {
   margin-right: 14px;
   color: #1c2e24;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.04rem;
   font-weight: 400;
 }
@@ -4365,7 +4367,8 @@ body {
 
 .circle-button:hover {
   border-color: #17201c;
-  background: var(--editorial-lime);
+  background: #17201c;
+  color: #d4e8d8;
 }
 
 .category-rail {
@@ -4427,7 +4430,7 @@ body {
 .category-tile .category-label {
   max-width: 135px;
   color: #18271f;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.08rem;
   font-weight: 400;
   line-height: 1.08;
@@ -4436,7 +4439,8 @@ body {
 .category-tile:hover,
 .category-tile.active {
   border-color: transparent;
-  background: var(--editorial-lime);
+  background: #17201c;
+  color: #d4e8d8;
   box-shadow: 0 15px 28px rgba(35, 52, 42, 0.14);
   transform: translateY(-3px) rotate(-0.4deg);
 }
@@ -4444,8 +4448,8 @@ body {
 .category-tile.active .category-icon,
 .category-tile:hover .category-icon {
   border-color: transparent;
-  background: #17201c;
-  color: #fffefa;
+  background: #d4e8d8;
+  color: #17201c;
 }
 
 .service-filter {
@@ -4464,7 +4468,7 @@ body {
 
 .service-filter button.active {
   background: #17201c;
-  color: #f1ff69;
+  color: #d4e8d8;
   box-shadow: none;
 }
 
@@ -4480,7 +4484,7 @@ body {
 
 .dashboard-welcome h2 {
   color: #142019;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -4506,22 +4510,22 @@ body {
 }
 
 .dashboard-card-mint {
-  background: var(--dc-mint-bg, #e8ff47);
+  background: var(--dc-mint-bg, #e6f5ed);
   color: var(--dc-mint-color, #1d725f);
 }
 
 .dashboard-card-blue {
-  background: var(--dc-blue-bg, #cfe8ff);
+  background: var(--dc-blue-bg, #e8f1fa);
   color: var(--dc-blue-color, #416eac);
 }
 
 .dashboard-card-amber {
-  background: var(--dc-amber-bg, #fff1ac);
+  background: var(--dc-amber-bg, #faf3e0);
   color: var(--dc-amber-color, #a26f1f);
 }
 
 .dashboard-card-coral {
-  background: var(--dc-coral-bg, #ffd2d0);
+  background: var(--dc-coral-bg, #fae8e7);
   color: var(--dc-coral-color, #b75d4b);
 }
 
@@ -4534,7 +4538,7 @@ body {
 
 .dashboard-card strong {
   color: var(--dc-value, #111711);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -4554,7 +4558,7 @@ body {
 .orders-panel h3,
 .seller-tools h3 {
   color: var(--ink, #17231b);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.45rem;
   font-weight: 400;
 }
@@ -4571,7 +4575,7 @@ body {
 }
 
 .dashboard-next-item-1 {
-  background: var(--next-item-1-bg, #e8ff47);
+  background: var(--next-item-1-bg, var(--editorial-lime));
   color: var(--next-item-1-color, #17201c);
 }
 
@@ -4607,7 +4611,7 @@ body {
 .panel-status {
   border: 0;
   border-radius: 999px;
-  background: var(--next-item-1-bg, #e8ff47);
+  background: var(--next-item-1-bg, var(--editorial-lime));
   color: var(--next-item-1-color, #25352a);
 }
 
@@ -4628,7 +4632,7 @@ body {
 
 .seller-tools .join-button {
   background: #17201c;
-  color: #f1ff69;
+  color: var(--editorial-lime);
 }
 
 .pro-band {
@@ -4676,12 +4680,12 @@ body {
 }
 
 .pro-band .eyebrow {
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .dark-button {
   border-radius: 999px;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
 }
 
@@ -4717,7 +4721,7 @@ body {
   overflow: hidden;
   border: 0;
   border-radius: 28px;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   box-shadow: 0 16px 30px rgba(33, 48, 38, 0.14);
 }
 
@@ -4739,11 +4743,11 @@ body {
 
 .escrow-card-top span,
 .escrow-card-top strong {
-  color: #17201c;
+  color: var(--ink);
 }
 
 .escrow-card-top strong {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 3.2rem;
   font-weight: 400;
 }
@@ -4752,12 +4756,12 @@ body {
   border: 0;
   border-radius: 999px;
   background: rgba(23, 32, 28, 0.09);
-  color: #455346;
+  color: var(--muted);
 }
 
 .escrow-flow span.done {
   background: #17201c;
-  color: #e8ff47;
+  color: var(--green);
 }
 
 .mini-ledger p {
@@ -4789,12 +4793,12 @@ body {
 }
 
 .seller-copy .eyebrow {
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .light-button {
   border-radius: 999px;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
 }
 
@@ -4811,7 +4815,7 @@ body {
 
 .footer-columns h3 {
   color: #17201c;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -4840,7 +4844,7 @@ body {
 .market-dialog h2,
 .onboarding-shell h2 {
   color: #17201c;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -4857,7 +4861,7 @@ body {
 
 .auth-tabs button.active {
   background: #17201c;
-  color: #e8ff47;
+  color: var(--editorial-lime);
   box-shadow: none;
 }
 
@@ -4884,7 +4888,7 @@ label textarea:focus {
 }
 
 .role-choice-client {
-  background: #e8ff47;
+  background: var(--editorial-lime);
 }
 
 .role-choice-freelancer {
@@ -4914,7 +4918,7 @@ label textarea:focus {
 }
 
 .onboarding-stepper span.active {
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
 }
 
@@ -4927,7 +4931,7 @@ label textarea:focus {
 .profile-copilot .ghost-button {
   border-radius: 999px;
   background: #17201c;
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .onboarding-actions {
@@ -4937,7 +4941,7 @@ label textarea:focus {
 .toast {
   border-radius: 999px;
   background: #17201c;
-  color: #e8ff47;
+  color: var(--editorial-lime);
   box-shadow: 0 13px 28px rgba(23, 32, 28, 0.22);
 }
 
@@ -5039,7 +5043,7 @@ label textarea:focus {
 .workspace-nav button.active,
 .workspace-nav button:hover {
   background: #17201c;
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .user-menu-wrap {
@@ -5069,7 +5073,7 @@ label textarea:focus {
   height: 34px;
   place-items: center;
   border-radius: 50%;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
   font-size: 0.75rem;
   font-weight: 950;
@@ -5203,7 +5207,7 @@ body.app-mode .marketplace-page .services-section {
   max-width: 720px;
   margin: 4px 0 0;
   color: #17201c;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(2.4rem, 4.2vw, 4.8rem);
   font-weight: 400;
   line-height: 0.94;
@@ -5217,7 +5221,7 @@ body.app-mode .marketplace-page .services-section {
   gap: 7px;
   padding: 0 12px;
   border-radius: 999px;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #26352a;
   font-size: 0.76rem;
   font-weight: 850;
@@ -5293,7 +5297,7 @@ body.app-mode .marketplace-page .services-section {
   height: 44px;
   place-items: center;
   border-radius: 50%;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
 }
 
@@ -5306,7 +5310,7 @@ body.app-mode .marketplace-page .services-section {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #e8ff47;
+  color: var(--editorial-lime);
   font-size: 0.76rem;
   font-weight: 800;
 }
@@ -5324,8 +5328,8 @@ body.app-mode .marketplace-page .services-section {
 }
 
 .wallet-balance-panel > strong {
-  color: #e8ff47;
-  font-family: Georgia, "Times New Roman", serif;
+  color: var(--editorial-lime);
+  font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(3.6rem, 6vw, 6.3rem);
   font-weight: 400;
   line-height: 0.86;
@@ -5354,7 +5358,7 @@ body.app-mode .marketplace-page .services-section {
 .wallet-balance-footer i {
   width: 15px;
   height: 15px;
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .wallet-topup-panel {
@@ -5372,7 +5376,7 @@ body.app-mode .marketplace-page .services-section {
 .finance-summary-panel h3 {
   margin: 0;
   color: #18251d;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 1.65rem;
   font-weight: 400;
 }
@@ -5400,7 +5404,7 @@ body.app-mode .marketplace-page .services-section {
 .wallet-presets button.active,
 .wallet-presets button:hover {
   border-color: #17201c;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #17201c;
 }
 
@@ -5439,7 +5443,7 @@ body.app-mode .marketplace-page .services-section {
   min-height: 48px;
   border-radius: 999px;
   background: #17201c;
-  color: #e8ff47;
+  color: var(--editorial-lime);
 }
 
 .wallet-topup-button:disabled {
@@ -5475,7 +5479,7 @@ body.app-mode .marketplace-page .services-section {
   min-height: 32px;
   padding: 0 10px;
   border-radius: 999px;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #26352a;
   font-size: 0.74rem;
   font-weight: 850;
@@ -5507,7 +5511,7 @@ body.app-mode .marketplace-page .services-section {
   height: 38px;
   place-items: center;
   border-radius: 50%;
-  background: #e8ff47;
+  background: var(--editorial-lime);
   color: #1e3528;
 }
 
@@ -5582,7 +5586,7 @@ body.app-mode .marketplace-page .services-section {
 
 .finance-stat strong {
   color: var(--fs-value, #17201c);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Outfit, "Times New Roman", serif;
   font-size: clamp(1.9rem, 3vw, 2.7rem);
   font-weight: 400;
   line-height: 0.96;
@@ -5593,7 +5597,7 @@ body.app-mode .marketplace-page .services-section {
   font-size: 0.72rem;
 }
 
-.finance-stat-lime { background: var(--fs-lime-bg, #e8ff47); color: var(--fs-lime-color, #1a3500); }
+.finance-stat-lime { background: var(--fs-lime-bg, var(--editorial-lime)); color: var(--fs-lime-color, #1a3500); }
 .finance-stat-blue { background: var(--fs-blue-bg, #cfe8ff); color: var(--fs-blue-color, #1a3a5e); }
 .finance-stat-coral { background: var(--fs-coral-bg, #ffd2d0); color: var(--fs-coral-color, #5a1a18); }
 .finance-stat-sage { background: var(--fs-sage-bg, #dbe9d5); color: var(--fs-sage-color, #1a3520); }
@@ -5631,7 +5635,7 @@ body.app-mode .marketplace-page .services-section {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #e8ff47;
+  background: var(--editorial-lime);
 }
 
 .chart-legend i:nth-of-type(2) {
@@ -5691,7 +5695,7 @@ body.app-mode .marketplace-page .services-section {
 }
 
 .finance-bar.incoming::-webkit-meter-optimum-value {
-  background: #e8ff47;
+  background: var(--editorial-lime);
   border-radius: 7px 7px 0 0;
 }
 
@@ -5701,7 +5705,7 @@ body.app-mode .marketplace-page .services-section {
 }
 
 .finance-bar.incoming::-moz-meter-bar {
-  background: #e8ff47;
+  background: var(--editorial-lime);
   border-radius: 7px 7px 0 0;
 }
 
@@ -5711,7 +5715,7 @@ body.app-mode .marketplace-page .services-section {
 }
 
 .finance-bar.incoming {
-  background: #e8ff47;
+  background: var(--editorial-lime);
 }
 
 .finance-bar.outgoing {
@@ -5748,11 +5752,11 @@ body.app-mode .marketplace-page .services-section {
   height: 154px;
   place-items: center;
   margin: 8px 0 2px;
-  border: 15px solid #e8ff47;
+  border: 15px solid var(--editorial-lime);
   border-radius: 50%;
   background: #17201c;
-  color: #e8ff47;
-  font-family: Georgia, "Times New Roman", serif;
+  color: var(--editorial-lime);
+  font-family: Outfit, "Times New Roman", serif;
   font-size: 2rem;
 }
 
