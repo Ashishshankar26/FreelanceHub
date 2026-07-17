@@ -3159,7 +3159,7 @@ label textarea {
   padding: 16px;
   border: 1px solid #dce9df;
   border-radius: 7px;
-  background: #f4faf5;
+  background: #e0ece2;
 }
 
 .dashboard-complete > span {
@@ -4605,7 +4605,7 @@ body {
 .order-item {
   border: 1px solid var(--line, transparent);
   border-radius: 16px;
-  background: var(--soft, #f2f6ef);
+  background: var(--soft, #e0eae0);
   box-shadow: none;
 }
 
@@ -4614,7 +4614,7 @@ body {
 }
 
 .seller-tools {
-  background: #e9f0e5;
+  background: #dae4d4;
 }
 
 .seller-tools .join-button {
