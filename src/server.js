@@ -10,6 +10,7 @@ async function main() {
     console.error("Database connection failed:", err.message);
     console.log("Server will start without database. Only static pages will work.");
   }
+  console.log("Creating Express app...");
   const app = createApp();
   const server = createServer(app);
 
@@ -19,6 +20,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error("Fatal startup error:", error);
   process.exit(1);
 });
