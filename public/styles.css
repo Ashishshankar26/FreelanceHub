@@ -6913,44 +6913,6 @@ body.app-mode .marketplace-page .services-section {
   border-color: var(--line);
 }
 [data-theme="dark"] .dashboard-complete strong { color: var(--ink); }
-
-/* ── Dark mode card gradients ── */
-[data-theme="dark"] .service-card { background: linear-gradient(135deg, #1a2e22, #24382c); }
-[data-theme="dark"] .service-card:nth-child(2) { background: linear-gradient(135deg, #1e1a2e, #2a2438); }
-[data-theme="dark"] .service-card:nth-child(3) { background: linear-gradient(135deg, #2e2a1e, #383428); }
-[data-theme="dark"] .service-card:nth-child(4) { background: linear-gradient(135deg, #18302a, #223c34); }
-[data-theme="dark"] .service-card:nth-child(5) { background: linear-gradient(135deg, #2e1e22, #38282c); }
-[data-theme="dark"] .service-card:nth-child(6) { background: linear-gradient(135deg, #1a1e2e, #242838); }
-[data-theme="dark"] .service-card:nth-child(7) { background: linear-gradient(135deg, #1e2e18, #283822); }
-[data-theme="dark"] .service-card:nth-child(8) { background: linear-gradient(135deg, #2e2e18, #383822); }
-[data-theme="dark"] .service-card:nth-child(9) { background: linear-gradient(135deg, #181a2e, #222438); }
-[data-theme="dark"] .service-card:nth-child(10) { background: linear-gradient(135deg, #1a2e22, #24382c); }
-[data-theme="dark"] .service-card:nth-child(11) { background: linear-gradient(135deg, #1e1a2e, #2a2438); }
-[data-theme="dark"] .service-card:nth-child(12) { background: linear-gradient(135deg, #2e2a1e, #383428); }
-[data-theme="dark"] .service-card:nth-child(13) { background: linear-gradient(135deg, #18302a, #223c34); }
-[data-theme="dark"] .service-card:nth-child(14) { background: linear-gradient(135deg, #2e1e22, #38282c); }
-[data-theme="dark"] .service-card:nth-child(15) { background: linear-gradient(135deg, #1a1e2e, #242838); }
-[data-theme="dark"] .service-card:nth-child(16) { background: linear-gradient(135deg, #1e2e18, #283822); }
-[data-theme="dark"] .service-card:nth-child(17) { background: linear-gradient(135deg, #2e2e18, #383822); }
-[data-theme="dark"] .service-card:nth-child(18) { background: linear-gradient(135deg, #181a2e, #222438); }
-[data-theme="dark"] .service-card .seller-name { color: #d6e0d8; }
-[data-theme="dark"] .service-card .seller-level { color: #90a098; }
-[data-theme="dark"] .service-card .service-title { color: #d6e0d8; }
-[data-theme="dark"] .service-card .specialist-tags span { background: rgba(232, 236, 232, 0.08); color: #90a098; }
-[data-theme="dark"] .service-card .specialist-service > span { color: #90a098; }
-[data-theme="dark"] .service-card .specialist-card-bottom { border-top-color: rgba(232, 236, 232, 0.1); }
-[data-theme="dark"] .service-card .price-row span { color: #90a098; }
-[data-theme="dark"] .service-card .price-row strong { color: #d6e0d8; }
-[data-theme="dark"] .service-open-action { border-color: rgba(232, 236, 232, 0.12); background: rgba(255,255,255,0.04); color: #c0ccc4; }
-[data-theme="dark"] .service-open-action:hover { background: rgba(255,255,255,0.1); }
-[data-theme="dark"] .dashboard-card-mint { background: linear-gradient(135deg, #1a3028, #243e34); color: #b8d4c8; }
-[data-theme="dark"] .dashboard-card-mint .dashboard-stat-icon { background: rgba(255,255,255,0.1); color: #b8d4c8; }
-[data-theme="dark"] .dashboard-card-blue { background: linear-gradient(135deg, #18222e, #222c3c); color: #b0c4d8; }
-[data-theme="dark"] .dashboard-card-blue .dashboard-stat-icon { background: rgba(255,255,255,0.1); color: #b0c4d8; }
-[data-theme="dark"] .dashboard-card-amber { background: linear-gradient(135deg, #2e2818, #3c3422); color: #d8ccb0; }
-[data-theme="dark"] .dashboard-card-amber .dashboard-stat-icon { background: rgba(255,255,255,0.1); color: #d8ccb0; }
-[data-theme="dark"] .dashboard-card-coral { background: linear-gradient(135deg, #2e1c1a, #3c2622); color: #d8bcb8; }
-[data-theme="dark"] .dashboard-card-coral .dashboard-stat-icon { background: rgba(255,255,255,0.1); color: #d8bcb8; }
 [data-theme="dark"] .activity-timeline::before { background: var(--line); }
 [data-theme="dark"] .activity-item h4 { color: var(--ink); }
 [data-theme="dark"] .activity-item span { color: var(--muted); }
