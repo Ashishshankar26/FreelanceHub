@@ -4127,7 +4127,7 @@ body {
 
 .service-card .service-title {
   font-size: clamp(1.1rem, 1.8vw, 1.35rem);
-  font-weight: 700;
+  font-weight: 600;
   color: #101510;
 }
 
