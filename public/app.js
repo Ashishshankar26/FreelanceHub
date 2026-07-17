@@ -1161,21 +1161,19 @@ function renderFinance(finance) {
 
     const isDark = document.documentElement.getAttribute("data-theme") === "dark";
 
-    if (state.financeChartType === "pie") {
+      if (state.financeChartType === "pie") {
       const total = incoming + outgoing;
       const centerX = width / 2;
-      const centerY = height / 2;
-      const radius = Math.min(width, height) / 2 - 25;
+      const centerY = height / 2 - 12;
+      const radius = Math.min(width, height) / 2 - 35;
       const innerRadius = radius * 0.55;
 
       if (total === 0) {
-        // Draw empty state circle
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)';
         ctx.lineWidth = 15;
         ctx.stroke();
-
         ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -1184,10 +1182,8 @@ function renderFinance(finance) {
       } else {
         const incomingAngle = (incoming / total) * 2 * Math.PI;
         const outgoingAngle = (outgoing / total) * 2 * Math.PI;
-
         let startAngle = -Math.PI / 2;
 
-        // Draw Inflow slice (green)
         if (incoming > 0) {
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, startAngle, startAngle + incomingAngle);
@@ -1197,8 +1193,6 @@ function renderFinance(finance) {
           ctx.fill();
           startAngle += incomingAngle;
         }
-
-        // Draw Outflow slice (red)
         if (outgoing > 0) {
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, startAngle, startAngle + outgoingAngle);
@@ -1208,18 +1202,15 @@ function renderFinance(finance) {
           ctx.fill();
         }
 
-        // Draw center text
         ctx.fillStyle = isDark ? '#ffffff' : '#17201c';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        
         ctx.font = 'bold 15px Georgia, serif';
         ctx.fillText(currency.format(total), centerX, centerY - 8);
         ctx.font = '10px sans-serif';
         ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : '#555';
         ctx.fillText('Total Volume', centerX, centerY + 12);
 
-        // Draw percentages inside slices if large enough
         let currentStart = -Math.PI / 2;
         if (incoming > 0) {
           const midAngle = currentStart + incomingAngle / 2;
@@ -1245,6 +1236,29 @@ function renderFinance(finance) {
             ctx.textBaseline = 'middle';
             ctx.fillText(Math.round((outgoing / total) * 100) + '%', textX, textY);
           }
+        }
+
+        // ── Pie legend ──
+        const legendY = height - 8;
+        let legendX = width / 2 - 80;
+        if (incoming > 0) {
+          ctx.fillStyle = '#2d805e';
+          ctx.fillRect(legendX, legendY - 7, 10, 10);
+          ctx.fillStyle = isDark ? '#ccc' : '#333';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('Inflow: ' + currency.format(incoming), legendX + 15, legendY);
+          legendX += 110;
+        }
+        if (outgoing > 0) {
+          ctx.fillStyle = '#e05355';
+          ctx.fillRect(legendX, legendY - 7, 10, 10);
+          ctx.fillStyle = isDark ? '#ccc' : '#333';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('Outflow: ' + currency.format(outgoing), legendX + 15, legendY);
         }
       }
     } else {
@@ -1348,10 +1362,12 @@ function renderFinance(finance) {
         ctx.lineJoin = 'round';
         ctx.stroke();
 
-        // Draw points for inflow
+        // Draw points for inflow + value labels
+        const labelThresholdBytes = currency.format(maximum).length * 5;
         monthly.forEach((m, i) => {
           const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
+          const val = Number(m.incoming || 0);
+          const y = paddingTop + chartHeight - (val / maximum) * chartHeight;
           ctx.beginPath();
           ctx.arc(x, y, 4, 0, 2 * Math.PI);
           ctx.fillStyle = '#2d805e';
@@ -1359,12 +1375,19 @@ function renderFinance(finance) {
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1.5;
           ctx.stroke();
+          if (val > 0) {
+            ctx.fillStyle = isDark ? '#8fdaa0' : '#2d805e';
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 8px sans-serif';
+            ctx.fillText(currency.format(val), x, y - 9);
+          }
         });
 
-        // Draw points for outflow
+        // Draw points for outflow + value labels
         monthly.forEach((m, i) => {
           const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
+          const val = Number(m.outgoing || 0);
+          const y = paddingTop + chartHeight - (val / maximum) * chartHeight;
           ctx.beginPath();
           ctx.arc(x, y, 4, 0, 2 * Math.PI);
           ctx.fillStyle = '#e05355';
@@ -1372,6 +1395,12 @@ function renderFinance(finance) {
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1.5;
           ctx.stroke();
+          if (val > 0) {
+            ctx.fillStyle = isDark ? '#f99' : '#e05355';
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 8px sans-serif';
+            ctx.fillText(currency.format(val), x, y + 14);
+          }
         });
 
         // Month labels
@@ -1382,6 +1411,22 @@ function renderFinance(finance) {
           const x = paddingLeft + i * stepX;
           ctx.fillText(m.label || '', x, height - paddingBottom + 16);
         });
+
+        // ── Line chart legend ──
+        const lineLegendY = height - 2;
+        let lineLegendX = width / 2 - 90;
+        ctx.fillStyle = '#2d805e';
+        ctx.fillRect(lineLegendX, lineLegendY - 7, 10, 10);
+        ctx.fillStyle = isDark ? '#ccc' : '#333';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Inflow', lineLegendX + 15, lineLegendY);
+        lineLegendX += 75;
+        ctx.fillStyle = '#e05355';
+        ctx.fillRect(lineLegendX, lineLegendY - 7, 10, 10);
+        ctx.fillStyle = isDark ? '#ccc' : '#333';
+        ctx.fillText('Outflow', lineLegendX + 15, lineLegendY);
       } else {
         // Clear canvas if no data
         ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : '#aaa';
@@ -1391,6 +1436,12 @@ function renderFinance(finance) {
       }
     }
   }
+  // Update chart legend HTML with real values
+  const legendEl = document.querySelector('.chart-legend');
+  if (legendEl) {
+    legendEl.innerHTML = '<i style="background:#2d805e;display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 0;vertical-align:middle"></i> Inflow ' + currency.format(incoming) + ' <i style="background:#e05355;display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 0;vertical-align:middle"></i> Outflow ' + currency.format(outgoing);
+  }
+
   const health = incoming + outgoing ? Math.min(100, Math.round((incoming / (incoming + outgoing)) * 100)) : 0;
   selectors.financeRing.style.setProperty("--finance-progress", `${health}%`);
   selectors.financeRingValue.textContent = `${health}%`;

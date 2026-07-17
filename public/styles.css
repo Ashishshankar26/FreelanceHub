@@ -5139,9 +5139,12 @@ label textarea:focus {
 body.app-mode .main-nav,
 body.app-mode .hero,
 body.app-mode .trusted-strip,
+body.app-mode .info-poster,
+body.app-mode .stats-ticker,
 body.app-mode .pro-band,
 body.app-mode .feature-grid,
 body.app-mode .seller-band,
+body.app-mode .seller-cta,
 body.app-mode .footer-market {
   display: none !important;
 }
@@ -7169,5 +7172,103 @@ body.app-mode .marketplace-page .services-section {
 [data-theme="dark"] .mini-ledger { background: var(--soft); border-color: var(--line); }
 [data-theme="dark"] .mini-ledger p { color: var(--muted); }
 [data-theme="dark"] .footer-market { border-top-color: var(--line); }
+
+/* ── How Escrow Works ── */
+.info-poster { padding: 5rem 2rem; background: var(--soft); }
+.info-poster-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+.info-poster-inner h2 { font-size: 2rem; margin: .4rem 0 2.5rem; color: var(--ink); }
+.info-poster-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2.5rem; }
+.info-step { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.5rem; text-align: center; position: relative; transition: transform .2s, box-shadow .2s; }
+.info-step:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
+.info-step-num { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; font-weight: 800; font-size: .75rem; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; }
+.info-step i { width: 36px; height: 36px; color: var(--green); margin-bottom: .75rem; }
+.info-step h3 { font-size: 1.05rem; margin: 0 0 .5rem; color: var(--ink); }
+.info-step p { font-size: .88rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+/* ── Stats Ticker ── */
+.stats-ticker { background: var(--green); padding: 2rem 2rem; }
+.stats-ticker-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; text-align: center; }
+.stat-block strong { display: block; font-size: 1.6rem; color: #fff; font-weight: 800; }
+.stat-block span { font-size: .82rem; color: rgba(255,255,255,.8); }
+
+/* ── Showcase Band ── */
+.showcase-band { padding: 5rem max(22px, calc((100vw - 1100px) / 2)); background: var(--soft); }
+.showcase-inner { max-width: 1100px; margin: 0 auto; }
+.showcase-inner .eyebrow { color: var(--eyebrow-color); }
+.showcase-inner h2 { font-size: 2rem; margin: .4rem 0 2.5rem; color: var(--ink); }
+.showcase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.showcase-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+.showcase-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,.08); }
+.showcase-card-img { display: grid; place-items: center; height: 130px; color: rgba(255,255,255,.8); }
+.showcase-card-img i { width: 44px; height: 44px; }
+.showcase-card-body { padding: 1.2rem 1.2rem 1.5rem; display: grid; gap: .5rem; }
+.showcase-card-body strong { font-size: 1rem; color: var(--ink); }
+.showcase-card-body p { font-size: .84rem; color: var(--muted); margin: 0; line-height: 1.5; }
+.showcase-tag { display: inline-block; font-size: .7rem; font-weight: 800; color: var(--green); background: var(--mint); padding: 3px 10px; border-radius: 999px; width: fit-content; }
+.showcase-cta { margin: 2.5rem 0 0; text-align: center; color: var(--muted); font-size: .9rem; }
+
+/* ── Seller CTA ── */
+.seller-cta { padding: 5rem 2rem; background: var(--paper); }
+.seller-cta-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.seller-cta-text h2 { font-size: 2rem; color: var(--ink); margin: .4rem 0 1rem; }
+.seller-cta-text > p { color: var(--muted); line-height: 1.6; margin: 0 0 1.5rem; }
+.seller-cta-list { list-style: none; padding: 0; margin: 0 0 1.8rem; display: grid; gap: .6rem; }
+.seller-cta-list li { display: flex; align-items: center; gap: 8px; font-size: .92rem; color: var(--ink); }
+.seller-cta-list i { width: 18px; height: 18px; color: var(--green); flex-shrink: 0; }
+.seller-cta-visual { display: grid; place-items: center; }
+.seller-cta-visual img { max-width: 100%; height: auto; }
+
+/* ── Dashboard Info Banner ── */
+.dash-info-banner { margin-top: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--line); }
+.dash-info-banner-inner { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+.dash-info-item { display: flex; align-items: center; gap: 12px; }
+.dash-info-item i { width: 28px; height: 28px; color: var(--green); flex-shrink: 0; }
+.dash-info-item strong { display: block; font-size: 1rem; color: var(--ink); }
+.dash-info-item span { font-size: .78rem; color: var(--muted); }
+
+/* ── Escrow Security Strip ── */
+.escrow-info-strip { margin-top: 2.5rem; padding: 2rem; background: var(--soft); border-radius: 14px; border: 1px solid var(--line); }
+.escrow-info-strip-inner { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; text-align: center; }
+.escrow-info-block i { width: 28px; height: 28px; color: var(--green); margin-bottom: .5rem; }
+.escrow-info-block h4 { font-size: .95rem; color: var(--ink); margin: 0 0 .3rem; }
+.escrow-info-block p { font-size: .8rem; color: var(--muted); margin: 0; line-height: 1.4; }
+
+/* ── Growth Tips Banner ── */
+.growth-tips-banner { margin-top: 2.5rem; padding: 2rem; background: linear-gradient(135deg, rgba(19,113,95,.06), rgba(19,113,95,.12)); border-radius: 14px; border: 1px solid var(--line); }
+.growth-tips-inner { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.growth-tip { text-align: center; }
+.growth-tip-icon { display: inline-flex; width: 44px; height: 44px; border-radius: 50%; background: var(--mint); place-items: center; justify-content: center; margin-bottom: .6rem; }
+.growth-tip-icon i { width: 22px; height: 22px; color: var(--green); }
+.growth-tip h4 { font-size: .95rem; color: var(--ink); margin: 0 0 .3rem; }
+.growth-tip p { font-size: .82rem; color: var(--muted); margin: 0; line-height: 1.45; }
+
+/* ── Dark mode: headings & marketplace ── */
+[data-theme="dark"] .section-heading .eyebrow,
+[data-theme="dark"] .services-section .section-heading .eyebrow,
+[data-theme="dark"] .category-section .section-heading .eyebrow { color: var(--green); }
+[data-theme="dark"] .section-heading h2,
+[data-theme="dark"] .services-section .section-heading h2,
+[data-theme="dark"] .category-section .section-heading h2 { color: var(--ink); }
+
+/* ── Dark mode: poster sections ── */
+[data-theme="dark"] .info-poster { background: var(--soft); }
+[data-theme="dark"] .info-step { background: var(--paper); border-color: var(--line); }
+[data-theme="dark"] .info-step:hover { box-shadow: 0 12px 32px rgba(0,0,0,.3); }
+[data-theme="dark"] .stats-ticker { background: var(--green-strong); }
+[data-theme="dark"] .showcase-card { background: var(--paper); border-color: var(--line); }
+[data-theme="dark"] .showcase-card:hover { box-shadow: 0 14px 32px rgba(0,0,0,.3); }
+[data-theme="dark"] .seller-cta { background: var(--paper); }
+[data-theme="dark"] .seller-cta-list li { color: var(--ink); }
+[data-theme="dark"] .dash-info-item strong { color: var(--ink); }
+[data-theme="dark"] .escrow-info-strip { background: var(--soft); border-color: var(--line); }
+[data-theme="dark"] .escrow-info-block h4 { color: var(--ink); }
+[data-theme="dark"] .growth-tips-banner { background: linear-gradient(135deg, rgba(52,212,176,.08), rgba(52,212,176,.15)); border-color: var(--line); }
+[data-theme="dark"] .growth-tip h4 { color: var(--ink); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-poster-steps, .stats-ticker-inner, .seller-cta-inner, .dash-info-banner-inner, .escrow-info-strip-inner, .growth-tips-inner { grid-template-columns: 1fr; }
+  .showcase-grid { grid-template-columns: 1fr; }
+}
 
 
