@@ -1871,6 +1871,9 @@ body[data-theme="dark"] {
 }
 
 .main-nav-capsule button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: transparent;
   border: none;
   padding: 6px 16px;
@@ -1880,6 +1883,12 @@ body[data-theme="dark"] {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.18s ease;
+}
+
+.main-nav-capsule button i,
+.main-nav-capsule button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .main-nav-capsule button:hover {

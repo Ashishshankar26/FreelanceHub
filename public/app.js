@@ -971,7 +971,6 @@ function updateAuthUI() {
   selectors.logoutButton.classList.toggle("hidden", true);
   selectors.signinButton.classList.toggle("hidden", loggedIn);
   selectors.joinButton.classList.toggle("hidden", loggedIn);
-  selectors.workspaceNav.classList.toggle("hidden", !loggedIn);
   selectors.userMenuWrap.classList.toggle("hidden", !loggedIn);
   if (loggedIn) {
     selectors.userInitials.textContent = getInitials(state.user.name || "FH");
