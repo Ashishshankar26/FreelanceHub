@@ -221,6 +221,7 @@ const selectors = {
 
 async function init() {
   initTheme();
+  initInteractiveCard();
   bindEvents();
   initGoogleAuth();
   setAuthMode("signup");
@@ -2118,42 +2119,84 @@ function initLogoNav() {
   }
 }
 
+
+// --- Luhn Algorithm & Card Network Detection ---
+function luhnCheck(val) {
+  let checksum = 0;
+  let j = 1;
+  const raw = String(val).replace(/\D/g, '');
+  if (raw.length < 13 || raw.length > 19) return false;
+
+  for (let i = raw.length - 1; i >= 0; i--) {
+    let calc = 0;
+    calc = Number(raw.charAt(i)) * j;
+    if (calc > 9) {
+      checksum += 1;
+      calc -= 10;
+    }
+    checksum += calc;
+    j = (j === 1) ? 2 : 1;
+  }
+  return (checksum % 10 === 0);
+}
+
+function detectCardNetwork(numberStr) {
+  const clean = String(numberStr).replace(/\D/g, '');
+  if (/^4/.test(clean)) return { name: 'VISA', icon: 'credit-card', color: '#38bdf8' };
+  if (/^(5[1-5]|22[2-7])/.test(clean)) return { name: 'MASTERCARD', icon: 'credit-card', color: '#f43f5e' };
+  if (/^3[47]/.test(clean)) return { name: 'AMEX', icon: 'credit-card', color: '#34d399' };
+  if (/^(60|65|81|82)/.test(clean)) return { name: 'RUPAY', icon: 'credit-card', color: '#fbbf24' };
+  return { name: 'VISA', icon: 'credit-card', color: '#a855f7' };
+}
+
 function initInteractiveCard() {
-  const card = document.querySelector(".flip-card");
-  if (!card) return;
+  const card = document.querySelector("#cardFlipInner") || document.querySelector(".flip-card");
+  const cardWrapper = document.querySelector(".card-interactive-wrapper") || document.querySelector(".flip-card");
 
-  card.addEventListener("mousemove", (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - (rect.width / 2);
-    const y = e.clientY - rect.top - (rect.height / 2);
-    const rotateX = -(y / (rect.height / 2)) * 12;
-    const rotateY = (x / (rect.width / 2)) * 12;
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  });
+  if (cardWrapper && card) {
+    cardWrapper.addEventListener("mousemove", (e) => {
+      const rect = cardWrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left - (rect.width / 2);
+      const y = e.clientY - rect.top - (rect.height / 2);
+      const rotateX = -(y / (rect.height / 2)) * 14;
+      const rotateY = (x / (rect.width / 2)) * 14;
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
 
-  card.addEventListener("mouseleave", () => {
-    card.style.transform = "rotateX(0deg) rotateY(0deg)";
-  });
+    cardWrapper.addEventListener("mouseleave", () => {
+      card.style.transform = "rotateX(0deg) rotateY(0deg)";
+    });
+  }
 
   const cardNoInput = document.querySelector("#gatewayCardNo");
   const cardNameInput = document.querySelector("#gatewayCardName");
   const cardExpiryInput = document.querySelector("#gatewayCardExpiry");
   const cardCvvInput = document.querySelector("#gatewayCardCvv");
 
-  const previewNo = selectors.previewNumber;
-  const previewHolder = selectors.previewHolder;
-  const previewExp = selectors.previewExpiry;
-  const previewCv = selectors.previewCvv;
+  const previewNo = selectors.previewNumber || document.querySelector("#previewNumber");
+  const previewHolder = selectors.previewHolder || document.querySelector("#previewHolder");
+  const previewExp = selectors.previewExpiry || document.querySelector("#previewExpiry");
+  const previewCv = selectors.previewCvv || document.querySelector("#previewCvv");
+  const previewBrandLogo = document.querySelector(".card-network-logo");
 
   if (cardNoInput) {
     cardNoInput.addEventListener("input", (e) => {
-      let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-      let parts = [];
-      for (let i = 0, len = val.length; i < len; i += 4) {
-        parts.push(val.substring(i, i + 4));
+      let val = e.target.value.replace(/\D/g, '');
+      let formatted = '';
+      for (let i = 0; i < val.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += val[i];
       }
-      e.target.value = parts.join(' ').substring(0, 19);
+      e.target.value = formatted.substring(0, 19);
+
       if (previewNo) previewNo.textContent = e.target.value || "•••• •••• •••• ••••";
+
+      // Dynamic brand detection
+      const net = detectCardNetwork(val);
+      if (previewBrandLogo) {
+        previewBrandLogo.textContent = net.name;
+        previewBrandLogo.style.color = net.color;
+      }
     });
   }
 
@@ -2165,8 +2208,11 @@ function initInteractiveCard() {
 
   if (cardExpiryInput) {
     cardExpiryInput.addEventListener("input", (e) => {
-      let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let val = e.target.value.replace(/\D/g, '');
       if (val.length >= 2) {
+        let month = Number(val.substring(0, 2));
+        if (month > 12) val = '12' + val.substring(2);
+        if (month === 0) val = '01' + val.substring(2);
         e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
       } else {
         e.target.value = val;
@@ -2177,17 +2223,17 @@ function initInteractiveCard() {
 
   if (cardCvvInput) {
     cardCvvInput.addEventListener("input", (e) => {
-      let val = e.target.value.replace(/[^0-9]/gi, '');
-      e.target.value = val;
+      let val = e.target.value.replace(/\D/g, '');
+      e.target.value = val.substring(0, 4);
       if (previewCv) previewCv.textContent = "•".repeat(val.length) || "•••";
     });
 
     cardCvvInput.addEventListener("focus", () => {
-      card.classList.add("flipped");
+      if (card) card.classList.add("flipped");
     });
 
     cardCvvInput.addEventListener("blur", () => {
-      card.classList.remove("flipped");
+      if (card) card.classList.remove("flipped");
     });
   }
 }
@@ -2223,18 +2269,59 @@ function openGatewayPage(checkoutDetails) {
 
   const executePayment = async () => {
     const isCard = !selectors.gatewayCardPanel?.classList.contains("hidden");
+
+    // Comprehensive Edge Case Validations
     if (isCard) {
-      if (!selectors.gatewayCardNo?.value || !selectors.gatewayCardName?.value || !selectors.gatewayCardExpiry?.value || !selectors.gatewayCardCvv?.value) {
-        showToast("Please fill in all card details.");
+      const cardNo = selectors.gatewayCardNo?.value.replace(/\s+/g, '');
+      const cardName = selectors.gatewayCardName?.value.trim();
+      const expiry = selectors.gatewayCardExpiry?.value.trim();
+      const cvv = selectors.gatewayCardCvv?.value.trim();
+
+      if (!cardNo || cardNo.length < 15) {
+        showToast("Please enter a valid 16-digit debit/credit card number.");
+        selectors.gatewayCardNo?.focus();
+        return;
+      }
+      if (!luhnCheck(cardNo)) {
+        showToast("Card verification failed. Invalid card number algorithm.");
+        selectors.gatewayCardNo?.focus();
+        return;
+      }
+      if (!cardName || cardName.length < 3) {
+        showToast("Please enter full cardholder name.");
+        selectors.gatewayCardName?.focus();
+        return;
+      }
+      if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+        showToast("Please enter expiration date in MM/YY format.");
+        selectors.gatewayCardExpiry?.focus();
+        return;
+      }
+      const [expM, expY] = expiry.split('/').map(Number);
+      const now = new Date();
+      const curY = Number(String(now.getFullYear()).substring(2));
+      const curM = now.getMonth() + 1;
+      if (expY < curY || (expY === curY && expM < curM)) {
+        showToast("Payment rejected: Card has expired.");
+        selectors.gatewayCardExpiry?.focus();
+        return;
+      }
+      if (!cvv || cvv.length < 3) {
+        showToast("Please enter a valid 3 or 4-digit CVV security code.");
+        selectors.gatewayCardCvv?.focus();
         return;
       }
     } else {
-      if (!selectors.gatewayUpiVpa?.value) {
-        showToast("Please enter your UPI Virtual Private Address.");
+      const vpa = selectors.gatewayUpiVpa?.value.trim();
+      const vpaRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+      if (!vpa || !vpaRegex.test(vpa)) {
+        showToast("Please enter a valid Virtual Payment Address (e.g. username@upi or mobile@paytm).");
+        selectors.gatewayUpiVpa?.focus();
         return;
       }
     }
 
+    // Step 1: Processing Animation
     selectors.gatewayCardPanel?.classList.add("hidden");
     selectors.gatewayUpiPanel?.classList.add("hidden");
     selectors.gatewayProcessing?.classList.remove("hidden");
@@ -2243,16 +2330,35 @@ function openGatewayPage(checkoutDetails) {
     if (progress) progress.style.width = "0%";
 
     const steps = [
-      { width: "25%", text: "Validating payment credentials..." },
-      { width: "55%", text: "Connecting to secure escrow vault..." },
-      { width: "85%", text: "Capturing settlement ledger..." },
-      { width: "100%", text: "Payment authorized successfully." }
+      { width: "25%", text: "Validating SSL credentials & Luhn algorithm..." },
+      { width: "55%", text: "Connecting to bank 3D Secure gateway..." },
+      { width: "85%", text: "Authorizing zero-risk escrow deposit..." },
+      { width: "100%", text: "Payment authorized successfully!" }
     ];
 
     for (const step of steps) {
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 450));
       if (progress) progress.style.width = step.width;
       if (selectors.gatewayProcessingText) selectors.gatewayProcessingText.textContent = step.text;
+    }
+
+    // Step 2: Simulated 3D Secure Bank OTP Verification Prompt
+    const otpInput = prompt("3D Secure Bank Verification:\n\nAn OTP has been sent to your registered mobile number for ₹" + checkoutDetails.total + ".\n\nEnter 6-digit OTP code to authorize (Demo code: 123456):", "123456");
+
+    if (otpInput === null) {
+      showToast("Payment cancelled during 3D Secure verification.");
+      selectors.gatewayProcessing?.classList.add("hidden");
+      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
+      else selectors.gatewayUpiPanel?.classList.remove("hidden");
+      return;
+    }
+
+    if (otpInput.trim().length !== 6 || isNaN(otpInput)) {
+      showToast("Invalid OTP code. Transaction declined by issuer bank.");
+      selectors.gatewayProcessing?.classList.add("hidden");
+      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
+      else selectors.gatewayUpiPanel?.classList.remove("hidden");
+      return;
     }
 
     try {
@@ -2260,12 +2366,13 @@ function openGatewayPage(checkoutDetails) {
       selectors.gatewayProcessing?.classList.add("hidden");
       selectors.gatewayReceiptPanel?.classList.remove("hidden");
 
-      if (selectors.receiptDate) selectors.receiptDate.textContent = `Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+      const nowStr = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      if (selectors.receiptDate) selectors.receiptDate.textContent = `Date: ${nowStr}`;
       if (selectors.receiptTxId) selectors.receiptTxId.textContent = payload.transactionId || `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
-      if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "Customer";
+      if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "User Account";
       if (selectors.receiptAmount) selectors.receiptAmount.textContent = currency.format(checkoutDetails.total);
 
-      showToast("Transaction successfully completed.");
+      showToast("Payment authorized & escrow ledger updated successfully!");
 
       if (selectors.receiptCloseButton) {
         selectors.receiptCloseButton.onclick = async () => {
@@ -2280,13 +2387,10 @@ function openGatewayPage(checkoutDetails) {
         };
       }
     } catch (error) {
-      showToast(error.message);
+      showToast(error.message || "Payment authorization failed.");
       selectors.gatewayProcessing?.classList.add("hidden");
-      if (isCard) {
-        selectors.gatewayCardPanel?.classList.remove("hidden");
-      } else {
-        selectors.gatewayUpiPanel?.classList.remove("hidden");
-      }
+      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
+      else selectors.gatewayUpiPanel?.classList.remove("hidden");
     }
   };
 
@@ -2295,7 +2399,7 @@ function openGatewayPage(checkoutDetails) {
 
   if (selectors.cancelGatewayButton) {
     selectors.cancelGatewayButton.onclick = () => {
-      openAppPage("wallet");
+      openAppPage("overview");
       showToast("Payment cancelled.");
     };
   }
