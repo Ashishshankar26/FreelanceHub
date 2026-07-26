@@ -448,7 +448,7 @@ function bindEvents() {
   });
   
   if (selectors.chartLineBtn) {
-    selectors.chartLineBtn.addEventListener("click", () => {
+    selectors.chartLineBtn?.addEventListener("click", () => {
       state.financeChartType = "line";
       updateChartToggleUI();
       if (state.dashboard && state.dashboard.finance) {
@@ -457,7 +457,7 @@ function bindEvents() {
     });
   }
   if (selectors.chartPieBtn) {
-    selectors.chartPieBtn.addEventListener("click", () => {
+    selectors.chartPieBtn?.addEventListener("click", () => {
       state.financeChartType = "pie";
       updateChartToggleUI();
       if (state.dashboard && state.dashboard.finance) {
@@ -983,7 +983,7 @@ async function logout() {
   selectors.body.classList.remove("app-mode");
   selectors.appPages.forEach((page) => page.classList.remove("active"));
   selectors.dashboardSection.classList.add("hidden");
-  selectors.walletPage.classList.add("hidden");
+  if (selectors.walletPage) selectors.walletPage.classList.add("hidden");
   document.querySelector("#financePage")?.classList.add("hidden");
   showToast("Logged out.");
 }
@@ -1224,8 +1224,8 @@ async function addWalletFunds() {
 function updateChartToggleUI() {
   if (selectors.chartLineBtn && selectors.chartPieBtn) {
     const isLine = state.financeChartType !== "pie";
-    selectors.chartLineBtn.classList.toggle("active", isLine);
-    selectors.chartPieBtn.classList.toggle("active", !isLine);
+    selectors.chartLineBtn?.classList.toggle("active", isLine);
+    selectors.chartPieBtn?.classList.toggle("active", !isLine);
   }
 }
 
@@ -2126,7 +2126,7 @@ function initLogoNav() {
       selectors.appPages.forEach((item) => item.classList.remove("active"));
       selectors.appNavButtons.forEach((btn) => btn.classList.remove("active"));
       selectors.dashboardSection.classList.add("hidden");
-      selectors.walletPage.classList.add("hidden");
+      if (selectors.walletPage) selectors.walletPage.classList.add("hidden");
       document.querySelector("#financePage")?.classList.add("hidden");
       selectors.gatewayPage?.classList.add("hidden");
       document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
