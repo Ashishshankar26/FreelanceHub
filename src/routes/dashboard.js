@@ -24,7 +24,7 @@ dashboardRouter.get(
         .populate("service", "title category price deliveryDays"),
       Message.countDocuments({ recipient: req.user._id, readAt: null }),
       role === "freelancer" ? Service.find({ seller: req.user._id }).sort({ createdAt: -1 }).limit(12) : [],
-      getWalletSnapshot(req.user._id, { limit: 8 }),
+      getWalletSnapshot(req.user._id, { limit: 200 }),
     ]);
 
     const stats = summarizeOrders(orders, role);
