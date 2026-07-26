@@ -266,6 +266,15 @@ function toggleTheme() {
 }
 
 function bindEvents() {
+  document.querySelectorAll("[data-close-dialog], dialog button[value='cancel']").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const dialog = button.closest("dialog");
+      if (dialog) dialog.close();
+    });
+  });
+
   selectors.themeToggle.addEventListener("click", toggleTheme);
   selectors.menuButton.addEventListener("click", () => {
     selectors.body.classList.toggle("menu-open");
@@ -416,14 +425,17 @@ function bindEvents() {
 }
 
 function initGoogleAuth() {
-  if (window.google?.accounts?.id) {
+  if (window.google?.accounts?.id && selectors.googleAuthButton) {
+    selectors.googleAuthButton.innerHTML = "";
     window.google.accounts.id.initialize({
       client_id: "678943507030-1i0os5s8s3o900jhaq6i9q6vf952jtd7.apps.googleusercontent.com",
       callback: handleGoogleCallback,
+      ux_mode: "popup",
+      auto_select: false,
     });
     window.google.accounts.id.renderButton(
       selectors.googleAuthButton,
-      { theme: "outline", size: "small", shape: "rectangular", width: 240 }
+      { theme: "outline", size: "large", shape: "rectangular", width: 240 }
     );
   }
 }

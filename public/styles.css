@@ -5935,7 +5935,29 @@ body.app-mode .marketplace-page .services-section {
 .google-auth-wrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 10px;
+  min-height: 44px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#googleAuthButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#googleAuthButton iframe {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+}
+
+#googleAuthButton svg {
+  max-width: 24px !important;
+  max-height: 24px !important;
 }
 
 .auth-divider {

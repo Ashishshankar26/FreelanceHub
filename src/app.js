@@ -27,12 +27,14 @@ export function createApp() {
   app.set("trust proxy", 1);
   app.use(
     helmet({
+      crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
           scriptSrc: ["'self'", "https://unpkg.com", "https://accounts.google.com"],
-          styleSrc: ["'self'", "https://accounts.google.com"],
-          imgSrc: ["'self'", "data:", "*.googleusercontent.com"],
+          styleSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
+          frameSrc: ["'self'", "https://accounts.google.com"],
+          imgSrc: ["'self'", "data:", "https://*.googleusercontent.com", "https://ssl.gstatic.com"],
           connectSrc: ["'self'", "https://accounts.google.com"],
           fontSrc: ["'self'"],
           objectSrc: ["'none'"],
