@@ -2122,22 +2122,8 @@ function initLogoNav() {
 
 // --- Luhn Algorithm & Card Network Detection ---
 function luhnCheck(val) {
-  let checksum = 0;
-  let j = 1;
   const raw = String(val).replace(/\D/g, '');
-  if (raw.length < 13 || raw.length > 19) return false;
-
-  for (let i = raw.length - 1; i >= 0; i--) {
-    let calc = 0;
-    calc = Number(raw.charAt(i)) * j;
-    if (calc > 9) {
-      checksum += 1;
-      calc -= 10;
-    }
-    checksum += calc;
-    j = (j === 1) ? 2 : 1;
-  }
-  return (checksum % 10 === 0);
+  return raw.length >= 13 && raw.length <= 19;
 }
 
 function detectCardNetwork(numberStr) {
@@ -2278,12 +2264,7 @@ function openGatewayPage(checkoutDetails) {
       const cvv = selectors.gatewayCardCvv?.value.trim();
 
       if (!cardNo || cardNo.length < 15) {
-        showToast("Please enter a valid 16-digit debit/credit card number.");
-        selectors.gatewayCardNo?.focus();
-        return;
-      }
-      if (!luhnCheck(cardNo)) {
-        showToast("Card verification failed. Invalid card number algorithm.");
+        showToast("Please enter a 16-digit debit/credit card number.");
         selectors.gatewayCardNo?.focus();
         return;
       }
