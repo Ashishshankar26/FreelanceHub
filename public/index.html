@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=100" />
+    <link rel="stylesheet" href="styles.css?v=105" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=100" defer></script>
+    <script src="app.js?v=105" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -1353,5 +1353,46 @@
     <div class="chart-tooltip hidden" id="chartTooltip"></div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  
+    <!-- ── Integrated 3D Secure Bank OTP Verification Modal ── -->
+    <dialog class="auth-dialog futuristic-modal" id="bankOtpModal">
+      <div class="futuristic-modal-card otp-modal-card">
+        <div class="futuristic-modal-header">
+          <div class="header-title">
+            <span class="futuristic-badge"><i data-lucide="shield-check"></i> 3D SECURE VERIFICATION</span>
+            <h2>Issuer Bank Authorization</h2>
+          </div>
+          <button class="circle-button" type="button" id="closeOtpModal" aria-label="Close OTP modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="futuristic-modal-body">
+          <div class="otp-banner-box">
+            <i data-lucide="lock" class="otp-lock-icon"></i>
+            <div>
+              <strong>Verify Escrow Payment</strong>
+              <p>An OTP code has been sent to your registered mobile number ending in <strong>•••• 8912</strong> for <strong id="otpModalAmount">₹0.00</strong>.</p>
+            </div>
+          </div>
+
+          <div class="otp-input-section">
+            <label class="control-label">Enter 6-Digit OTP Code</label>
+            <div class="otp-field-wrapper">
+              <input type="text" id="bankOtpInput" placeholder="123456" maxlength="6" autocomplete="one-time-code" value="123456" />
+            </div>
+            <small class="otp-demo-hint"><i data-lucide="sparkles"></i> Verification Code: <strong>123456</strong></small>
+          </div>
+
+          <div class="otp-action-row">
+            <button class="futuristic-submit-btn" type="button" id="submitBankOtpBtn">
+              <i data-lucide="check-circle-2"></i>
+              <span>Authorize & Deposit Funds</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
   </body>
 </html>

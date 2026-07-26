@@ -2253,10 +2253,9 @@ function openGatewayPage(checkoutDetails) {
 
   stopUpiTimer();
 
-  const executePayment = async () => {
+    const executePayment = async () => {
     const isCard = !selectors.gatewayCardPanel?.classList.contains("hidden");
 
-    // Comprehensive Edge Case Validations
     if (isCard) {
       const cardNo = selectors.gatewayCardNo?.value.replace(/\s+/g, '');
       const cardName = selectors.gatewayCardName?.value.trim();
@@ -2302,76 +2301,84 @@ function openGatewayPage(checkoutDetails) {
       }
     }
 
-    // Step 1: Processing Animation
-    selectors.gatewayCardPanel?.classList.add("hidden");
-    selectors.gatewayUpiPanel?.classList.add("hidden");
-    selectors.gatewayProcessing?.classList.remove("hidden");
+    // Launch Integrated Website OTP Modal
+    const otpModal = document.getElementById("bankOtpModal");
+    const otpAmountEl = document.getElementById("otpModalAmount");
+    const otpInput = document.getElementById("bankOtpInput");
+    const submitOtpBtn = document.getElementById("submitBankOtpBtn");
+    const closeOtpBtn = document.getElementById("closeOtpModal");
 
-    const progress = selectors.gatewayProgressBarInner;
-    if (progress) progress.style.width = "0%";
+    if (otpAmountEl) otpAmountEl.textContent = currency.format(checkoutDetails.total);
+    if (otpInput) otpInput.value = "123456";
 
-    const steps = [
-      { width: "25%", text: "Validating SSL credentials & Luhn algorithm..." },
-      { width: "55%", text: "Connecting to bank 3D Secure gateway..." },
-      { width: "85%", text: "Authorizing zero-risk escrow deposit..." },
-      { width: "100%", text: "Payment authorized successfully!" }
-    ];
+    if (otpModal) otpModal.showModal();
 
-    for (const step of steps) {
-      await new Promise(r => setTimeout(r, 450));
-      if (progress) progress.style.width = step.width;
-      if (selectors.gatewayProcessingText) selectors.gatewayProcessingText.textContent = step.text;
-    }
+    const processPaymentFlow = async () => {
+      if (otpModal) otpModal.close();
 
-    // Step 2: Simulated 3D Secure Bank OTP Verification Prompt
-    const otpInput = prompt("3D Secure Bank Verification:\n\nAn OTP has been sent to your registered mobile number for ₹" + checkoutDetails.total + ".\n\nEnter 6-digit OTP code to authorize (Demo code: 123456):", "123456");
+      // Show Processing Animation
+      selectors.gatewayCardPanel?.classList.add("hidden");
+      selectors.gatewayUpiPanel?.classList.add("hidden");
+      selectors.gatewayProcessing?.classList.remove("hidden");
 
-    if (otpInput === null) {
-      showToast("Payment cancelled during 3D Secure verification.");
-      selectors.gatewayProcessing?.classList.add("hidden");
-      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
-      else selectors.gatewayUpiPanel?.classList.remove("hidden");
-      return;
-    }
+      const progress = selectors.gatewayProgressBarInner;
+      if (progress) progress.style.width = "0%";
 
-    if (otpInput.trim().length !== 6 || isNaN(otpInput)) {
-      showToast("Invalid OTP code. Transaction declined by issuer bank.");
-      selectors.gatewayProcessing?.classList.add("hidden");
-      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
-      else selectors.gatewayUpiPanel?.classList.remove("hidden");
-      return;
-    }
+      const steps = [
+        { width: "30%", text: "Validating SSL credentials..." },
+        { width: "65%", text: "Verifying 3D Secure Bank Authorization..." },
+        { width: "90%", text: "Authorizing escrow deposit ledger..." },
+        { width: "100%", text: "Payment authorized successfully!" }
+      ];
 
-    try {
-      const payload = await checkoutDetails.checkoutAction();
-      selectors.gatewayProcessing?.classList.add("hidden");
-      selectors.gatewayReceiptPanel?.classList.remove("hidden");
-
-      const nowStr = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      if (selectors.receiptDate) selectors.receiptDate.textContent = `Date: ${nowStr}`;
-      if (selectors.receiptTxId) selectors.receiptTxId.textContent = payload.transactionId || `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
-      if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "User Account";
-      if (selectors.receiptAmount) selectors.receiptAmount.textContent = currency.format(checkoutDetails.total);
-
-      showToast("Payment authorized & escrow ledger updated successfully!");
-
-      if (selectors.receiptCloseButton) {
-        selectors.receiptCloseButton.onclick = async () => {
-          await Promise.all([loadWallet(), loadDashboard()]);
-          openAppPage("overview");
-        };
+      for (const step of steps) {
+        await new Promise(r => setTimeout(r, 400));
+        if (progress) progress.style.width = step.width;
+        if (selectors.gatewayProcessingText) selectors.gatewayProcessingText.textContent = step.text;
       }
 
-      if (selectors.receiptPrintButton) {
-        selectors.receiptPrintButton.onclick = () => {
-          window.print();
-        };
+      try {
+        const payload = await checkoutDetails.checkoutAction();
+        selectors.gatewayProcessing?.classList.add("hidden");
+        selectors.gatewayReceiptPanel?.classList.remove("hidden");
+
+        const nowStr = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        if (selectors.receiptDate) selectors.receiptDate.textContent = `Date: ${nowStr}`;
+        if (selectors.receiptTxId) selectors.receiptTxId.textContent = payload.transactionId || `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
+        if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "User Account";
+        if (selectors.receiptAmount) selectors.receiptAmount.textContent = currency.format(checkoutDetails.total);
+
+        // ONLY show success toast AFTER payment completes!
+        showToast(`₹${checkoutDetails.total} successfully added to your live wallet!`);
+
+        if (selectors.receiptCloseButton) {
+          selectors.receiptCloseButton.onclick = async () => {
+            await Promise.all([loadWallet(), loadDashboard()]);
+            openAppPage("overview");
+          };
+        }
+
+        if (selectors.receiptPrintButton) {
+          selectors.receiptPrintButton.onclick = () => {
+            window.print();
+          };
+        }
+      } catch (error) {
+        showToast(error.message || "Payment authorization failed.");
+        selectors.gatewayProcessing?.classList.add("hidden");
+        if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
+        else selectors.gatewayUpiPanel?.classList.remove("hidden");
       }
-    } catch (error) {
-      showToast(error.message || "Payment authorization failed.");
-      selectors.gatewayProcessing?.classList.add("hidden");
-      if (isCard) selectors.gatewayCardPanel?.classList.remove("hidden");
-      else selectors.gatewayUpiPanel?.classList.remove("hidden");
+    };
+
+    if (submitOtpBtn) {
+      submitOtpBtn.onclick = processPaymentFlow;
+    }
+    if (closeOtpBtn) {
+      closeOtpBtn.onclick = () => {
+        if (otpModal) otpModal.close();
+        showToast("Payment authorization cancelled.");
+      };
     }
   };
 
