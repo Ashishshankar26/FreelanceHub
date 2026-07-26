@@ -2592,3 +2592,202 @@ document.addEventListener("click", (e) => {
     downloadReceiptPdf();
   }
 });
+
+
+// ==========================================
+// SAVED PAYMENT METHODS & 3D STACK MANAGER
+// ==========================================
+const DEFAULT_SAVED_CARDS = [
+  {
+    id: "card_visa_primary",
+    holder: "Alex Morgan",
+    number: "4532 8912 3456 7890",
+    expiry: "08/28",
+    cvv: "888",
+    network: "VISA",
+    themeClass: "card-theme-visa"
+  },
+  {
+    id: "card_mc_secondary",
+    holder: "Alex Morgan",
+    number: "5412 7534 8901 2345",
+    expiry: "11/27",
+    cvv: "321",
+    network: "Mastercard",
+    themeClass: "card-theme-mastercard"
+  },
+  {
+    id: "card_rupay_fast",
+    holder: "Alex Morgan",
+    number: "6071 2233 4455 6677",
+    expiry: "05/29",
+    cvv: "999",
+    network: "RuPay",
+    themeClass: "card-theme-rupay"
+  }
+];
+
+const DEFAULT_SAVED_UPIS = [
+  { id: "upi_1", vpa: "alex.morgan@okicici", label: "Primary ICICI" },
+  { id: "upi_2", vpa: "alex@upi", label: "GPay" }
+];
+
+function getSavedCards() {
+  try {
+    const stored = localStorage.getItem("fh_saved_cards");
+    if (stored) return JSON.parse(stored);
+  } catch (e) {}
+  return DEFAULT_SAVED_CARDS;
+}
+
+function saveCardToStore(cardObj) {
+  const list = getSavedCards();
+  const exists = list.some(c => c.number.replace(/\s/g, "") === cardObj.number.replace(/\s/g, ""));
+  if (!exists) {
+    list.unshift(cardObj);
+    localStorage.setItem("fh_saved_cards", JSON.stringify(list));
+  }
+}
+
+function getSavedUpis() {
+  try {
+    const stored = localStorage.getItem("fh_saved_upis");
+    if (stored) return JSON.parse(stored);
+  } catch (e) {}
+  return DEFAULT_SAVED_UPIS;
+}
+
+function saveUpiToStore(vpa) {
+  const list = getSavedUpis();
+  const exists = list.some(u => u.vpa.toLowerCase() === vpa.toLowerCase());
+  if (!exists) {
+    list.unshift({ id: "upi_" + Date.now(), vpa: vpa, label: "Saved VPA" });
+    localStorage.setItem("fh_saved_upis", JSON.stringify(list));
+  }
+}
+
+let activeCardStackIndex = 0;
+
+function renderSavedCardsStack() {
+  const container = document.getElementById("cardsStackContainer");
+  const countBadge = document.getElementById("savedCardsCount");
+  if (!container) return;
+
+  const cards = getSavedCards();
+  if (countBadge) countBadge.textContent = cards.length;
+
+  if (!cards || cards.length === 0) {
+    container.innerHTML = `<div class="empty-stack-msg" style="text-align:center; padding:20px; color:var(--muted); font-size:0.85rem;">No saved cards yet.</div>`;
+    return;
+  }
+
+  // Re-order so activeCardStackIndex is at position 0
+  const orderedCards = [];
+  const activeCard = cards[activeCardStackIndex % cards.length] || cards[0];
+  orderedCards.push(activeCard);
+  cards.forEach((c, idx) => {
+    if (idx !== (activeCardStackIndex % cards.length)) {
+      orderedCards.push(c);
+    }
+  });
+
+  container.innerHTML = orderedCards.slice(0, 3).map((card, pos) => {
+    const masked = card.number.replace(/^(\d{4}\s?\d{4}\s?\d{4})/, "•••• •••• ••••");
+    const isSelected = pos === 0;
+    return `
+      <div class="stacked-card-item ${card.themeClass || 'card-theme-visa'}" data-card-id="${card.id}" data-stack-pos="${pos}">
+        <div class="stacked-card-top">
+          <span class="stacked-card-network">${card.network || 'CARD'}</span>
+          ${isSelected ? '<span class="stacked-card-selected-tag"><i data-lucide="check" style="width:10px;height:10px;display:inline;"></i> Selected</span>' : ''}
+        </div>
+        <div class="stacked-card-number">${masked}</div>
+        <div class="stacked-card-bottom">
+          <span>${card.holder || 'Cardholder'}</span>
+          <span>Exp: ${card.expiry || 'MM/YY'}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (window.lucide) lucide.createIcons();
+
+  // Attach click listeners to select card from stack
+  container.querySelectorAll(".stacked-card-item").forEach(itemEl => {
+    itemEl.addEventListener("click", () => {
+      const cardId = itemEl.getAttribute("data-card-id");
+      const foundIdx = cards.findIndex(c => c.id === cardId);
+      if (foundIdx !== -1) {
+        activeCardStackIndex = foundIdx;
+        renderSavedCardsStack();
+        fillCardInputs(cards[foundIdx]);
+      }
+    });
+  });
+
+  // Auto-fill active card inputs on initial render
+  if (activeCard) fillCardInputs(activeCard);
+}
+
+function fillCardInputs(card) {
+  const numInput = document.getElementById("gatewayCardNo");
+  const nameInput = document.getElementById("gatewayCardName");
+  const expInput = document.getElementById("gatewayCardExpiry");
+  const cvvInput = document.getElementById("gatewayCardCvv");
+
+  if (numInput) numInput.value = card.number;
+  if (nameInput) nameInput.value = card.holder;
+  if (expInput) expInput.value = card.expiry;
+  if (cvvInput) cvvInput.value = card.cvv || "123";
+
+  // Trigger input events to sync 3D card preview
+  if (numInput) numInput.dispatchEvent(new Event("input"));
+  if (nameInput) nameInput.dispatchEvent(new Event("input"));
+  if (expInput) expInput.dispatchEvent(new Event("input"));
+}
+
+function renderSavedUpiChips() {
+  const container = document.getElementById("savedUpiChipsContainer");
+  if (!container) return;
+
+  const upis = getSavedUpis();
+  if (!upis || upis.length === 0) {
+    container.innerHTML = `<span style="color:var(--muted); font-size:0.8rem;">No saved UPI IDs</span>`;
+    return;
+  }
+
+  container.innerHTML = upis.map(u => `
+    <button type="button" class="upi-chip" data-vpa="${u.vpa}">
+      <i data-lucide="zap" style="width:12px;height:12px;"></i>
+      <span>${u.vpa}</span>
+    </button>
+  `).join("");
+
+  if (window.lucide) lucide.createIcons();
+
+  container.querySelectorAll(".upi-chip").forEach(chipBtn => {
+    chipBtn.addEventListener("click", () => {
+      container.querySelectorAll(".upi-chip").forEach(b => b.classList.remove("active"));
+      chipBtn.classList.add("active");
+      const vpa = chipBtn.getAttribute("data-vpa");
+      const upiInput = document.getElementById("gatewayUpiVpa");
+      if (upiInput) upiInput.value = vpa;
+    });
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#btnAddNewCard")) {
+    const numInput = document.getElementById("gatewayCardNo");
+    const nameInput = document.getElementById("gatewayCardName");
+    const expInput = document.getElementById("gatewayCardExpiry");
+    const cvvInput = document.getElementById("gatewayCardCvv");
+    if (numInput) numInput.value = "";
+    if (nameInput) nameInput.value = "";
+    if (expInput) expInput.value = "";
+    if (cvvInput) cvvInput.value = "";
+    if (numInput) numInput.focus();
+    if (numInput) numInput.dispatchEvent(new Event("input"));
+    if (nameInput) nameInput.dispatchEvent(new Event("input"));
+    if (expInput) expInput.dispatchEvent(new Event("input"));
+  }
+});

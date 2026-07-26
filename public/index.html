@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=130" />
+    <link rel="stylesheet" href="styles.css?v=140" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="app.js?v=135" defer></script>
+    <script src="app.js?v=140" defer></script>
       
   </head>
   <body>
@@ -830,7 +830,25 @@
             </div>
             
             <!-- Card Checkout Panel -->
+                        <!-- Card Payment Panel -->
             <div class="gateway-panel-content" id="gatewayCardPanel">
+              
+              <!-- Saved Cards Stack Section -->
+              <div class="saved-cards-stack-section" id="savedCardsSection">
+                <div class="saved-cards-header">
+                  <div class="saved-cards-title">
+                    <i data-lucide="layers"></i>
+                    <span>Saved Cards</span>
+                    <span class="saved-cards-count" id="savedCardsCount">0</span>
+                  </div>
+                  <button type="button" class="btn-text-action" id="btnAddNewCard">
+                    <i data-lucide="plus"></i> New Card
+                  </button>
+                </div>
+                <div class="cards-stack-wrapper" id="cardsStackContainer">
+                  <!-- Stack rendered via JS -->
+                </div>
+              </div>
               <div class="card-interactive-wrapper">
                 <div class="flip-card">
                   <div class="flip-card-inner" id="cardFlipInner">
@@ -885,6 +903,10 @@
                     <input type="password" id="gatewayCardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
                   </label>
                 </div>
+                                <label class="save-method-checkbox">
+                  <input type="checkbox" id="saveCardCheckbox" checked />
+                  <span>Save this card for 1-click payments next time</span>
+                </label>
                 <button class="gateway-pay-btn" type="button" id="gatewayPayCardButton">
                   <span>Pay Securely</span>
                   <i data-lucide="shield-check"></i>
@@ -893,7 +915,17 @@
             </div>
             
             <!-- UPI Checkout Panel -->
+                        <!-- UPI Checkout Panel -->
             <div class="gateway-panel-content hidden" id="gatewayUpiPanel">
+              <div class="saved-upi-section" id="savedUpiSection">
+                <div class="saved-upi-header">
+                  <i data-lucide="zap"></i>
+                  <span>Fast Pay with Saved UPI IDs</span>
+                </div>
+                <div class="saved-upi-chips" id="savedUpiChipsContainer">
+                  <!-- UPI chips rendered via JS -->
+                </div>
+              </div>
               <div class="upi-qr-wrapper">
                 <div class="upi-qr-box">
                   <div class="upi-qr-image" id="upiQrCodeContainer"></div>
@@ -909,6 +941,10 @@
               </div>
               <div class="upi-details">
                 <p>Alternatively, trigger via Virtual Payment Address (VPA):</p>
+                                <label class="save-method-checkbox">
+                  <input type="checkbox" id="saveUpiCheckbox" checked />
+                  <span>Save this UPI VPA for future payments</span>
+                </label>
                 <div class="upi-vpa-row">
                   <input type="text" id="gatewayUpiVpa" placeholder="username@upi" />
                   <button class="join-button" type="button" id="gatewayPayUpiButton">Pay</button>

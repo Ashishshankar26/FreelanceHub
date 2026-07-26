@@ -10292,3 +10292,251 @@ dialog.futuristic-modal#bankOtpModal {
   pointer-events: none;
   z-index: 0;
 }
+
+/* ==========================================
+   SAVED CARDS 3D STACK & SAVED UPI CHIPS
+   ========================================== */
+.saved-cards-stack-section {
+  margin-bottom: 22px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.saved-cards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.saved-cards-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.saved-cards-title i, .saved-cards-title svg {
+  color: #a855f7;
+  width: 18px;
+  height: 18px;
+}
+
+.saved-cards-count {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.btn-text-action {
+  background: none;
+  border: none;
+  color: #a855f7;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-text-action:hover {
+  background: rgba(168, 85, 247, 0.12);
+}
+
+/* 3D Staggered Cards Stack Container */
+.cards-stack-wrapper {
+  position: relative;
+  height: 135px;
+  perspective: 1000px;
+}
+
+.stacked-card-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  border-radius: 16px;
+  padding: 14px 18px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+/* Stack Position 0: Active front card */
+.stacked-card-item[data-stack-pos="0"] {
+  z-index: 3;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.35);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* Stack Position 1: Card 2 behind */
+.stacked-card-item[data-stack-pos="1"] {
+  z-index: 2;
+  transform: translateY(14px) scale(0.94);
+  opacity: 0.85;
+  filter: brightness(0.85);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Stack Position 2: Card 3 behind */
+.stacked-card-item[data-stack-pos="2"] {
+  z-index: 1;
+  transform: translateY(26px) scale(0.88);
+  opacity: 0.65;
+  filter: brightness(0.7);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.stacked-card-item:hover {
+  transform: translateY(-6px) scale(1.02) !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+  filter: brightness(1.05) !important;
+  box-shadow: 0 16px 36px rgba(168, 85, 247, 0.45) !important;
+}
+
+/* Card Themes */
+.card-theme-visa {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+}
+
+.card-theme-mastercard {
+  background: linear-gradient(135deg, #431407 0%, #7c2d12 50%, #9a3412 100%);
+}
+
+.card-theme-amex {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%);
+}
+
+.card-theme-rupay {
+  background: linear-gradient(135deg, #701a75 0%, #86198f 50%, #a21caf 100%);
+}
+
+.stacked-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stacked-card-network {
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.stacked-card-selected-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 2px 8px;
+  border-radius: 100px;
+  backdrop-filter: blur(4px);
+}
+
+.stacked-card-number {
+  font-family: monospace;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.stacked-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* Checkbox Style */
+.save-method-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.save-method-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #a855f7;
+  cursor: pointer;
+}
+
+/* Saved UPI Section */
+.saved-upi-section {
+  margin-bottom: 18px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.saved-upi-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.saved-upi-header i, .saved-upi-header svg {
+  color: #a855f7;
+  width: 16px;
+  height: 16px;
+}
+
+.saved-upi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.upi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upi-chip:hover, .upi-chip.active {
+  border-color: #a855f7;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.15);
+}
