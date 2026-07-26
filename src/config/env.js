@@ -32,7 +32,9 @@ export const env = {
     pass: process.env.SMTP_PASS || "",
     from: process.env.MAIL_FROM || "FreelanceHub <no-reply@freelancehub.local>",
   },
-  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientId:
+    process.env.GOOGLE_CLIENT_ID ||
+    "678943507030-1i0os5s8s3o900jhaq6i9q6vf952jtd7.apps.googleusercontent.com",
   openai: {
     apiKey: process.env.OPENAI_API_KEY || "",
     model: process.env.OPENAI_MODEL || "gpt-5.6",

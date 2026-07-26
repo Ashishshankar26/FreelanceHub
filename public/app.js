@@ -518,26 +518,42 @@ function bindEvents() {
   }
 }
 
+const DEFAULT_GOOGLE_CLIENT_ID = "678943507030-1i0os5s8s3o900jhaq6i9q6vf952jtd7.apps.googleusercontent.com";
 let _googleClientId = "";
-async function initGoogleAuth() {
-  if (!window.google?.accounts?.id) return;
+
+async function initGoogleAuth(attempts = 0) {
   const btn = selectors.googleAuthButton || document.querySelector("#googleAuthButton");
   if (!btn) return;
+
+  if (!window.google?.accounts?.id) {
+    if (attempts < 20) {
+      setTimeout(() => initGoogleAuth(attempts + 1), 250);
+    }
+    return;
+  }
+
   if (!_googleClientId) {
     try {
       const cfg = await fetch("/api/auth/config").then(r => r.json());
-      _googleClientId = cfg.googleClientId || "";
-    } catch { /* silent */ }
+      _googleClientId = cfg?.googleClientId || DEFAULT_GOOGLE_CLIENT_ID;
+    } catch {
+      _googleClientId = DEFAULT_GOOGLE_CLIENT_ID;
+    }
   }
-  if (!_googleClientId) return;
+  if (!_googleClientId) _googleClientId = DEFAULT_GOOGLE_CLIENT_ID;
+
   btn.innerHTML = "";
-  window.google.accounts.id.initialize({
-    client_id: _googleClientId,
-    callback: handleGoogleCallback,
-    ux_mode: "popup",
-    auto_select: false,
-  });
-  window.google.accounts.id.renderButton(btn, { theme: "outline", size: "large", shape: "pill", width: 320 });
+  try {
+    window.google.accounts.id.initialize({
+      client_id: _googleClientId,
+      callback: handleGoogleCallback,
+      ux_mode: "popup",
+      auto_select: false,
+    });
+    window.google.accounts.id.renderButton(btn, { theme: "outline", size: "large", shape: "pill", width: 320 });
+  } catch (err) {
+    console.error("[Google Auth] Button render error:", err);
+  }
 }
 
 async function handleGoogleCallback(response) {

@@ -6,7 +6,7 @@
     <title>FreelanceHub | Escrow-backed freelance services</title>
     <link rel="stylesheet" href="styles.css?v=150" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer onload="if (typeof initGoogleAuth === 'function') initGoogleAuth();"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="app.js?v=150" defer></script>
