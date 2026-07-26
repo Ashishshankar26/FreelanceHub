@@ -226,7 +226,6 @@ async function init() {
   
   initLogoNav();
   initNotificationToggle();
-  initInteractiveCard();
   renderNotifications();
   
   await Promise.allSettled([loadCurrentUser(), loadServices()]);
