@@ -6935,25 +6935,7 @@ body.app-mode .marketplace-page .services-section {
   font-weight: 800;
 }
 
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #receiptPrintableArea, #receiptPrintableArea * {
-    visibility: visible;
-  }
-  #receiptPrintableArea {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    border: 0;
-    background: #fff;
-    color: #000;
-    padding: 0;
-    margin: 0;
-  }
-}
+
 
 /* ==========================================
    Dark Mode Overrides (workspace / wallet / gateway)
@@ -8742,29 +8724,7 @@ body.app-mode .marketplace-page .services-section {
 }
 
 /* --- Printable Receipt Styling --- */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #gatewayReceiptPanel, #gatewayReceiptPanel * {
-    visibility: visible;
-  }
-  #gatewayReceiptPanel {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 20px;
-    background: #fff !important;
-    color: #000 !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-  .receipt-actions {
-    display: none !important;
-  }
-}
+
 
 /* --- Futuristic 3D Flip Card & Gateway Enhancements --- */
 .card-interactive-wrapper {
@@ -9064,50 +9024,102 @@ body.app-mode .marketplace-page .services-section {
 }
 
 /* --- Isolate Receipt Printing Cleanly (No Bleed Through) --- */
+
+
+/* --- 3D Debit Card Spacing & Alignment --- */
+.card-interactive-wrapper {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 380px;
+  margin: 36px auto 32px auto !important;
+  display: block;
+}
+
+.gateway-tab-row {
+  margin-bottom: 28px !important;
+}
+
+/* --- Card Flip Class (Guaranteed 180deg rotate) --- */
+#cardFlipInner.flipped,
+.flip-card-inner.flipped {
+  transform: rotateY(180deg) !important;
+}
+
+/* --- OTP Modal Dead-Center Viewport Positioning --- */
+#bankOtpModal,
+dialog.futuristic-modal#bankOtpModal {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(480px, calc(100vw - 32px)) !important;
+  max-height: 90vh !important;
+  border: none !important;
+  background: transparent !important;
+  z-index: 999999 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+#bankOtpModal::backdrop {
+  background: rgba(0, 0, 0, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.otp-modal-card {
+  margin: 0 auto !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
 @media print {
   html, body {
     background: #ffffff !important;
     color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  body * {
+  /* Hide header, navigation, sidebars, buttons, dialogs, footers */
+  .site-header,
+  .main-nav,
+  .header-actions,
+  .dashboard-section,
+  .marketplace-page,
+  .finance-page,
+  .gateway-sidebar,
+  .gateway-header-row,
+  .gateway-tab-row,
+  #gatewayCardPanel,
+  #gatewayUpiPanel,
+  #gatewayProcessing,
+  .receipt-checkmark,
+  .gateway-receipt-panel > h2,
+  .gateway-receipt-panel > .receipt-success-text,
+  .receipt-actions,
+  .circle-button,
+  .join-button,
+  .auth-dialog,
+  #bankOtpModal,
+  .workspace-footer,
+  .floating-wallet {
     display: none !important;
   }
 
-  #gatewayPage, #gatewayPage *,
-  #receiptPrintableArea, #receiptPrintableArea * {
+  /* Expose receipt section cleanly */
+  #gatewayPage,
+  .gateway-container,
+  .gateway-main-panel,
+  #gatewayReceiptPanel,
+  #receiptPrintableArea {
     display: block !important;
     visibility: visible !important;
-  }
-
-  #gatewayPage {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
+    position: static !important;
     width: 100% !important;
-    background: #ffffff !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .gateway-container, .gateway-main-panel, .gateway-receipt-panel {
-    background: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-  }
-
-  .gateway-sidebar, .gateway-header-row, .gateway-tab-row, #gatewayCardPanel, #gatewayUpiPanel, #gatewayProcessing, .receipt-checkmark, .receipt-actions, header, footer {
-    display: none !important;
-  }
-
-  #receiptPrintableArea {
-    width: 100% !important;
-    max-width: 650px !important;
-    margin: 20px auto !important;
-    padding: 32px !important;
+    max-width: 680px !important;
+    margin: 10px auto !important;
+    padding: 24px !important;
     background: #ffffff !important;
     color: #0f172a !important;
     border: 2px solid #cbd5e1 !important;
@@ -9115,15 +9127,29 @@ body.app-mode .marketplace-page .services-section {
     box-shadow: none !important;
   }
 
-  #receiptPrintableArea h3,
-  #receiptPrintableArea span,
-  #receiptPrintableArea strong {
+  #receiptPrintableArea * {
+    display: block !important;
+    visibility: visible !important;
     color: #0f172a !important;
+  }
+
+  .receipt-header {
+    margin-bottom: 20px !important;
+    border-bottom: 2px solid #cbd5e1 !important;
+    padding-bottom: 12px !important;
   }
 
   .receipt-row {
     display: flex !important;
     justify-content: space-between !important;
+    align-items: center !important;
     margin-bottom: 12px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .receipt-divider {
+    height: 1px !important;
+    background: #cbd5e1 !important;
+    margin: 16px 0 !important;
   }
 }

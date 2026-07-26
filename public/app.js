@@ -1243,7 +1243,7 @@ async function addWalletFunds() {
       method: "POST",
       body: JSON.stringify({ amount }),
     });
-    showToast(`₹${amount} added to your live wallet!`);
+    
     await loadWallet();
     await loadDashboard();
   } catch (error) {
@@ -1341,7 +1341,7 @@ async function submitFuturisticTopup() {
       method: "POST",
       body: JSON.stringify({ amount }),
     });
-    showToast(`₹${amount} added to your live wallet!`);
+    
     closeFuturisticTopupModal();
     await loadWallet();
     await loadDashboard();
@@ -2215,11 +2215,11 @@ function initInteractiveCard() {
     });
 
     cardCvvInput.addEventListener("focus", () => {
-      if (card) card.classList.add("flipped");
+      document.querySelectorAll("#cardFlipInner, .flip-card-inner").forEach(el => el.classList.add("flipped"));
     });
 
     cardCvvInput.addEventListener("blur", () => {
-      if (card) card.classList.remove("flipped");
+      document.querySelectorAll("#cardFlipInner, .flip-card-inner").forEach(el => el.classList.remove("flipped"));
     });
   }
 }
