@@ -2361,36 +2361,7 @@ function openGatewayPage(checkoutDetails) {
         }
 
         // PDF Download button
-        const pdfBtn = document.getElementById("receiptDownloadPdf");
-        if (pdfBtn) {
-          pdfBtn.onclick = async () => {
-            const el = document.getElementById("receiptPrintableArea");
-            if (!el || !window.html2canvas || !window.jspdf) {
-              window.print();
-              return;
-            }
-            try {
-              pdfBtn.disabled = true;
-              pdfBtn.querySelector("span").textContent = "Generating...";
-              const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-              const imgData = canvas.toDataURL("image/png");
-              const { jsPDF } = window.jspdf;
-              const pdf = new jsPDF("p", "mm", "a4");
-              const pdfW = pdf.internal.pageSize.getWidth() - 20;
-              const pdfH = (canvas.height * pdfW) / canvas.width;
-              pdf.addImage(imgData, "PNG", 10, 10, pdfW, pdfH);
-              const txnId = document.getElementById("receiptTxId")?.textContent || "receipt";
-              pdf.save("FreelanceHub_Receipt_" + txnId + ".pdf");
-              pdfBtn.querySelector("span").textContent = "Download PDF";
-              pdfBtn.disabled = false;
-            } catch (err) {
-              console.error("PDF generation failed:", err);
-              window.print();
-              pdfBtn.querySelector("span").textContent = "Download PDF";
-              pdfBtn.disabled = false;
-            }
-          };
-        }
+        const pdfBtn = document.getElementById("receiptDownloadPdf"); if (pdfBtn) { pdfBtn.onclick = (e) => { e.preventDefault(); downloadReceiptPdf(); }; }
       } catch (error) {
         showToast(error.message || "Payment authorization failed.");
         selectors.gatewayProcessing?.classList.add("hidden");
@@ -2481,3 +2452,143 @@ function refreshIcons() {
 }
 
 init();
+
+
+// ==========================================
+// ROBUST PDF RECEIPT DOWNLOAD GENERATOR
+// ==========================================
+function downloadReceiptPdf() {
+  const btn = document.getElementById("receiptDownloadPdf");
+  if (btn) {
+    btn.disabled = true;
+    const span = btn.querySelector("span");
+    if (span) span.textContent = "Generating PDF...";
+  }
+
+  const txId = document.getElementById("receiptTxId")?.textContent || "TXN-DEMO-12345";
+  const dateStr = document.getElementById("receiptDate")?.textContent || new Date().toLocaleString();
+  const userStr = document.getElementById("receiptUser")?.textContent || "User Account";
+  const amountStr = document.getElementById("receiptAmount")?.textContent || "₹0.00";
+  const statusStr = "SETTLED & ESCROW LOCKED";
+
+  const jsPDFLib = window.jspdf?.jsPDF || window.jsPDF;
+  if (jsPDFLib) {
+    try {
+      const doc = new jsPDFLib({ orientation: "p", unit: "mm", format: "a4" });
+      
+      // Top Header Banner
+      doc.setFillColor(15, 23, 42); // #0f172a slate
+      doc.rect(0, 0, 210, 42, "F");
+      
+      // Brand Title
+      doc.setTextColor(168, 85, 247); // #a855f7 purple
+      doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
+      doc.text("FreelanceHub", 15, 18);
+      
+      doc.setTextColor(248, 250, 252);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text("OFFICIAL ESCROW TRANSACTION RECEIPT", 15, 28);
+      
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("Date: " + dateStr, 125, 28);
+      
+      // Status Badge Box
+      doc.setFillColor(240, 253, 244);
+      doc.setDrawColor(34, 197, 94);
+      doc.roundedRect(15, 48, 180, 16, 3, 3, "FD");
+      
+      doc.setTextColor(34, 197, 94);
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("STATUS: PAYMENT SUCCESSFUL (" + statusStr + ")", 20, 58);
+      
+      // Details Card Box
+      doc.setFillColor(248, 250, 252);
+      doc.setDrawColor(226, 232, 240);
+      doc.roundedRect(15, 70, 180, 85, 4, 4, "FD");
+      
+      doc.setTextColor(15, 23, 42);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("Transaction Summary", 22, 82);
+      
+      const details = [
+        ["Transaction ID", txId],
+        ["Account Holder", userStr],
+        ["Payment Method", "Card / Escrow Top-Up"],
+        ["Platform Fee", "₹0.00 (FREE)"],
+        ["Escrow Status", "Locked in Live Ledger"],
+      ];
+      
+      let y = 94;
+      details.forEach(([label, val]) => {
+        doc.setFontSize(10);
+        doc.setTextColor(100, 116, 139);
+        doc.setFont("helvetica", "normal");
+        doc.text(label, 22, y);
+        
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "bold");
+        doc.text(val, 105, y);
+        
+        doc.setDrawColor(241, 245, 249);
+        doc.line(22, y + 3, 188, y + 3);
+        y += 10;
+      });
+      
+      // Total Box
+      doc.setFillColor(245, 243, 255);
+      doc.setDrawColor(168, 85, 247);
+      doc.roundedRect(15, 162, 180, 22, 4, 4, "FD");
+      
+      doc.setTextColor(124, 58, 237);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("Total Amount Added To Wallet:", 22, 175);
+      
+      doc.setFontSize(16);
+      doc.setTextColor(109, 40, 217);
+      doc.text(amountStr, 145, 176);
+      
+      // Footer Notes
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.setFont("helvetica", "italic");
+      doc.text("This is an electronically generated receipt verified by FreelanceHub Escrow Gateway.", 15, 200);
+      doc.text("For support or inquiries, please contact support@freelancehub.com", 15, 206);
+      
+      const cleanTxId = txId.replace(/[^a-zA-Z0-9_-]/g, "_");
+      doc.save("FreelanceHub_Receipt_" + cleanTxId + ".pdf");
+      
+      if (btn) {
+        btn.disabled = false;
+        const span = btn.querySelector("span");
+        if (span) span.textContent = "Download PDF";
+      }
+      if (typeof showToast === "function") showToast("PDF Receipt downloaded successfully!");
+      return;
+    } catch (err) {
+      console.error("jsPDF generation error:", err);
+    }
+  }
+
+  // Fallback to window.print()
+  if (btn) {
+    btn.disabled = false;
+    const span = btn.querySelector("span");
+    if (span) span.textContent = "Download PDF";
+  }
+  window.print();
+}
+
+// Global Delegation for Receipt Download PDF Button
+document.addEventListener("click", (e) => {
+  const pdfBtn = e.target.closest("#receiptDownloadPdf");
+  if (pdfBtn) {
+    e.preventDefault();
+    downloadReceiptPdf();
+  }
+});
