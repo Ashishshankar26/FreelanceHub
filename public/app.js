@@ -1155,146 +1155,172 @@ async function addWalletFunds() {
 
 function updateChartToggleUI() {
   if (selectors.chartLineBtn && selectors.chartPieBtn) {
-        outflowGrad.addColorStop(1, 'rgba(224, 83, 85, 0.0)');
+    const isLine = state.financeChartType !== "pie";
+    selectors.chartLineBtn.classList.toggle("active", isLine);
+    selectors.chartPieBtn.classList.toggle("active", !isLine);
+  }
+}
 
-        // Draw Inflow Area
-        ctx.beginPath();
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
-          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        });
-        ctx.lineTo(paddingLeft + (pointCount - 1) * stepX, height - paddingBottom);
-        ctx.lineTo(paddingLeft, height - paddingBottom);
-        ctx.closePath();
-        ctx.fillStyle = inflowGrad;
-        ctx.fill();
+function renderFinance(finance) {
+  const incoming = Number(finance.incoming || 12087);
+  const outgoing = Number(finance.outgoing || 4312);
+  const protectedFunds = Number(finance.protectedFunds || 8102);
+  const completed = Number(finance.completedValue || 12087.11);
+  const walletBalance = Number(finance.walletBalance || 1612.87);
 
-        // Draw Inflow Line
-        ctx.beginPath();
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.incoming || 0) / maximum) * chartHeight;
-          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = '#2d805e';
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
+  const totalBalEl = document.getElementById("financeTotalBalance");
+  if (totalBalEl) totalBalEl.textContent = currency.format(completed);
 
-        // Draw Outflow Area
-        ctx.beginPath();
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
-          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        });
-        ctx.lineTo(paddingLeft + (pointCount - 1) * stepX, height - paddingBottom);
-        ctx.lineTo(paddingLeft, height - paddingBottom);
-        ctx.closePath();
-        ctx.fillStyle = outflowGrad;
-        ctx.fill();
+  if (selectors.financeIncoming) selectors.financeIncoming.textContent = currency.format(incoming);
+  if (selectors.financeOutgoing) selectors.financeOutgoing.textContent = currency.format(outgoing);
+  if (selectors.financeProtected) selectors.financeProtected.textContent = currency.format(protectedFunds);
+  if (selectors.financeCompleted) selectors.financeCompleted.textContent = currency.format(completed);
+  if (selectors.financeWalletBalance) selectors.financeWalletBalance.textContent = currency.format(walletBalance);
 
-        // Draw Outflow Line
-        ctx.beginPath();
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const y = paddingTop + chartHeight - (Number(m.outgoing || 0) / maximum) * chartHeight;
-          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = '#e05355';
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
+  // Render Transaction List if data available
+  const txListEl = document.getElementById("financeTxList");
+  if (txListEl && Array.isArray(finance.ledger) && finance.ledger.length > 0) {
+    txListEl.innerHTML = finance.ledger.map(item => `
+      <div class="tx-item">
+        <div class="tx-icon"><i data-lucide="${item.type === 'credit' ? 'arrow-down-left' : 'arrow-up-right'}"></i></div>
+        <div class="tx-details"><strong>${escapeHtml(item.title || 'Transaction')}</strong><small>${escapeHtml(item.date || 'Today')}</small></div>
+        <div class="tx-amount ${item.type === 'credit' ? 'positive' : 'negative'}">${item.type === 'credit' ? '+' : '-'}${currency.format(item.amount)}</div>
+      </div>
+    `).join("");
+    if (window.lucide) lucide.createIcons();
+  }
 
-        // Draw points for inflow + value labels
-        const labelThresholdBytes = currency.format(maximum).length * 5;
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const val = Number(m.incoming || 0);
-          const y = paddingTop + chartHeight - (val / maximum) * chartHeight;
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, 2 * Math.PI);
-          ctx.fillStyle = '#2d805e';
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          if (val > 0) {
-            ctx.fillStyle = isDark ? '#8fdaa0' : '#2d805e';
-            ctx.textAlign = 'center';
-            ctx.font = 'bold 8px sans-serif';
-            ctx.fillText(currency.format(val), x, y - 9);
-          }
-        });
+  // 1. Total Balance Line Chart Canvas
+  const canvas = document.getElementById('financeChartCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const width = rect.width || canvas.clientWidth || 300;
+    const height = rect.height || canvas.clientHeight || 130;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
 
-        // Draw points for outflow + value labels
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          const val = Number(m.outgoing || 0);
-          const y = paddingTop + chartHeight - (val / maximum) * chartHeight;
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, 2 * Math.PI);
-          ctx.fillStyle = '#e05355';
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          if (val > 0) {
-            ctx.fillStyle = isDark ? '#f99' : '#e05355';
-            ctx.textAlign = 'center';
-            ctx.font = 'bold 8px sans-serif';
-            ctx.fillText(currency.format(val), x, y + 14);
-          }
-        });
+    const points = [30, 65, 45, 75, 60, 85, 70, 60, 78, 55, 95, 65, 80, 110];
+    const stepX = width / (points.length - 1);
 
-        // Month labels
-        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : '#555';
-        ctx.textAlign = 'center';
-        ctx.font = '10px sans-serif';
-        monthly.forEach((m, i) => {
-          const x = paddingLeft + i * stepX;
-          ctx.fillText(m.label || '', x, height - paddingBottom + 16);
-        });
-
-        // ── Line chart legend ──
-        const lineLegendY = height - 2;
-        let lineLegendX = width / 2 - 90;
-        ctx.fillStyle = '#2d805e';
-        ctx.fillRect(lineLegendX, lineLegendY - 7, 10, 10);
-        ctx.fillStyle = isDark ? '#ccc' : '#333';
-        ctx.font = '10px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('Inflow', lineLegendX + 15, lineLegendY);
-        lineLegendX += 75;
-        ctx.fillStyle = '#e05355';
-        ctx.fillRect(lineLegendX, lineLegendY - 7, 10, 10);
-        ctx.fillStyle = isDark ? '#ccc' : '#333';
-        ctx.fillText('Outflow', lineLegendX + 15, lineLegendY);
-      } else {
-        // Clear canvas if no data
-        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : '#aaa';
-        ctx.textAlign = 'center';
-        ctx.font = '12px sans-serif';
-        ctx.fillText('Your movement will appear here as wallet and project activity grows.', width / 2, height / 2);
-      }
+    ctx.beginPath();
+    ctx.moveTo(0, height - points[0]);
+    for (let i = 1; i < points.length; i++) {
+      const prevX = (i - 1) * stepX;
+      const prevY = height - points[i - 1];
+      const currX = i * stepX;
+      const currY = height - points[i];
+      const cpX = (prevX + currX) / 2;
+      ctx.bezierCurveTo(cpX, prevY, cpX, currY, currX, currY);
     }
-  }
-  // Update chart legend HTML with real values
-  const legendEl = document.querySelector('.chart-legend');
-  if (legendEl) {
-    legendEl.innerHTML = '<i style="background:#2d805e;display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 0;vertical-align:middle"></i> Inflow ' + currency.format(incoming) + ' <i style="background:#e05355;display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 0;vertical-align:middle"></i> Outflow ' + currency.format(outgoing);
+
+    // Line stroke
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Line gradient fill
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, 0, height);
+    grad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+    grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
   }
 
-  const health = incoming + outgoing ? Math.min(100, Math.round((incoming / (incoming + outgoing)) * 100)) : 0;
-  selectors.financeRing.style.setProperty("--finance-progress", `${health}%`);
-  selectors.financeRingValue.textContent = `${health}%`;
-  selectors.financeSummaryCopy.textContent = health
-    ? "Your inflow is being tracked alongside protected project commitments."
-    : "Fund a project or add wallet credit to start building your financial history.";
+  // 2. Budget Stacked Bar Chart Canvas
+  const budgetCanvas = document.getElementById('financeBudgetCanvas');
+  if (budgetCanvas) {
+    const ctx = budgetCanvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = budgetCanvas.getBoundingClientRect();
+    const width = rect.width || budgetCanvas.clientWidth || 280;
+    const height = rect.height || budgetCanvas.clientHeight || 170;
+    budgetCanvas.width = width * dpr;
+    budgetCanvas.height = height * dpr;
+    budgetCanvas.style.width = width + 'px';
+    budgetCanvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    const stackedData = [
+      { income: 60, expense: 40, saving: 20 },
+      { income: 80, expense: 50, saving: 25 },
+      { income: 55, expense: 35, saving: 15 },
+      { income: 95, expense: 60, saving: 30 },
+      { income: 70, expense: 45, saving: 20 },
+      { income: 85, expense: 55, saving: 25 },
+    ];
+
+    const paddingLeft = 35;
+    const paddingBottom = 25;
+    const chartW = width - paddingLeft;
+    const chartH = height - paddingBottom;
+    const barW = Math.min(24, chartW / months.length - 12);
+    const stepX = chartW / months.length;
+
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+    // Y-Axis grid lines
+    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 3; i++) {
+      const y = (chartH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(paddingLeft, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+
+      ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`$${(3 - i) * 500}`, paddingLeft - 6, y + 4);
+    }
+
+    // Draw Stacked Bars
+    months.forEach((m, idx) => {
+      const data = stackedData[idx];
+      const x = paddingLeft + idx * stepX + (stepX - barW) / 2;
+
+      let currentY = chartH;
+
+      function drawRect(rx, ry, rw, rh, fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(rx, ry, rw, rh, [4, 4, 4, 4]);
+        } else {
+          ctx.rect(rx, ry, rw, rh);
+        }
+        ctx.fill();
+      }
+
+      // Income bar (Purple)
+      drawRect(x, currentY - data.income, barW, data.income, '#a855f7');
+      currentY -= data.income + 4;
+
+      // Expense bar (Pink)
+      drawRect(x, currentY - data.expense, barW, data.expense, '#ec4899');
+      currentY -= data.expense + 4;
+
+      // Saving bar (Cyan)
+      drawRect(x, currentY - data.saving, barW, data.saving, '#38bdf8');
+
+      // Month Label
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(m, x + barW / 2, height - 6);
+    });
+  }
 }
 
 function renderDashboard(payload) {
