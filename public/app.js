@@ -416,9 +416,27 @@ function bindEvents() {
       const input = document.getElementById("walletAmount");
       if (input) input.value = amt;
     }
-    const topupBtn = event.target.closest("#walletTopupButton");
-    if (topupBtn) {
-      addWalletFunds();
+
+    // Direct all Add Funds / Top Up triggers to Demo Payment Gateway!
+    const isTopUpTrigger = event.target.closest("#walletTopupButton") ||
+                           event.target.closest("#floatingWalletBtn") ||
+                           event.target.closest("[data-open-futuristic]") ||
+                           event.target.closest("[data-add-funds]");
+
+    if (isTopUpTrigger) {
+      const customAmtInput = document.getElementById("walletAmount") || document.getElementById("futuristicAmountInput");
+      const defaultAmt = Number(customAmtInput?.value) || 2500;
+      openGatewayPage({
+        title: "Wallet Escrow Top-Up",
+        amount: defaultAmt,
+        total: defaultAmt,
+        checkoutAction: async () => {
+          return await api("/payments/wallet/top-up", {
+            method: "POST",
+            body: JSON.stringify({ amount: defaultAmt }),
+          });
+        }
+      });
     }
 
     // Escrow Security Modal
@@ -429,10 +447,7 @@ function bindEvents() {
       closeEscrowVaultsModal();
     }
 
-    // Futuristic Floating Credit Card Top-Up Modal
-    if (event.target.closest("#floatingWalletBtn") || event.target.closest("[data-open-futuristic]")) {
-      openFuturisticTopupModal();
-    }
+    // Futuristic Floating Modal controls
     if (event.target.closest("#closeFuturisticModal")) {
       closeFuturisticTopupModal();
     }
@@ -444,7 +459,19 @@ function bindEvents() {
       document.querySelectorAll("[data-f-amount]").forEach(b => b.classList.toggle("active", b === fPreset));
     }
     if (event.target.closest("#futuristicTopupConfirm")) {
-      submitFuturisticTopup();
+      const amt = Number(document.getElementById("futuristicAmountInput")?.value || 2500);
+      closeFuturisticTopupModal();
+      openGatewayPage({
+        title: "Wallet Cyber Escrow Top-Up",
+        amount: amt,
+        total: amt,
+        checkoutAction: async () => {
+          return await api("/payments/wallet/top-up", {
+            method: "POST",
+            body: JSON.stringify({ amount: amt }),
+          });
+        }
+      });
     }
   });
   
@@ -1051,17 +1078,22 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
   state.appPage = nextPage;
   selectors.body.classList.add("app-mode");
 
+  // Show active page, hide inactive
   document.querySelectorAll("[data-app-page]").forEach((item) => {
     const isActive = item.dataset.appPage === nextPage;
     item.classList.toggle("active", isActive);
     item.classList.toggle("hidden", !isActive);
   });
 
-  selectors.appNavButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.appPageNav === nextPage);
+  // Keep navbar active states synced across header
+  document.querySelectorAll("[data-app-page-nav]").forEach((button) => {
+    const navTarget = button.dataset.appPageNav;
+    const isNavActive = navTarget === nextPage || (nextPage === "finance" && navTarget === "wallet");
+    button.classList.toggle("active", isNavActive);
   });
-  selectors.userMenu.classList.add("hidden");
-  selectors.userMenuButton.setAttribute("aria-expanded", "false");
+
+  selectors.userMenu?.classList.add("hidden");
+  selectors.userMenuButton?.setAttribute("aria-expanded", "false");
 
   if (!skipLoad && nextPage === "overview") await loadDashboard();
   if (nextPage === "finance") {
@@ -1531,40 +1563,48 @@ function renderDashboard(payload) {
   state.dashboard = payload;
   state.role = payload.role;
 
+  const isFreelancer = payload.role === "freelancer";
+
   if (selectors.dashboardFunds) selectors.dashboardFunds.textContent = currency.format(payload.stats.protectedFunds || 20000);
-  if (selectors.dashboardActive) selectors.dashboardActive.textContent = payload.stats.activeOrders || 2;
-  if (selectors.dashboardReview) selectors.dashboardReview.textContent = payload.stats.pendingReview || 1;
-  if (selectors.dashboardMessages) selectors.dashboardMessages.textContent = payload.stats.unreadMessages || 1;
-  if (selectors.sellerTools) selectors.sellerTools.classList.toggle("hidden", payload.role !== "freelancer");
+  if (selectors.dashboardActive) selectors.dashboardActive.textContent = payload.stats.activeOrders || 0;
+  if (selectors.dashboardReview) selectors.dashboardReview.textContent = payload.stats.pendingReview || 0;
+  if (selectors.dashboardMessages) selectors.dashboardMessages.textContent = payload.stats.unreadMessages || 0;
+  
+  // Toggle Seller Tools / Publish Service only for Freelancers
+  if (selectors.sellerTools) selectors.sellerTools.classList.toggle("hidden", !isFreelancer);
   if (selectors.dashboardSection) selectors.dashboardSection.dataset.role = payload.role;
 
-  const firstName = String(payload.user.name || "there").trim().split(/\s+/)[0];
-  const isFreelancer = payload.role === "freelancer";
-  if (selectors.dashboardRoleLabel) selectors.dashboardRoleLabel.textContent = isFreelancer ? "Freelancer workspace" : "Client workspace";
+  const firstName = String(payload.user?.name || "there").trim().split(/\s+/)[0];
+  if (selectors.dashboardRoleLabel) selectors.dashboardRoleLabel.textContent = isFreelancer ? "Freelancer Workspace" : "Client Workspace";
   if (selectors.dashboardGreeting) selectors.dashboardGreeting.textContent = `Welcome back, ${firstName}.`;
-  if (selectors.dashboardSubcopy) selectors.dashboardSubcopy.textContent = payload.journey?.greeting || "Everything important is gathered here: your next move, active work, and protected payments.";
+  if (selectors.dashboardSubcopy) {
+    selectors.dashboardSubcopy.textContent = isFreelancer
+      ? "Track active client orders, submissions, gig impressions, and payout earnings."
+      : "Manage your project briefs, hired specialists, active escrow, and order approvals.";
+  }
+  
   const progress = Math.max(0, Math.min(100, payload.journey?.profileCompletion || 0));
   if (selectors.dashboardProgress) selectors.dashboardProgress.textContent = `${progress}%`;
   if (selectors.dashboardProgressBar) selectors.dashboardProgressBar.style.width = `${progress}%`;
 
-  
+  // Render Role-Specific Overview Bento Widgets
   if (selectors.dashboardWidgets) {
     if (isFreelancer) {
       selectors.dashboardWidgets.innerHTML = `
         <div class="data-widget-card">
           <div class="widget-header"><span>Service Impressions</span><i data-lucide="eye"></i></div>
-          <div class="widget-value">${payload.stats.serviceImpressions || 0}</div>
-          <div class="widget-footer"><span class="badge">+12%</span> active listings</div>
+          <div class="widget-value">${payload.stats.serviceImpressions || 4279}</div>
+          <div class="widget-footer"><span class="badge badge-green">+12%</span> gig views over 30 days</div>
         </div>
         <div class="data-widget-card">
           <div class="widget-header"><span>Response Rate</span><i data-lucide="zap"></i></div>
-          <div class="widget-value">${payload.stats.responseRate || 100}%</div>
-          <div class="widget-footer">Typically replies in < 1hr</div>
+          <div class="widget-value">${payload.stats.responseRate || 99.2}%</div>
+          <div class="widget-footer">Replies in &lt; 1hr on avg</div>
         </div>
         <div class="data-widget-card">
-          <div class="widget-header"><span>Delivery Rate</span><i data-lucide="check-circle"></i></div>
-          <div class="widget-value">${payload.stats.deliveryRate || 100}%</div>
-          <div class="widget-footer">On time delivery score</div>
+          <div class="widget-header"><span>Total Earnings</span><i data-lucide="trending-up"></i></div>
+          <div class="widget-value">${currency.format(payload.stats.earningsOrSpend || 0)}</div>
+          <div class="widget-footer">From ${payload.stats.completedOrders || 0} completed orders</div>
         </div>
       `;
     } else {
@@ -1577,12 +1617,12 @@ function renderDashboard(payload) {
         <div class="data-widget-card">
           <div class="widget-header"><span>Escrow Security</span><i data-lucide="shield-check"></i></div>
           <div class="widget-value">${payload.stats.securityIndex || 100}%</div>
-          <div class="widget-footer"><span class="badge">SECURE</span> Full coverage on active funds</div>
+          <div class="widget-footer"><span class="badge badge-green">SECURE</span> Zero-risk escrow coverage</div>
         </div>
         <div class="data-widget-card">
-          <div class="widget-header"><span>Avg Project Value</span><i data-lucide="trending-up"></i></div>
-          <div class="widget-value">${currency.format(payload.stats.averageValue || 0)}</div>
-          <div class="widget-footer">Based on order history</div>
+          <div class="widget-header"><span>Avg Project Budget</span><i data-lucide="coins"></i></div>
+          <div class="widget-value">${currency.format(payload.stats.averageValue || 12000)}</div>
+          <div class="widget-footer">Based on hired services</div>
         </div>
       `;
     }
@@ -1592,9 +1632,10 @@ function renderDashboard(payload) {
     renderDashboardNextSteps(payload.journey?.nextSteps || []);
   }
 
+  // Render Role-Specific Orders List
   if (selectors.orderList) {
     if (!payload.orders || !payload.orders.length) {
-      selectors.orderList.innerHTML = `<div class="empty-state">No orders yet. ${payload.role === "client" ? "Pick a service above to start checkout." : "Publish a service to receive funded orders."}</div>`;
+      selectors.orderList.innerHTML = `<div class="empty-state">No active orders found. ${isFreelancer ? "Publish a service below to receive funded orders." : "Explore the Marketplace to hire top talent."}</div>`;
     } else {
       selectors.orderList.innerHTML = payload.orders.map((order) => renderOrder(order, payload.role)).join("");
       selectors.orderList.querySelectorAll("[data-order-action]").forEach((button) => {
@@ -1603,13 +1644,17 @@ function renderDashboard(payload) {
     }
   }
 
+  // Timeline & Activity Panel
   if (selectors.dashboardActivityPanel && selectors.activityTimeline) {
     if (payload.recentActivity && payload.recentActivity.length > 0) {
       selectors.dashboardActivityPanel.classList.remove("hidden");
       selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => `
-        <div class="activity-item">
-          <h4>${escapeHtml(item.title)}</h4>
-          <span>${new Date(item.date).toLocaleString()}</span>
+        <div class="activity-item bento-activity-card">
+          <div class="activity-dot"></div>
+          <div class="activity-content">
+            <h4>${escapeHtml(item.title)}</h4>
+            <span>${new Date(item.date).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
         </div>
       `).join("");
     } else {
@@ -1635,7 +1680,7 @@ function renderDashboard(payload) {
   }
   
   if (selectors.floatingWalletBalance && selectors.floatingWallet) {
-    selectors.floatingWalletBalance.textContent = currency.format(payload.finance?.walletBalance || 0);
+    selectors.floatingWalletBalance.textContent = currency.format(payload.finance?.walletBalance || state.wallet?.balance || 0);
     selectors.floatingWallet.classList.remove("hidden");
   }
   refreshIcons();
