@@ -400,11 +400,27 @@ function bindEvents() {
   selectors.connectPayoutsButton.addEventListener("click", connectPayouts);
   selectors.walletPresetButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      selectors.walletAmount.value = button.dataset.walletAmount;
+      if (selectors.walletAmount) selectors.walletAmount.value = button.dataset.walletAmount;
       selectors.walletPresetButtons.forEach((item) => item.classList.toggle("active", item === button));
     });
   });
-  selectors.walletTopupButton.addEventListener("click", addWalletFunds);
+  if (selectors.walletTopupButton) {
+    selectors.walletTopupButton.addEventListener("click", addWalletFunds);
+  }
+
+  // Delegated handler for embedded wallet presets and topup buttons
+  document.addEventListener("click", (event) => {
+    const presetBtn = event.target.closest("[data-wallet-amount]");
+    if (presetBtn) {
+      const amt = presetBtn.dataset.walletAmount;
+      const input = document.getElementById("walletAmount");
+      if (input) input.value = amt;
+    }
+    const topupBtn = event.target.closest("#walletTopupButton");
+    if (topupBtn) {
+      addWalletFunds();
+    }
+  });
   
   if (selectors.chartLineBtn) {
     selectors.chartLineBtn.addEventListener("click", () => {
@@ -1003,11 +1019,13 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
     return;
   }
   const allowedPages = ["overview", "marketplace", "wallet", "finance", "gateway"];
-  const nextPage = allowedPages.includes(page) ? page : "overview";
+  let nextPage = allowedPages.includes(page) ? page : "overview";
+  if (nextPage === "wallet") nextPage = "finance";
+
   state.appPage = nextPage;
   selectors.body.classList.add("app-mode");
   selectors.dashboardSection.classList.remove("hidden");
-  selectors.walletPage.classList.remove("hidden");
+  if (selectors.walletPage) selectors.walletPage.classList.add("hidden");
   document.querySelector("#financePage")?.classList.remove("hidden");
   selectors.gatewayPage?.classList.remove("hidden");
   selectors.appPages.forEach((item) => item.classList.toggle("active", item.dataset.appPage === nextPage));
@@ -1016,10 +1034,8 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
   selectors.userMenuButton.setAttribute("aria-expanded", "false");
 
   if (!skipLoad && nextPage === "overview") await loadDashboard();
-  if (nextPage === "wallet") await loadWallet();
   if (nextPage === "finance") {
-    if (!state.dashboard) await loadDashboard();
-    else renderFinance(state.dashboard.finance || {});
+    await Promise.allSettled([loadDashboard(), loadWallet()]);
   }
   if (scroll) document.querySelector(`[data-app-page="${nextPage}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -1085,6 +1101,7 @@ async function loadWallet() {
     const payload = await api("/payments/wallet");
     state.wallet = payload.wallet;
     renderWallet(payload.wallet);
+    renderFinance(state.dashboard?.finance || {}, payload.wallet);
   } catch (error) {
     showToast(error.message);
   }
@@ -1092,65 +1109,72 @@ async function loadWallet() {
 
 function renderWallet(wallet) {
   const balance = Number(wallet.balance || 0);
-  const isDemo = wallet.provider === "demo";
-  selectors.walletBalance.textContent = currency.format(balance);
+  const totalBalEl = document.getElementById("financeTotalBalance");
+  if (totalBalEl) totalBalEl.textContent = currency.format(balance);
+
+  const walletBalEl = document.getElementById("financeWalletBalance");
+  if (walletBalEl) walletBalEl.textContent = currency.format(balance);
+
+  const dashWalletBalEl = document.getElementById("dashboardWalletBalance");
+  if (dashWalletBalEl) dashWalletBalEl.textContent = currency.format(balance);
+
   if (selectors.floatingWalletBalance) {
     selectors.floatingWalletBalance.textContent = currency.format(balance);
     selectors.floatingWallet.classList.remove("hidden");
   }
-  selectors.walletCredits.textContent = `${currency.format(wallet.credits || 0)} added`;
-  selectors.walletProviderLabel.textContent = isDemo ? "Demo payments" : `${String(wallet.provider || "payment").toUpperCase()} payments`;
-  selectors.walletBalanceCopy.textContent = isDemo
-    ? "Demo funds are ready to use in your presentation ledger."
-    : "Add funds securely, then track every wallet movement here.";
-  selectors.walletTopupButton.innerHTML = `<i data-lucide="${isDemo ? "plus-circle" : "lock-keyhole"}"></i>${isDemo ? "Add demo funds" : "Continue to payment"}`;
-  selectors.walletDemoNote.innerHTML = isDemo
-    ? `<i data-lucide="sparkles"></i> Funds are credited instantly to this presentation ledger.`
-    : `<i data-lucide="shield-check"></i> Funds are credited after the payment provider confirms the transaction.`;
-  selectors.walletPhoneField.classList.toggle("hidden", isDemo);
-  selectors.walletPhone.value = wallet.phone || "";
 
-  if (!wallet.transactions?.length) {
-    selectors.walletTransactions.innerHTML = `<div class="wallet-empty"><span><i data-lucide="wallet-minimal"></i></span><div><strong>Your ledger is clear.</strong><p>Add demo funds to see a real stored transaction here.</p></div></div>`;
-  } else {
-    selectors.walletTransactions.innerHTML = wallet.transactions.map(renderWalletTransaction).join("");
+  // Render Real Transaction Ledger Items from MongoDB
+  const txListEl = document.getElementById("financeTxList");
+  if (txListEl) {
+    const transactions = Array.isArray(wallet.transactions) ? wallet.transactions : [];
+    if (!transactions.length) {
+      txListEl.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.85rem;">No wallet transactions recorded yet. Use the top-up form above to add demo funds.</div>`;
+    } else {
+      txListEl.innerHTML = transactions.map(item => {
+        const isCredit = item.direction === "credit";
+        const title = item.description || item.title || (isCredit ? "Wallet Top-Up" : "Escrow Payment");
+        const dateObj = item.createdAt || item.completedAt ? new Date(item.createdAt || item.completedAt) : new Date();
+        const dateStr = dateObj.toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+
+        return `
+          <div class="tx-item">
+            <div class="tx-icon ${isCredit ? 'bg-cyan' : 'bg-rose'}">
+              <i data-lucide="${isCredit ? 'arrow-down-left' : 'arrow-up-right'}"></i>
+            </div>
+            <div class="tx-details">
+              <strong>${escapeHtml(title)}</strong>
+              <small>${escapeHtml(dateStr)}</small>
+            </div>
+            <div class="tx-amount ${isCredit ? 'positive' : 'negative'}">
+              ${isCredit ? '+' : '-'}${currency.format(item.amount || 0)}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
   }
   refreshIcons();
 }
 
-function renderWalletTransaction(transaction) {
-  const succeeded = transaction.status === "succeeded";
-  const createdAt = transaction.completedAt || transaction.createdAt;
-  return `
-    <article class="wallet-transaction ${succeeded ? "is-succeeded" : ""}">
-      <span class="wallet-transaction-icon"><i data-lucide="${transaction.direction === "credit" ? "arrow-down-left" : "arrow-up-right"}"></i></span>
-      <div><strong>${escapeHtml(transaction.description || "Wallet transaction")}</strong><small>${createdAt ? new Date(createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "Just now"} / ${escapeHtml(transaction.status)}</small></div>
-      <strong class="wallet-transaction-amount ${transaction.direction === "credit" ? "credit" : "debit"}">${transaction.direction === "credit" ? "+" : "-"}${currency.format(transaction.amount || 0)}</strong>
-    </article>
-  `;
-}
-
 async function addWalletFunds() {
-  const amount = Number(selectors.walletAmount.value);
+  const amountInput = document.getElementById("walletAmount");
+  const amount = Number(amountInput?.value || 500);
   if (!Number.isFinite(amount) || amount < 50) {
     showToast("Enter an amount of at least ₹50.");
     return;
   }
   
-  openGatewayPage({
-    type: "wallet_topup",
-    title: "Wallet Credit Top-Up",
-    amount: amount,
-    fee: 0,
-    total: amount,
-    checkoutAction: async () => {
-      const payload = await api("/payments/wallet/top-up", {
-        method: "POST",
-        body: JSON.stringify({ amount, phone: selectors.walletPhone.value.trim() }),
-      });
-      return payload;
-    }
-  });
+  try {
+    const payload = await api("/payments/wallet/top-up", {
+      method: "POST",
+      body: JSON.stringify({ amount }),
+    });
+    showToast(`₹${amount} added to your live wallet!`);
+    await loadWallet();
+    await loadDashboard();
+  } catch (error) {
+    showToast(error.message || "Failed to add funds.");
+  }
 }
 
 function updateChartToggleUI() {
@@ -1161,21 +1185,20 @@ function updateChartToggleUI() {
   }
 }
 
-function renderFinance(finance) {
-  const incoming = Number(finance.incoming || 12087);
-  const outgoing = Number(finance.outgoing || 4312);
-  const protectedFunds = Number(finance.protectedFunds || 8102);
-  const completed = Number(finance.completedValue || 12087.11);
-  const walletBalance = Number(finance.walletBalance || 1612.87);
+function renderFinance(finance, wallet) {
+  const currentWallet = wallet || state.wallet;
+  const balance = Number(currentWallet?.balance ?? finance?.walletBalance ?? 0);
+  const incoming = Number(finance?.incoming ?? currentWallet?.credits ?? 0);
+  const protectedFunds = Number(finance?.protectedFunds ?? 0);
 
   const totalBalEl = document.getElementById("financeTotalBalance");
-  if (totalBalEl) totalBalEl.textContent = currency.format(completed);
+  if (totalBalEl) totalBalEl.textContent = currency.format(balance);
+
+  const walletBalEl = document.getElementById("financeWalletBalance");
+  if (walletBalEl) walletBalEl.textContent = currency.format(balance);
 
   if (selectors.financeIncoming) selectors.financeIncoming.textContent = currency.format(incoming);
-  if (selectors.financeOutgoing) selectors.financeOutgoing.textContent = currency.format(outgoing);
   if (selectors.financeProtected) selectors.financeProtected.textContent = currency.format(protectedFunds);
-  if (selectors.financeCompleted) selectors.financeCompleted.textContent = currency.format(completed);
-  if (selectors.financeWalletBalance) selectors.financeWalletBalance.textContent = currency.format(walletBalance);
 
   // Render Transaction List if data available
   const txListEl = document.getElementById("financeTxList");

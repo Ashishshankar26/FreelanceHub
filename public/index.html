@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=18" />
+    <link rel="stylesheet" href="styles.css?v=25" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=18" defer></script>
+    <script src="app.js?v=25" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -19,8 +19,7 @@
       <nav class="main-nav-capsule" id="mainNav" aria-label="Main navigation">
         <button class="active" type="button" data-app-page-nav="overview"><i data-lucide="layout-dashboard"></i><span>Overview</span></button>
         <button type="button" data-app-page-nav="marketplace"><i data-lucide="store"></i><span>Marketplace</span></button>
-        <button type="button" data-app-page-nav="wallet"><i data-lucide="wallet-cards"></i><span>Wallet</span></button>
-        <button type="button" data-app-page-nav="finance"><i data-lucide="chart-no-axes-combined"></i><span>Finance</span></button>
+        <button type="button" data-app-page-nav="finance"><i data-lucide="wallet-cards"></i><span>Finance & Wallet</span></button>
       </nav>
 
       <div class="header-actions">
@@ -374,8 +373,8 @@
                   </div>
                 </div>
               </div>
-              <button class="bento-btn-dark wide" type="button" data-app-page-nav="wallet">
-                <i data-lucide="plus"></i> Add funds to wallet
+              <button class="bento-btn-dark wide" type="button" data-app-page-nav="finance">
+                <i data-lucide="arrow-right"></i> Open Finance & Wallet
               </button>
             </article>
           </div>
@@ -623,99 +622,13 @@
 
       </section>
 
-      <section class="workspace-page wallet-page app-page hidden" id="walletPage" data-app-page="wallet" aria-labelledby="walletTitle">
-        <div class="workspace-page-heading">
-          <div>
-            <p class="eyebrow">Your payment workspace</p>
-            <h2 id="walletTitle">Wallet, ready when your next project is.</h2>
-          </div>
-          <span class="demo-chip"><i data-lucide="flask-conical"></i> Demo ledger</span>
-        </div>
-        <div class="wallet-layout">
-          <article class="wallet-balance-panel">
-            <div class="wallet-balance-top">
-              <span class="wallet-panel-icon"><i data-lucide="wallet-cards"></i></span>
-              <span class="wallet-status"><i data-lucide="circle-check"></i> Available now</span>
-            </div>
-            <span class="wallet-balance-label">Wallet balance</span>
-            <strong id="walletBalance">₹0</strong>
-            <p id="walletBalanceCopy">Add demo funds for a complete presentation-ready payment flow.</p>
-            <div class="wallet-balance-footer">
-              <span><i data-lucide="shield-check"></i> Stored in your ledger</span>
-              <span id="walletProviderLabel">Demo payments</span>
-            </div>
-          </article>
-          <article class="wallet-topup-panel">
-            <div class="panel-heading">
-              <div>
-                <p class="eyebrow">Add money</p>
-                <h3>Fund your wallet</h3>
-              </div>
-              <span class="wallet-panel-icon wallet-panel-icon-coral"><i data-lucide="plus"></i></span>
-            </div>
-            <div class="wallet-presets" aria-label="Suggested top-up amounts">
-              <button type="button" data-wallet-amount="500">₹500</button>
-              <button type="button" data-wallet-amount="1000">₹1,000</button>
-              <button type="button" data-wallet-amount="2500">₹2,500</button>
-            </div>
-            <label class="wallet-amount-field">
-              <span>Amount</span>
-              <div><span>₹</span><input id="walletAmount" type="number" min="50" max="100000" step="50" value="500" inputmode="decimal" /></div>
-            </label>
-            <label class="wallet-phone-field hidden" id="walletPhoneField">
-              <span>Mobile number</span>
-              <input id="walletPhone" type="tel" inputmode="tel" placeholder="For live provider payments" />
-            </label>
-            <button class="join-button wallet-topup-button" type="button" id="walletTopupButton"><i data-lucide="plus-circle"></i>Add demo funds</button>
-            <p class="wallet-demo-note" id="walletDemoNote"><i data-lucide="sparkles"></i> Funds are credited instantly to this presentation ledger.</p>
-          </article>
-        </div>
-        <div class="wallet-ledger-panel">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Activity</p>
-              <h3>Wallet ledger</h3>
-            </div>
-            <span class="ledger-total" id="walletCredits">₹0 added</span>
-          </div>
-          <div class="wallet-transaction-list" id="walletTransactions"></div>
-        </div>
-
-        <!-- ── Escrow Security Info Strip ── -->
-        <div class="escrow-info-strip">
-          <div class="escrow-info-strip-inner">
-            <div class="escrow-info-block">
-              <i data-lucide="lock"></i>
-              <h4>256-bit SSL</h4>
-              <p>All transactions encrypted end-to-end</p>
-            </div>
-            <div class="escrow-info-block">
-              <i data-lucide="shield-check"></i>
-              <h4>Escrow Vault</h4>
-              <p>Funds held securely until work is approved</p>
-            </div>
-            <div class="escrow-info-block">
-              <i data-lucide="scale"></i>
-              <h4>Dispute Resolution</h4>
-              <p>Fair, transparent mediation for every order</p>
-            </div>
-            <div class="escrow-info-block">
-              <i data-lucide="clock"></i>
-              <h4>Instant Payouts</h4>
-              <p>Earnings released within 24 hours of approval</p>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
       <section class="workspace-page finance-page app-page hidden" id="financePage" data-app-page="finance" aria-labelledby="financeTitle">
         <div class="workspace-page-heading">
           <div>
-            <p class="eyebrow">Financial Dashboard</p>
-            <h2 id="financeTitle">See where your work and money are moving.</h2>
+            <p class="eyebrow">Financial &amp; Wallet Dashboard</p>
+            <h2 id="financeTitle">See where your work, wallet, and money are moving.</h2>
           </div>
-          <span class="finance-period"><i data-lucide="calendar-days"></i> Last 6 months</span>
+          <span class="finance-period"><i data-lucide="database"></i> Live Database Sync</span>
         </div>
 
         <div class="finance-bento-grid">
@@ -724,10 +637,10 @@
             <!-- 1. Total Balance Card -->
             <article class="bento-card card-total-balance">
               <div class="bento-card-header">
-                <span class="bento-title">Total balance</span>
-                <span class="bento-badge badge-green">+ 12%</span>
+                <span class="bento-title">Total Wallet Balance</span>
+                <span class="bento-badge badge-green">Live DB</span>
               </div>
-              <div class="bento-amount" id="financeTotalBalance">$12,087.11</div>
+              <div class="bento-amount" id="financeTotalBalance">₹0.00</div>
               <div class="bento-chart-container">
                 <canvas id="financeChartCanvas" aria-label="Total balance line chart" style="width:100%;height:130px;"></canvas>
               </div>
@@ -736,7 +649,7 @@
               </div>
             </article>
 
-            <!-- 2. Wallet Debit Card Widget -->
+            <!-- 2. Wallet Debit Card & Top-Up Widget -->
             <article class="bento-card card-debit-stack">
               <div class="card-stack-visual">
                 <div class="stacked-card card-cyan"></div>
@@ -751,28 +664,43 @@
                     <span class="debit-brand">VISA</span>
                   </div>
                   <div class="debit-card-bottom">
-                    <strong class="debit-amount" id="financeWalletBalance">$1,612.87</strong>
+                    <strong class="debit-amount" id="financeWalletBalance">₹0.00</strong>
                     <i data-lucide="rss" class="contactless-icon"></i>
                   </div>
                 </div>
               </div>
-              <button class="bento-btn-dark wide" type="button" data-app-page-nav="wallet">
-                <i data-lucide="plus"></i> Add new card / Top up
-              </button>
+
+              <!-- Embedded Top-Up Form -->
+              <div class="wallet-topup-bento-form" style="margin-top:16px;">
+                <div class="wallet-presets" aria-label="Suggested top-up amounts" style="display:flex;gap:8px;margin-bottom:12px;">
+                  <button type="button" class="preset-btn" data-wallet-amount="500" style="flex:1;padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.03);font-size:0.82rem;font-weight:700;color:var(--ink);cursor:pointer;">₹500</button>
+                  <button type="button" class="preset-btn" data-wallet-amount="1000" style="flex:1;padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.03);font-size:0.82rem;font-weight:700;color:var(--ink);cursor:pointer;">₹1,000</button>
+                  <button type="button" class="preset-btn" data-wallet-amount="2500" style="flex:1;padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.03);font-size:0.82rem;font-weight:700;color:var(--ink);cursor:pointer;">₹2,500</button>
+                </div>
+                <div class="wallet-input-row" style="display:flex;gap:8px;align-items:center;">
+                  <div style="flex:1;position:relative;">
+                    <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--muted);">₹</span>
+                    <input id="walletAmount" type="number" min="50" max="100000" step="50" value="500" style="width:100%;padding:10px 10px 10px 24px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);background:var(--paper);font-weight:700;color:var(--ink);box-sizing:border-box;" />
+                  </div>
+                  <button class="bento-btn-dark" type="button" id="walletTopupButton" style="margin-top:0;padding:10px 16px;white-space:nowrap;">
+                    <i data-lucide="plus-circle"></i> Add Funds
+                  </button>
+                </div>
+              </div>
             </article>
           </div>
 
           <!-- COLUMN 2 -->
           <div class="bento-col col-mid">
-            <!-- 1. Saving Widget -->
+            <!-- 1. Total Earnings / Credits Widget -->
             <article class="bento-card card-mini-metric">
               <div class="mini-metric-content">
                 <div class="mini-metric-info">
                   <div class="bento-card-header">
-                    <span class="bento-title">Saving</span>
-                    <span class="bento-badge badge-green">+ 22%</span>
+                    <span class="bento-title">Total Income</span>
+                    <span class="bento-badge badge-green">Live Credits</span>
                   </div>
-                  <div class="bento-amount-sm" id="financeIncoming">$12,087</div>
+                  <div class="bento-amount-sm" id="financeIncoming">₹0.00</div>
                 </div>
                 <div class="mini-bar-graphic cyan-bars">
                   <span style="height:35%"></span><span style="height:50%"></span><span style="height:70%"></span><span style="height:60%"></span><span style="height:85%"></span><span style="height:100%"></span>
@@ -780,15 +708,15 @@
               </div>
             </article>
 
-            <!-- 2. My Escrow Goal Widget -->
+            <!-- 2. Protected Escrow Vaults Widget -->
             <article class="bento-card card-mini-metric">
               <div class="mini-metric-content">
                 <div class="mini-metric-info">
                   <div class="bento-card-header">
-                    <span class="bento-title">Escrow Goal</span>
-                    <span class="bento-badge badge-gray">77% completed</span>
+                    <span class="bento-title">Protected Escrow</span>
+                    <span class="bento-badge badge-gray">Active Vaults</span>
                   </div>
-                  <div class="bento-amount-sm" id="financeProtected">$8,102</div>
+                  <div class="bento-amount-sm" id="financeProtected">₹0.00</div>
                 </div>
                 <div class="mini-stripe-graphic pink-stripes">
                   <div class="progress-bar-inner" style="width: 77%;"></div>
@@ -799,44 +727,23 @@
             <!-- 3. Transaction History List -->
             <article class="bento-card card-tx-history">
               <div class="bento-card-header">
-                <span class="bento-heading-lg">Transaction history</span>
-                <button class="bento-link-btn" type="button" data-app-page-nav="wallet">View all</button>
+                <span class="bento-heading-lg">Transaction Ledger</span>
+                <span class="bento-badge badge-green">Real-time DB</span>
               </div>
-              <div class="tx-history-list" id="financeTxList">
-                <div class="tx-item">
-                  <div class="tx-icon icon-apple"><i data-lucide="shield-check"></i></div>
-                  <div class="tx-details"><strong>Escrow Deposit</strong><small>3 May 09:10 AM</small></div>
-                  <div class="tx-amount negative">+$450.00</div>
-                </div>
-                <div class="tx-item">
-                  <div class="tx-icon icon-amazon"><i data-lucide="arrow-up-right"></i></div>
-                  <div class="tx-details"><strong>Milestone Payout</strong><small>3 May 10:54 AM</small></div>
-                  <div class="tx-amount negative">-$43.12</div>
-                </div>
-                <div class="tx-item">
-                  <div class="tx-icon icon-airbnb"><i data-lucide="wallet"></i></div>
-                  <div class="tx-details"><strong>Wallet Top-Up</strong><small>2 May 11:03 AM</small></div>
-                  <div class="tx-amount positive">+$500.00</div>
-                </div>
-                <div class="tx-item">
-                  <div class="tx-icon icon-spotify"><i data-lucide="check-circle"></i></div>
-                  <div class="tx-details"><strong>Service Release</strong><small>2 May 03:12 PM</small></div>
-                  <div class="tx-amount positive">+$120.00</div>
-                </div>
-              </div>
+              <div class="tx-history-list" id="financeTxList"></div>
             </article>
           </div>
 
           <!-- COLUMN 3 -->
           <div class="bento-col col-right">
-            <!-- 1. Escrow Protection Card (Replacing Premium Sub) -->
+            <!-- 1. Escrow Protection Card -->
             <article class="bento-card card-escrow-yield">
               <div class="escrow-yield-content">
                 <span class="escrow-yield-eyebrow"><i data-lucide="shield-check"></i> Escrow Guarantee</span>
                 <h3 class="escrow-yield-title">100% Protected Vaults</h3>
                 <p class="escrow-yield-desc">All milestone funds are locked in zero-risk escrow vaults until work is approved.</p>
-                <button class="bento-btn-dark" type="button" data-app-page-nav="wallet">
-                  Manage Vaults
+                <button class="bento-btn-dark" type="button" id="escrowVaultsBtn">
+                  View Escrow Security
                 </button>
               </div>
             </article>
