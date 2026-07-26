@@ -1460,83 +1460,93 @@ function renderDashboard(payload) {
     });
   }
   
-  if (isFreelancer) {
-    selectors.dashboardWidgets.innerHTML = `
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Service Impressions</span><i data-lucide="eye"></i></div>
-        <div class="widget-value">${payload.stats.serviceImpressions || 0}</div>
-        <div class="widget-footer"><span class="badge">+12%</span> active listings</div>
-      </div>
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Response Rate</span><i data-lucide="zap"></i></div>
-        <div class="widget-value">${payload.stats.responseRate || 100}%</div>
-        <div class="widget-footer">Typically replies in < 1hr</div>
-      </div>
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Delivery Rate</span><i data-lucide="check-circle"></i></div>
-        <div class="widget-value">${payload.stats.deliveryRate || 100}%</div>
-        <div class="widget-footer">On time delivery score</div>
-      </div>
-    `;
-  } else {
-    selectors.dashboardWidgets.innerHTML = `
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Total Spend</span><i data-lucide="wallet"></i></div>
-        <div class="widget-value">${currency.format(payload.stats.earningsOrSpend || 0)}</div>
-        <div class="widget-footer">Across ${payload.stats.totalOrders || 0} completed orders</div>
-      </div>
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Escrow Security</span><i data-lucide="shield-check"></i></div>
-        <div class="widget-value">${payload.stats.securityIndex || 100}%</div>
-        <div class="widget-footer"><span class="badge">SECURE</span> Full coverage on active funds</div>
-      </div>
-      <div class="data-widget-card">
-        <div class="widget-header"><span>Avg Project Value</span><i data-lucide="trending-up"></i></div>
-        <div class="widget-value">${currency.format(payload.stats.averageValue || 0)}</div>
-        <div class="widget-footer">Based on order history</div>
-      </div>
-    `;
-  }
-  
-  renderDashboardNextSteps(payload.journey?.nextSteps || []);
-
-  if (!payload.orders.length) {
-    selectors.orderList.innerHTML = `<div class="empty-state">No orders yet. ${payload.role === "client" ? "Pick a service above to start checkout." : "Publish a service to receive funded orders."}</div>`;
-  } else {
-    selectors.orderList.innerHTML = payload.orders.map((order) => renderOrder(order, payload.role)).join("");
-    selectors.orderList.querySelectorAll("[data-order-action]").forEach((button) => {
-      button.addEventListener("click", () => handleOrderAction(button.dataset.orderAction, button.dataset.orderId));
-    });
-  }
-
-  if (payload.recentActivity && payload.recentActivity.length > 0) {
-    selectors.dashboardActivityPanel.classList.remove("hidden");
-    selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => `
-      <div class="activity-item">
-        <h4>${escapeHtml(item.title)}</h4>
-        <span>${new Date(item.date).toLocaleString()}</span>
-      </div>
-    `).join("");
-  } else {
-    selectors.dashboardActivityPanel.classList.add("hidden");
-  }
-
-  if (payload.emailLog && payload.emailLog.length > 0) {
-    selectors.dashboardEmailPanel.classList.remove("hidden");
-    selectors.emailLogList.innerHTML = payload.emailLog.map(item => `
-      <div class="email-log-item">
-        <div class="email-log-item-header">
-          <span>To: ${escapeHtml(item.to)}</span>
-          <span>${new Date(item.createdAt).toLocaleString()}</span>
+  if (selectors.dashboardWidgets) {
+    if (isFreelancer) {
+      selectors.dashboardWidgets.innerHTML = `
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Service Impressions</span><i data-lucide="eye"></i></div>
+          <div class="widget-value">${payload.stats.serviceImpressions || 0}</div>
+          <div class="widget-footer"><span class="badge">+12%</span> active listings</div>
         </div>
-        <div class="email-log-item-subject">${escapeHtml(item.subject)}</div>
-      </div>
-    `).join("");
-  } else {
-    selectors.dashboardEmailPanel.classList.add("hidden");
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Response Rate</span><i data-lucide="zap"></i></div>
+          <div class="widget-value">${payload.stats.responseRate || 100}%</div>
+          <div class="widget-footer">Typically replies in < 1hr</div>
+        </div>
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Delivery Rate</span><i data-lucide="check-circle"></i></div>
+          <div class="widget-value">${payload.stats.deliveryRate || 100}%</div>
+          <div class="widget-footer">On time delivery score</div>
+        </div>
+      `;
+    } else {
+      selectors.dashboardWidgets.innerHTML = `
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Total Spend</span><i data-lucide="wallet"></i></div>
+          <div class="widget-value">${currency.format(payload.stats.earningsOrSpend || 0)}</div>
+          <div class="widget-footer">Across ${payload.stats.totalOrders || 0} completed orders</div>
+        </div>
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Escrow Security</span><i data-lucide="shield-check"></i></div>
+          <div class="widget-value">${payload.stats.securityIndex || 100}%</div>
+          <div class="widget-footer"><span class="badge">SECURE</span> Full coverage on active funds</div>
+        </div>
+        <div class="data-widget-card">
+          <div class="widget-header"><span>Avg Project Value</span><i data-lucide="trending-up"></i></div>
+          <div class="widget-value">${currency.format(payload.stats.averageValue || 0)}</div>
+          <div class="widget-footer">Based on order history</div>
+        </div>
+      `;
+    }
   }
   
-  if (selectors.floatingWalletBalance) {
+  if (selectors.dashboardNextSteps) {
+    renderDashboardNextSteps(payload.journey?.nextSteps || []);
+  }
+
+  if (selectors.orderList) {
+    if (!payload.orders || !payload.orders.length) {
+      selectors.orderList.innerHTML = `<div class="empty-state">No orders yet. ${payload.role === "client" ? "Pick a service above to start checkout." : "Publish a service to receive funded orders."}</div>`;
+    } else {
+      selectors.orderList.innerHTML = payload.orders.map((order) => renderOrder(order, payload.role)).join("");
+      selectors.orderList.querySelectorAll("[data-order-action]").forEach((button) => {
+        button.addEventListener("click", () => handleOrderAction(button.dataset.orderAction, button.dataset.orderId));
+      });
+    }
+  }
+
+  if (selectors.dashboardActivityPanel && selectors.activityTimeline) {
+    if (payload.recentActivity && payload.recentActivity.length > 0) {
+      selectors.dashboardActivityPanel.classList.remove("hidden");
+      selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => `
+        <div class="activity-item">
+          <h4>${escapeHtml(item.title)}</h4>
+          <span>${new Date(item.date).toLocaleString()}</span>
+        </div>
+      `).join("");
+    } else {
+      selectors.dashboardActivityPanel.classList.add("hidden");
+    }
+  }
+
+  if (selectors.dashboardEmailPanel && selectors.emailLogList) {
+    if (payload.emailLog && payload.emailLog.length > 0) {
+      selectors.dashboardEmailPanel.classList.remove("hidden");
+      selectors.emailLogList.innerHTML = payload.emailLog.map(item => `
+        <div class="email-log-item">
+          <div class="email-log-item-header">
+            <span>To: ${escapeHtml(item.to)}</span>
+            <span>${new Date(item.createdAt).toLocaleString()}</span>
+          </div>
+          <div class="email-log-item-subject">${escapeHtml(item.subject)}</div>
+        </div>
+      `).join("");
+    } else {
+      selectors.dashboardEmailPanel.classList.add("hidden");
+    }
+  }
+  
+  if (selectors.floatingWalletBalance && selectors.floatingWallet) {
     selectors.floatingWalletBalance.textContent = currency.format(payload.finance?.walletBalance || 0);
     selectors.floatingWallet.classList.remove("hidden");
   }
