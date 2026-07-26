@@ -7595,6 +7595,200 @@ body.app-mode .marketplace-page .services-section {
   background: rgba(45, 212, 191, 0.12) !important;
   border: 1px solid rgba(45, 212, 191, 0.25) !important;
   color: #2dd4bf !important;
+[data-theme="dark"] .escrow-flow span.done {
+  background: rgba(45, 212, 191, 0.22) !important;
+  color: #2dd4bf !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .mini-ledger {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .mini-ledger p {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-left: 3px solid #2dd4bf !important;
+  color: #f8fafc !important;
+  font-weight: 500 !important;
+}
+
+/* Dashboard Overview Cards (Screenshot 2 Fix) */
+[data-theme="dark"] .dashboard-card {
+  background: #121927 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  border-radius: 12px !important;
+}
+
+[data-theme="dark"] .dashboard-card-mint {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(45, 212, 191, 0.3) !important;
+  border-top: 3px solid #2dd4bf !important;
+}
+
+[data-theme="dark"] .dashboard-card-mint .dashboard-stat-icon {
+  background: rgba(45, 212, 191, 0.22) !important;
+  color: #2dd4bf !important;
+}
+
+[data-theme="dark"] .dashboard-card-mint strong {
+  color: #2dd4bf !important;
+}
+
+[data-theme="dark"] .dashboard-card-blue {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-top: 3px solid #38bdf8 !important;
+}
+
+[data-theme="dark"] .dashboard-card-blue .dashboard-stat-icon {
+  background: rgba(56, 189, 248, 0.22) !important;
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .dashboard-card-blue strong {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .dashboard-card-amber {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  border-top: 3px solid #fbbf24 !important;
+}
+
+[data-theme="dark"] .dashboard-card-amber .dashboard-stat-icon {
+  background: rgba(251, 191, 36, 0.22) !important;
+  color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .dashboard-card-amber strong {
+  color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .dashboard-card-coral {
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(251, 113, 133, 0.3) !important;
+  border-top: 3px solid #fb7185 !important;
+}
+
+[data-theme="dark"] .dashboard-card-coral .dashboard-stat-icon {
+  background: rgba(251, 113, 133, 0.22) !important;
+  color: #fb7185 !important;
+}
+
+[data-theme="dark"] .dashboard-card-coral strong {
+  color: #fb7185 !important;
+}
+
+[data-theme="dark"] .dashboard-card span:not(.dashboard-stat-icon) {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .dashboard-card small {
+  color: #64748b !important;
+}
+
+/* Secondary Dashboard Stat Widgets */
+[data-theme="dark"] .dashboard-widgets-grid > article {
+  background: #121927 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .dashboard-widgets-grid strong {
+  color: #f8fafc !important;
+}
+
+/* Finance Stat Cards (Screenshot 3 Fix) */
+[data-theme="dark"] .finance-stat {
+  background: #121927 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  border-radius: 12px !important;
+}
+
+[data-theme="dark"] .finance-stat-lime {
+  background: linear-gradient(135deg, rgba(163, 230, 53, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(163, 230, 53, 0.3) !important;
+  border-top: 3px solid #a3e635 !important;
+}
+[data-theme="dark"] .finance-stat-lime > span { color: #a3e635 !important; }
+[data-theme="dark"] .finance-stat-lime strong { color: #f8fafc !important; }
+
+[data-theme="dark"] .finance-stat-blue {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-top: 3px solid #38bdf8 !important;
+}
+[data-theme="dark"] .finance-stat-blue > span { color: #38bdf8 !important; }
+[data-theme="dark"] .finance-stat-blue strong { color: #f8fafc !important; }
+
+[data-theme="dark"] .finance-stat-coral {
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(251, 113, 133, 0.3) !important;
+  border-top: 3px solid #fb7185 !important;
+}
+[data-theme="dark"] .finance-stat-coral > span { color: #fb7185 !important; }
+[data-theme="dark"] .finance-stat-coral strong { color: #f8fafc !important; }
+
+[data-theme="dark"] .finance-stat-sage {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.16) 0%, #121927 100%) !important;
+  border: 1px solid rgba(45, 212, 191, 0.3) !important;
+  border-top: 3px solid #2dd4bf !important;
+}
+[data-theme="dark"] .finance-stat-sage > span { color: #2dd4bf !important; }
+[data-theme="dark"] .finance-stat-sage strong { color: #f8fafc !important; }
+
+[data-theme="dark"] .finance-stat small { color: #94a3b8 !important; }
+
+/* Panels & Headings in Dark Mode */
+[data-theme="dark"] .workspace-page-heading h2,
+[data-theme="dark"] .dashboard-welcome h2,
+[data-theme="dark"] .panel-heading h3,
+[data-theme="dark"] .finance-chart-panel h3,
+[data-theme="dark"] .finance-summary-panel h3,
+[data-theme="dark"] .wallet-topup-panel h3,
+[data-theme="dark"] .wallet-ledger-panel h3,
+[data-theme="dark"] .orders-panel h3,
+[data-theme="dark"] .seller-tools h3 {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .finance-chart-panel,
+[data-theme="dark"] .finance-summary-panel,
+[data-theme="dark"] .wallet-topup-panel,
+[data-theme="dark"] .wallet-ledger-panel,
+[data-theme="dark"] .orders-panel,
+[data-theme="dark"] .seller-tools,
+[data-theme="dark"] .dashboard-next {
+  background: #121927 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .finance-ring {
+  border-color: #2dd4bf !important;
+  background: #0b0f17 !important;
+  color: #2dd4bf !important;
+}
+
+[data-theme="dark"] .finance-summary-lines span {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .finance-summary-lines strong {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .finance-summary-lines small {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .wallet-period,
+[data-theme="dark"] .finance-period {
+  background: rgba(45, 212, 191, 0.12) !important;
+  border: 1px solid rgba(45, 212, 191, 0.25) !important;
+  color: #2dd4bf !important;
 }
 
 [data-theme="dark"] .service-form input,
@@ -7611,4 +7805,433 @@ body.app-mode .marketplace-page .services-section {
 @media (max-width: 768px) {
   .info-poster-steps, .stats-ticker-inner, .seller-cta-inner, .dash-info-banner-inner, .escrow-info-strip-inner, .growth-tips-inner { grid-template-columns: 1fr; }
   .showcase-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================
+   BENTO GRID DESIGN SYSTEM (FINANCE & OVERVIEW)
+   ========================================== */
+
+.finance-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.bento-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bento-card {
+  background: var(--paper, #f8f9fa);
+  border: 1px solid var(--line, rgba(0, 0, 0, 0.08));
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .bento-card {
+  background: #111827 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .bento-card:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.bento-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.bento-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bento-heading-lg {
+  font-size: 1.25rem;
+  font-weight: 750;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.bento-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.bento-amount-sm {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.bento-badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.badge-gray {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--muted);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.chart-month-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Debit Card Stack Widget */
+.card-debit-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-stack-visual {
+  position: relative;
+  padding-top: 24px;
+}
+
+.stacked-card {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 20px;
+  border-radius: 12px 12px 0 0;
+}
+
+.card-cyan { top: 0; width: 75%; background: #38bdf8; }
+.card-yellow { top: 8px; width: 85%; background: #fbbf24; }
+.card-pink { top: 16px; width: 93%; background: #fb7185; }
+
+.main-debit-card {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  border-radius: 18px;
+  padding: 22px;
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(168, 85, 247, 0.35);
+}
+
+.debit-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.debit-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.debit-num {
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+
+.debit-brand {
+  font-size: 1.1rem;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.debit-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.debit-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.contactless-icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+}
+
+.bento-btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: #000000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bento-btn-dark:hover {
+  opacity: 0.9;
+  transform: scale(1.01);
+}
+
+[data-theme="dark"] .bento-btn-dark {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Mini Metric Cards */
+.card-mini-metric .mini-metric-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mini-bar-graphic span {
+  display: inline-block;
+  width: 8px;
+  background: #38bdf8;
+  border-radius: 4px;
+  margin-left: 3px;
+  vertical-align: bottom;
+}
+
+.pink-stripes .progress-bar-inner {
+  height: 8px;
+  background: linear-gradient(90deg, #fb7185, #ec4899);
+  border-radius: 999px;
+}
+
+.mini-stripe-graphic {
+  width: 100px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .mini-stripe-graphic {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Transaction History List */
+.tx-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tx-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .tx-icon {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tx-details {
+  flex: 1;
+}
+
+.tx-details strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.tx-details small {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.tx-amount {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tx-amount.positive { color: #22c55e; }
+.tx-amount.negative { color: var(--ink); }
+
+.bento-link-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bento-link-btn:hover {
+  color: var(--ink);
+}
+
+/* Escrow Yield Card */
+.card-escrow-yield {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%) !important;
+  border: 1px solid rgba(236, 72, 153, 0.25) !important;
+}
+
+.escrow-yield-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ec4899;
+}
+
+.escrow-yield-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 6px 0;
+}
+
+.escrow-yield-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+
+/* Quick Transfer Widget */
+.avatar-transfer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.transfer-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.bg-rose { background: linear-gradient(135deg, #fb7185, #e11d48); }
+.bg-cyan { background: linear-gradient(135deg, #38bdf8, #0284c7); }
+.bg-purple { background: linear-gradient(135deg, #c084fc, #9333ea); }
+.bg-amber { background: linear-gradient(135deg, #fbbf24, #d97706); }
+
+.add-avatar-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+[data-theme="dark"] .add-avatar-btn {
+  background: #ffffff;
+  color: #000000;
+}
+
+.add-avatar-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Budget Legend & Stacked Bar Chart */
+.budget-legend {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.legend-chip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chip-purple i { background: #a855f7; }
+.chip-pink i { background: #ec4899; }
+.chip-cyan i { background: #38bdf8; }
+
+.bento-icon-link {
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 992px) {
+  .finance-bento-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -579,63 +579,167 @@
       <section class="workspace-page finance-page app-page hidden" id="financePage" data-app-page="finance" aria-labelledby="financeTitle">
         <div class="workspace-page-heading">
           <div>
-            <p class="eyebrow">Financial tracker</p>
+            <p class="eyebrow">Financial Dashboard</p>
             <h2 id="financeTitle">See where your work and money are moving.</h2>
           </div>
           <span class="finance-period"><i data-lucide="calendar-days"></i> Last 6 months</span>
         </div>
-        <div class="finance-stat-grid">
-          <article class="finance-stat finance-stat-lime"><span><i data-lucide="arrow-down-left"></i> Inflow</span><strong id="financeIncoming">₹0</strong><small id="financeIncomingCopy">Wallet credits and earnings</small></article>
-          <article class="finance-stat finance-stat-blue"><span><i data-lucide="arrow-up-right"></i> Outflow</span><strong id="financeOutgoing">₹0</strong><small>Funded projects</small></article>
-          <article class="finance-stat finance-stat-coral"><span><i data-lucide="shield-check"></i> Protected</span><strong id="financeProtected">₹0</strong><small>Active escrow value</small></article>
-          <article class="finance-stat finance-stat-sage"><span><i data-lucide="circle-check-big"></i> Completed</span><strong id="financeCompleted">₹0</strong><small>Work settled</small></article>
-        </div>
-        <div class="finance-grid">
-          <article class="finance-chart-panel">
-            <div class="panel-heading">
-              <div><p class="eyebrow">Cash movement</p><h3>Flow over time</h3></div>
-              <span class="chart-legend"><i></i> Inflow <i></i> Outflow</span>
-            </div>
-            
-          <canvas id="financeChartCanvas" aria-label="Six month finance chart" style="width:100%;height:240px;"></canvas>
-          <div class="chart-toggle" style="margin-top:8px; text-align:center;">
-            <button class="mini-button" id="chartLineBtn" type="button">Line Chart</button>
-            <button class="mini-button" id="chartPieBtn" type="button" style="margin-left:8px;">Pie Chart</button>
-          </div>
-          </article>
-          <article class="finance-summary-panel">
-            <p class="eyebrow">At a glance</p>
-            <h3>Financial health</h3>
-            <div class="finance-ring" id="financeRing"><span id="financeRingValue">0%</span></div>
-            <p id="financeSummaryCopy">Fund a project or add wallet credit to start building your financial history.</p>
-            <div class="finance-summary-lines">
-              <span><small>Wallet balance</small><strong id="financeWalletBalance">₹0</strong></span>
-              <span><small>Project volume</small><strong id="financeVolume">₹0</strong></span>
-            </div>
-          </article>
-        </div>
 
-        <!-- ── Growth Tips Banner ── -->
-        <div class="growth-tips-banner">
-          <div class="growth-tips-inner">
-            <div class="growth-tip">
-              <span class="growth-tip-icon"><i data-lucide="lightbulb"></i></span>
-              <h4>Diversify services</h4>
-              <p>Sellers with 3+ active services earn 2.4× more on average.</p>
-            </div>
-            <div class="growth-tip">
-              <span class="growth-tip-icon"><i data-lucide="repeat"></i></span>
-              <h4>Repeat clients</h4>
-              <p>68% of top earners get over half their revenue from returning clients.</p>
-            </div>
-            <div class="growth-tip">
-              <span class="growth-tip-icon"><i data-lucide="rocket"></i></span>
-              <h4>Fast delivery</h4>
-              <p>Orders delivered within 24 hrs get 3× more positive reviews.</p>
-            </div>
+        <div class="finance-bento-grid">
+          <!-- COLUMN 1 -->
+          <div class="bento-col col-left">
+            <!-- 1. Total Balance Card -->
+            <article class="bento-card card-total-balance">
+              <div class="bento-card-header">
+                <span class="bento-title">Total balance</span>
+                <span class="bento-badge badge-green">+ 12%</span>
+              </div>
+              <div class="bento-amount" id="financeTotalBalance">$12,087.11</div>
+              <div class="bento-chart-container">
+                <canvas id="financeChartCanvas" aria-label="Total balance line chart" style="width:100%;height:130px;"></canvas>
+              </div>
+              <div class="chart-month-labels">
+                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+              </div>
+            </article>
+
+            <!-- 2. Wallet Debit Card Widget -->
+            <article class="bento-card card-debit-stack">
+              <div class="card-stack-visual">
+                <div class="stacked-card card-cyan"></div>
+                <div class="stacked-card card-yellow"></div>
+                <div class="stacked-card card-pink"></div>
+                <div class="main-debit-card">
+                  <div class="debit-card-top">
+                    <div>
+                      <span class="debit-label">Debit card</span>
+                      <small class="debit-num">**** 1092</small>
+                    </div>
+                    <span class="debit-brand">VISA</span>
+                  </div>
+                  <div class="debit-card-bottom">
+                    <strong class="debit-amount" id="financeWalletBalance">$1,612.87</strong>
+                    <i data-lucide="rss" class="contactless-icon"></i>
+                  </div>
+                </div>
+              </div>
+              <button class="bento-btn-dark wide" type="button" data-app-page-nav="wallet">
+                <i data-lucide="plus"></i> Add new card / Top up
+              </button>
+            </article>
+          </div>
+
+          <!-- COLUMN 2 -->
+          <div class="bento-col col-mid">
+            <!-- 1. Saving Widget -->
+            <article class="bento-card card-mini-metric">
+              <div class="mini-metric-content">
+                <div class="mini-metric-info">
+                  <div class="bento-card-header">
+                    <span class="bento-title">Saving</span>
+                    <span class="bento-badge badge-green">+ 22%</span>
+                  </div>
+                  <div class="bento-amount-sm" id="financeIncoming">$12,087</div>
+                </div>
+                <div class="mini-bar-graphic cyan-bars">
+                  <span style="height:35%"></span><span style="height:50%"></span><span style="height:70%"></span><span style="height:60%"></span><span style="height:85%"></span><span style="height:100%"></span>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. My Escrow Goal Widget -->
+            <article class="bento-card card-mini-metric">
+              <div class="mini-metric-content">
+                <div class="mini-metric-info">
+                  <div class="bento-card-header">
+                    <span class="bento-title">Escrow Goal</span>
+                    <span class="bento-badge badge-gray">77% completed</span>
+                  </div>
+                  <div class="bento-amount-sm" id="financeProtected">$8,102</div>
+                </div>
+                <div class="mini-stripe-graphic pink-stripes">
+                  <div class="progress-bar-inner" style="width: 77%;"></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. Transaction History List -->
+            <article class="bento-card card-tx-history">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Transaction history</span>
+                <button class="bento-link-btn" type="button" data-app-page-nav="wallet">View all</button>
+              </div>
+              <div class="tx-history-list" id="financeTxList">
+                <div class="tx-item">
+                  <div class="tx-icon icon-apple"><i data-lucide="shield-check"></i></div>
+                  <div class="tx-details"><strong>Escrow Deposit</strong><small>3 May 09:10 AM</small></div>
+                  <div class="tx-amount negative">+$450.00</div>
+                </div>
+                <div class="tx-item">
+                  <div class="tx-icon icon-amazon"><i data-lucide="arrow-up-right"></i></div>
+                  <div class="tx-details"><strong>Milestone Payout</strong><small>3 May 10:54 AM</small></div>
+                  <div class="tx-amount negative">-$43.12</div>
+                </div>
+                <div class="tx-item">
+                  <div class="tx-icon icon-airbnb"><i data-lucide="wallet"></i></div>
+                  <div class="tx-details"><strong>Wallet Top-Up</strong><small>2 May 11:03 AM</small></div>
+                  <div class="tx-amount positive">+$500.00</div>
+                </div>
+                <div class="tx-item">
+                  <div class="tx-icon icon-spotify"><i data-lucide="check-circle"></i></div>
+                  <div class="tx-details"><strong>Service Release</strong><small>2 May 03:12 PM</small></div>
+                  <div class="tx-amount positive">+$120.00</div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- COLUMN 3 -->
+          <div class="bento-col col-right">
+            <!-- 1. Escrow Protection Card (Replacing Premium Sub) -->
+            <article class="bento-card card-escrow-yield">
+              <div class="escrow-yield-content">
+                <span class="escrow-yield-eyebrow"><i data-lucide="shield-check"></i> Escrow Guarantee</span>
+                <h3 class="escrow-yield-title">100% Protected Vaults</h3>
+                <p class="escrow-yield-desc">All milestone funds are locked in zero-risk escrow vaults until work is approved.</p>
+                <button class="bento-btn-dark" type="button" data-app-page-nav="wallet">
+                  Manage Vaults
+                </button>
+              </div>
+            </article>
+
+            <!-- 2. Quick Transfer Widget -->
+            <article class="bento-card card-quick-transfer">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Quick transfer</span>
+                <button class="bento-icon-link" type="button" aria-label="Transfer"><i data-lucide="arrow-up-right"></i></button>
+              </div>
+              <div class="avatar-transfer-row">
+                <div class="transfer-avatar bg-rose">AS</div>
+                <div class="transfer-avatar bg-cyan">JD</div>
+                <div class="transfer-avatar bg-purple">MK</div>
+                <div class="transfer-avatar bg-amber">RL</div>
+                <button class="add-avatar-btn" type="button" id="quickTransferBtn" title="Add recipient"><i data-lucide="plus"></i></button>
+              </div>
+            </article>
+
+            <!-- 3. Budget Stacked Bar Chart -->
+            <article class="bento-card card-budget-chart">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Budget</span>
+                <button class="bento-icon-link" type="button" aria-label="Budget details"><i data-lucide="arrow-up-right"></i></button>
+              </div>
+              <div class="budget-legend">
+                <span class="legend-chip chip-purple"><i></i> Income</span>
+                <span class="legend-chip chip-pink"><i></i> Expense</span>
+                <span class="legend-chip chip-cyan"><i></i> Saving</span>
+              </div>
+              <div class="budget-chart-wrap">
+                <canvas id="financeBudgetCanvas" aria-label="Budget stacked bar chart" style="width:100%;height:170px;"></canvas>
+              </div>
+            </article>
           </div>
         </div>
-
       </section>
 
       <section class="workspace-page gateway-page hidden app-page" id="gatewayPage" data-app-page="gateway" aria-labelledby="gatewayTitle">
