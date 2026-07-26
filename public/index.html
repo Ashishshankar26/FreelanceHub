@@ -11,10 +11,17 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#home" aria-label="FreelanceHub home">
+      <a class="brand brand-pill" href="#home" aria-label="FreelanceHub home">
         <span class="brand-mark">fh</span>
-        <span>FreelanceHub</span>
+        <span class="brand-name">FreelanceHub</span>
       </a>
+
+      <nav class="main-nav-capsule" id="mainNav" aria-label="Main navigation">
+        <button class="active" type="button" data-scroll-target="services">Explore</button>
+        <button type="button" data-scroll-target="categories">Categories</button>
+        <button type="button" data-scroll-target="how-it-works-poster">Escrow</button>
+        <button type="button" data-scroll-target="pro">Pro</button>
+      </nav>
 
       <nav class="workspace-nav hidden" id="workspaceNav" aria-label="Workspace navigation">
         <button class="active" type="button" data-app-page-nav="overview"><i data-lucide="layout-dashboard"></i><span>Overview</span></button>
@@ -25,9 +32,16 @@
 
       <div class="header-actions">
         <button class="ghost-button hidden" type="button" id="dashboardButton">Dashboard</button>
-        <button class="circle-button" type="button" id="themeToggle" aria-label="Toggle theme">
-          <i data-lucide="moon"></i>
+
+        <button class="theme-toggle-pill" type="button" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+          <span class="theme-option theme-light"><i data-lucide="sun"></i></span>
+          <span class="theme-option theme-dark active"><i data-lucide="moon"></i></span>
         </button>
+
+        <button class="circle-button search-toggle-btn" type="button" id="searchToggleBtn" aria-label="Search" title="Search">
+          <i data-lucide="search"></i>
+        </button>
+
         <div class="notification-wrap" id="notificationWrap">
           <button class="circle-button" type="button" id="notificationButton" aria-expanded="false" aria-label="Open notifications">
             <i data-lucide="bell"></i>
@@ -43,9 +57,11 @@
             </div>
           </div>
         </div>
+
         <button class="ghost-button hidden" type="button" id="logoutButton">Log out</button>
-        <button class="ghost-button" type="button" id="signinButton">Sign in</button>
-        <button class="join-button" type="button" id="joinButton">Join</button>
+        <button class="nav-signin-btn" type="button" id="signinButton">Sign in</button>
+        <button class="nav-cta-btn" type="button" id="joinButton">Join</button>
+
         <div class="user-menu-wrap hidden" id="userMenuWrap">
           <button class="user-avatar-button" type="button" id="userMenuButton" aria-expanded="false" aria-label="Open account menu">
             <span class="user-avatar" id="userInitials">FH</span>

@@ -237,29 +237,45 @@ async function init() {
 function initTheme() {
   const isDark = localStorage.getItem("theme") === "dark" || 
     (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  const iconElement = selectors.themeToggle.querySelector("i, svg");
+  const lightOpt = selectors.themeToggle?.querySelector(".theme-light");
+  const darkOpt = selectors.themeToggle?.querySelector(".theme-dark");
+
   if (isDark) {
     document.documentElement.setAttribute("data-theme", "dark");
-    if (iconElement) iconElement.outerHTML = '<i data-lucide="sun"></i>';
+    if (lightOpt && darkOpt) {
+      lightOpt.classList.remove("active");
+      darkOpt.classList.add("active");
+    }
   } else {
-    if (iconElement) iconElement.outerHTML = '<i data-lucide="moon"></i>';
+    document.documentElement.removeAttribute("data-theme");
+    if (lightOpt && darkOpt) {
+      lightOpt.classList.add("active");
+      darkOpt.classList.remove("active");
+    }
   }
 }
 
 function toggleTheme() {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-  const iconElement = selectors.themeToggle.querySelector("i, svg");
+  const lightOpt = selectors.themeToggle?.querySelector(".theme-light");
+  const darkOpt = selectors.themeToggle?.querySelector(".theme-dark");
+
   if (isDark) {
     document.documentElement.removeAttribute("data-theme");
     localStorage.setItem("theme", "light");
-    if (iconElement) iconElement.outerHTML = '<i data-lucide="moon"></i>';
+    if (lightOpt && darkOpt) {
+      lightOpt.classList.add("active");
+      darkOpt.classList.remove("active");
+    }
   } else {
     document.documentElement.setAttribute("data-theme", "dark");
     localStorage.setItem("theme", "dark");
-    if (iconElement) iconElement.outerHTML = '<i data-lucide="sun"></i>';
+    if (lightOpt && darkOpt) {
+      lightOpt.classList.remove("active");
+      darkOpt.classList.add("active");
+    }
   }
-  lucide.createIcons();
-  // Re-render canvas charts so they pick up the new color scheme
+  if (window.lucide) lucide.createIcons();
   if (state.dashboard?.finance) {
     renderFinance(state.dashboard.finance);
   }
@@ -275,6 +291,14 @@ function bindEvents() {
     });
   });
 
+  const searchBtn = document.querySelector("#searchToggleBtn");
+  if (searchBtn) {
+    searchBtn.addEventListener("click", () => {
+      document.querySelector("#services")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      selectors.searchInput?.focus();
+    });
+  }
+
   selectors.themeToggle.addEventListener("click", toggleTheme);
   selectors.menuButton.addEventListener("click", () => {
     selectors.body.classList.toggle("menu-open");
@@ -282,7 +306,7 @@ function bindEvents() {
     selectors.menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   });
 
-  selectors.navButtons.forEach((button) => {
+  document.querySelectorAll("[data-scroll-target]").forEach((button) => {
     button.addEventListener("click", () => {
       const target = document.querySelector(`#${button.dataset.scrollTarget}`);
       selectors.body.classList.remove("menu-open");

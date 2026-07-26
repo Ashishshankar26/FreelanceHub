@@ -1808,78 +1808,219 @@ body {
   color: var(--ink);
 }
 
+body[data-theme="dark"] {
+  background-color: #07090e;
+  background-image: 
+    radial-gradient(circle at 50% -10%, rgba(45, 212, 191, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 15% 70%, rgba(192, 132, 252, 0.06) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
 .site-header {
-  min-height: 72px;
-  gap: 20px;
-  padding: 0 max(22px, calc((100vw - 1260px) / 2) + 20px) 0 max(16px, calc((100vw - 1260px) / 2));
-  border-bottom-color: var(--header-border);
+  min-height: 64px;
+  gap: 16px;
+  padding: 0 max(16px, calc((100vw - 1280px) / 2));
+  border-bottom: 1px solid var(--header-border);
   background: var(--header-bg);
-  box-shadow: 0 1px 0 var(--header-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.brand {
-  gap: 12px;
-  font-size: 1.5rem;
-  font-weight: 850;
+.brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px 5px 6px;
+  border-radius: 999px;
+  background: var(--pill-bg, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--pill-border, rgba(255, 255, 255, 0.12));
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 7px;
-  background: var(--brand-mark-bg);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-  font-size: 1.05rem;
+.brand-pill:hover {
+  background: var(--pill-hover-bg, rgba(255, 255, 255, 0.14));
 }
 
-.main-nav {
-  gap: 2px;
+.brand-pill .brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.76rem;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.main-nav button,
-.ghost-button {
-  min-height: 36px;
-  padding: 0 8px;
-  color: var(--nav-text);
-  font-size: 0.85rem;
+.main-nav-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--capsule-bg, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--capsule-border, rgba(255, 255, 255, 0.1));
+}
+
+.main-nav-capsule button {
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.main-nav-capsule button:hover {
+  color: var(--ink);
+  background: var(--capsule-hover-bg, rgba(255, 255, 255, 0.1));
+}
+
+.main-nav-capsule button.active {
+  background: var(--capsule-active-bg, rgba(255, 255, 255, 0.2));
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.workspace-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--capsule-bg, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--capsule-border, rgba(255, 255, 255, 0.1));
+}
+
+.workspace-nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.workspace-nav button:hover,
+.workspace-nav button.active {
+  background: var(--capsule-active-bg, rgba(255, 255, 255, 0.2));
+  color: var(--ink);
   font-weight: 700;
 }
 
-.main-nav button:hover,
-.ghost-button:hover {
-  color: var(--green-strong);
-}
-
 .header-actions {
-  gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.join-button,
-.dark-button,
-.light-button {
+.theme-toggle-pill {
   display: inline-flex;
-  min-height: 36px;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--pill-bg, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--pill-border, rgba(255, 255, 255, 0.12));
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-pill .theme-option {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-pill .theme-option i {
+  width: 15px;
+  height: 15px;
+}
+
+.theme-toggle-pill .theme-option.active {
+  background: var(--pill-active-bg, rgba(255, 255, 255, 0.22));
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--pill-bg, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--pill-border, rgba(255, 255, 255, 0.12));
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-toggle-btn:hover {
+  background: var(--pill-hover-bg, rgba(255, 255, 255, 0.14));
+  transform: scale(1.05);
+}
+
+.nav-signin-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 0 14px;
-  border-radius: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--signin-btn-bg, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--pill-border, rgba(255, 255, 255, 0.12));
+  color: var(--ink);
+  font-weight: 600;
   font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-signin-btn:hover {
+  background: var(--signin-btn-hover, rgba(255, 255, 255, 0.18));
+}
+
+.nav-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: var(--cta-btn-bg, #ffffff);
+  color: var(--cta-btn-text, #0b0f17);
   font-weight: 750;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
 }
 
-.join-button {
-  background: var(--cta-bg);
-  box-shadow: 0 8px 18px rgba(8, 115, 93, 0.16);
-}
-
-.join-button:hover {
-  background: var(--cta-hover);
-  box-shadow: 0 12px 24px rgba(8, 115, 93, 0.22);
+.nav-cta-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
 }
 
 .hero {
