@@ -1,6 +1,6 @@
 # FreelanceHub
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-2ea44f?style=for-the-badge)](https://freelancehub-production-e237.up.railway.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-2ea44f?style=for-the-badge)](https://freelancehub-production-9df2.up.railway.app)
 
 Escrow-style freelance marketplace with MongoDB Atlas, email notifications, Cashfree UPI checkout, client/freelancer dashboards, order messaging, disputes, revisions, and protected fund release.
 
