@@ -2227,6 +2227,8 @@ function initInteractiveCard() {
 }
 
 function openGatewayPage(checkoutDetails) {
+  renderSavedCardsStack();
+  renderSavedUpiChips();
   openAppPage("gateway", { scroll: true, skipLoad: true });
 
   if (selectors.gatewayItemTitle) selectors.gatewayItemTitle.textContent = checkoutDetails.title;
@@ -2790,4 +2792,12 @@ document.addEventListener("click", (e) => {
     if (nameInput) nameInput.dispatchEvent(new Event("input"));
     if (expInput) expInput.dispatchEvent(new Event("input"));
   }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    renderSavedCardsStack();
+    renderSavedUpiChips();
+  }, 300);
 });
