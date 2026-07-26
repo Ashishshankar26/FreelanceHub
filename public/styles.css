@@ -1,3 +1,9 @@
+dialog:not([open]) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 :root {
   --ink: #1d1f24;
   --muted: #677083;

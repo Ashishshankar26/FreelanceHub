@@ -1050,12 +1050,20 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
 
   state.appPage = nextPage;
   selectors.body.classList.add("app-mode");
-  selectors.dashboardSection.classList.remove("hidden");
-  if (selectors.walletPage) selectors.walletPage.classList.add("hidden");
-  document.querySelector("#financePage")?.classList.remove("hidden");
-  selectors.gatewayPage?.classList.remove("hidden");
-  selectors.appPages.forEach((item) => item.classList.toggle("active", item.dataset.appPage === nextPage));
-  selectors.appNavButtons.forEach((button) => button.classList.toggle("active", button.dataset.appPageNav === nextPage));
+
+  const dashboardEl = document.querySelector("#dashboard");
+  const financeEl = document.querySelector("#financePage");
+  const walletEl = document.querySelector("#walletPage");
+  const gatewayEl = document.querySelector("#gatewayPage");
+
+  if (dashboardEl) dashboardEl.classList.toggle("hidden", nextPage !== "overview");
+  if (financeEl) financeEl.classList.toggle("hidden", nextPage !== "finance");
+  if (walletEl) walletEl.classList.add("hidden");
+  if (gatewayEl) gatewayEl.classList.toggle("hidden", nextPage !== "gateway");
+
+  selectors.appNavButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.appPageNav === nextPage);
+  });
   selectors.userMenu.classList.add("hidden");
   selectors.userMenuButton.setAttribute("aria-expanded", "false");
 
