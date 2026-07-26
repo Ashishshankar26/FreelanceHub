@@ -141,6 +141,29 @@ img {
   gap: 10px;
   font-size: 1.34rem;
   font-weight: 900;
+}
+
+.brand-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--green);
+  color: white;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.main-nav button,
+.ghost-button,
+.trend-row button,
+.category-tile,
+.service-filter button,
+.footer-columns a {
+  border: 0;
+  background: transparent;
   color: var(--muted);
 }
 

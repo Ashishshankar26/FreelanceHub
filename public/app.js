@@ -1547,64 +1547,6 @@ function renderDashboard(payload) {
   if (selectors.dashboardProgress) selectors.dashboardProgress.textContent = `${progress}%`;
   if (selectors.dashboardProgressBar) selectors.dashboardProgressBar.style.width = `${progress}%`;
 
-      { income: 55, expense: 35, saving: 15 },
-      { income: 95, expense: 60, saving: 30 },
-      { income: 70, expense: 45, saving: 20 },
-      { income: 85, expense: 55, saving: 25 },
-    ];
-
-    const paddingLeft = 35;
-    const paddingBottom = 25;
-    const chartW = width - paddingLeft;
-    const chartH = height - paddingBottom;
-    const barW = Math.min(24, chartW / months.length - 12);
-    const stepX = chartW / months.length;
-
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-
-    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 3; i++) {
-      const y = (chartH / 3) * i;
-      ctx.beginPath();
-      ctx.moveTo(paddingLeft, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-
-      ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(`$${(3 - i) * 500}`, paddingLeft - 6, y + 4);
-    }
-
-    months.forEach((m, idx) => {
-      const data = stackedData[idx];
-      const x = paddingLeft + idx * stepX + (stepX - barW) / 2;
-      let currentY = chartH;
-
-      function drawRect(rx, ry, rw, rh, fillStyle) {
-        ctx.fillStyle = fillStyle;
-        ctx.beginPath();
-        if (ctx.roundRect) {
-          ctx.roundRect(rx, ry, rw, rh, [4, 4, 4, 4]);
-        } else {
-          ctx.rect(rx, ry, rw, rh);
-        }
-        ctx.fill();
-      }
-
-      drawRect(x, currentY - data.income, barW, data.income, '#a855f7');
-      currentY -= data.income + 4;
-      drawRect(x, currentY - data.expense, barW, data.expense, '#ec4899');
-      currentY -= data.expense + 4;
-      drawRect(x, currentY - data.saving, barW, data.saving, '#38bdf8');
-
-      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(m, x + barW / 2, height - 6);
-    });
-  }
   
   if (selectors.dashboardWidgets) {
     if (isFreelancer) {
