@@ -494,7 +494,7 @@ async function main() {
   // 1. Seed Ashish Shankar (Freelancer)
   const ashish = await User.create({
     name: "Ashish Shankar",
-    email: "oneashishshankar@gmail.com",
+    email: "ashish@freelancehub.local",
     passwordHash,
     roles: ["freelancer", "client"],
     activeRole: "freelancer",
@@ -573,7 +573,7 @@ async function main() {
   // 2. Seed Tony Stark (Client)
   const tony = await User.create({
     name: "Tony Stark",
-    email: "tonystarm2003@gmail.com",
+    email: "tony@freelancehub.local",
     passwordHash,
     roles: ["client", "freelancer"],
     activeRole: "client",
