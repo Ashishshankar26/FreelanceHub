@@ -1050,15 +1050,11 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
   state.appPage = nextPage;
   selectors.body.classList.add("app-mode");
 
-  const dashboardEl = document.querySelector("#dashboard");
-  const financeEl = document.querySelector("#financePage");
-  const walletEl = document.querySelector("#walletPage");
-  const gatewayEl = document.querySelector("#gatewayPage");
-
-  if (dashboardEl) dashboardEl.classList.toggle("hidden", nextPage !== "overview");
-  if (financeEl) financeEl.classList.toggle("hidden", nextPage !== "finance");
-  if (walletEl) walletEl.classList.add("hidden");
-  if (gatewayEl) gatewayEl.classList.toggle("hidden", nextPage !== "gateway");
+  document.querySelectorAll("[data-app-page]").forEach((item) => {
+    const isActive = item.dataset.appPage === nextPage;
+    item.classList.toggle("active", isActive);
+    item.classList.toggle("hidden", !isActive);
+  });
 
   selectors.appNavButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.appPageNav === nextPage);
