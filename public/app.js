@@ -87,6 +87,7 @@ const selectors = {
   menuLogoutButton: document.querySelector("#menuLogoutButton"),
   joinDialog: document.querySelector("#joinDialog"),
   authForm: document.querySelector("#authForm"),
+  googleAuthButton: document.querySelector("#googleAuthButton"),
   authTabs: document.querySelectorAll("[data-auth-mode]"),
   authEyebrow: document.querySelector("#authEyebrow"),
   authTitle: document.querySelector("#authTitle"),
