@@ -2128,11 +2128,11 @@ function luhnCheck(val) {
 
 function detectCardNetwork(numberStr) {
   const clean = String(numberStr).replace(/\D/g, '');
-  if (/^4/.test(clean)) return { name: 'VISA', icon: 'credit-card', color: '#38bdf8' };
-  if (/^(5[1-5]|22[2-7])/.test(clean)) return { name: 'MASTERCARD', icon: 'credit-card', color: '#f43f5e' };
-  if (/^3[47]/.test(clean)) return { name: 'AMEX', icon: 'credit-card', color: '#34d399' };
-  if (/^(60|65|81|82)/.test(clean)) return { name: 'RUPAY', icon: 'credit-card', color: '#fbbf24' };
-  return { name: 'VISA', icon: 'credit-card', color: '#a855f7' };
+  if (/^4/.test(clean)) return { name: 'VISA', color: '#38bdf8', bg: 'linear-gradient(135deg, #0284c7 0%, #0f172a 60%, #312e81 100%)' };
+  if (/^(5[1-5]|22[2-7])/.test(clean)) return { name: 'MASTERCARD', color: '#f43f5e', bg: 'linear-gradient(135deg, #be123c 0%, #4c1d95 60%, #881337 100%)' };
+  if (/^3[47]/.test(clean)) return { name: 'AMEX', color: '#34d399', bg: 'linear-gradient(135deg, #047857 0%, #064e3b 50%, #0f172a 100%)' };
+  if (/^(60|65|81|82)/.test(clean)) return { name: 'RUPAY', color: '#fbbf24', bg: 'linear-gradient(135deg, #d97706 0%, #701a75 60%, #451a03 100%)' };
+  return { name: 'VISA', color: '#38bdf8', bg: 'linear-gradient(135deg, #0284c7 0%, #0f172a 60%, #312e81 100%)' };
 }
 
 function initInteractiveCard() {
@@ -2165,7 +2165,7 @@ function initInteractiveCard() {
   const previewCv = selectors.previewCvv || document.querySelector("#previewCvv");
   const previewBrandLogo = document.querySelector(".card-network-logo");
 
-  if (cardNoInput) {
+    if (cardNoInput) {
     cardNoInput.addEventListener("input", (e) => {
       let val = e.target.value.replace(/\D/g, '');
       let formatted = '';
@@ -2177,12 +2177,14 @@ function initInteractiveCard() {
 
       if (previewNo) previewNo.textContent = e.target.value || "•••• •••• •••• ••••";
 
-      // Dynamic brand detection
+      // Dynamic brand detection & gradient switching
       const net = detectCardNetwork(val);
       if (previewBrandLogo) {
         previewBrandLogo.textContent = net.name;
         previewBrandLogo.style.color = net.color;
       }
+      const cardFront = document.querySelector(".flip-card-front");
+      if (cardFront) cardFront.style.background = net.bg;
     });
   }
 

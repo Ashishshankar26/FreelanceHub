@@ -9153,3 +9153,382 @@ dialog.futuristic-modal#bankOtpModal {
     margin: 16px 0 !important;
   }
 }
+
+/* ==========================================
+   NEXT-GEN FUTURISTIC PAYMENT GATEWAY STYLES
+   ========================================== */
+
+/* --- Cyber Container Glass & Background --- */
+.gateway-page {
+  position: relative;
+  padding: 40px 0 80px 0;
+}
+
+.gateway-page::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 500px;
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.15), transparent 50%),
+              radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.15), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gateway-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- Glassmorphic Main Gateway Panel --- */
+.gateway-main-panel {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 24px !important;
+  padding: 36px 40px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(56, 189, 248, 0.08) !important;
+}
+
+/* --- Header Row & Title --- */
+.gateway-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gateway-header-row h2 {
+  font-size: 1.6rem;
+  font-weight: 850;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- Capsule Payment Method Tabs --- */
+.gateway-tab-row {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 32px !important;
+}
+
+.gateway-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 100px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.gateway-tab:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gateway-tab.active {
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.18) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25) !important;
+}
+
+/* --- 3D Interactive Cyber Card --- */
+.card-interactive-wrapper {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 400px;
+  margin: 36px auto 36px auto !important;
+  display: block;
+}
+
+.flip-card {
+  width: 100%;
+  height: 230px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  border-radius: 22px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+#cardFlipInner.flipped,
+.flip-card-inner.flipped {
+  transform: rotateY(180deg) !important;
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 22px;
+  padding: 24px 26px;
+  background: linear-gradient(135deg, #0284c7 0%, #0f172a 60%, #312e81 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.08);
+  transition: background 0.4s ease;
+}
+
+/* Decorative Mesh Watermark on Card */
+.flip-card-front::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.card-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.contactless-pulse {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #38bdf8;
+}
+
+.card-network-logo {
+  font-weight: 900;
+  font-size: 1.35rem;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.chip-hologram {
+  width: 48px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #92400e 100%);
+  border: 1px solid rgba(255,255,255,0.4);
+  position: relative;
+  margin-top: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.chip-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.3);
+}
+
+.card-number-display {
+  font-family: 'Courier New', monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  margin: 14px 0 6px 0;
+  z-index: 2;
+}
+
+.card-details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 2;
+}
+
+.card-label {
+  display: block;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.card-val {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+/* Card Back */
+.flip-card-back {
+  transform: rotateY(180deg);
+  padding: 20px 0;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+}
+
+.card-black-strip {
+  width: 100%;
+  height: 48px;
+  background: #020617;
+  margin-top: 15px;
+  border-y: 1px solid rgba(255,255,255,0.05);
+}
+
+.card-cvv-box {
+  padding: 16px 26px;
+}
+
+.card-cvv-whitebar {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-align: right;
+  margin-top: 6px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- Input Fields with Micro-Icons --- */
+.gateway-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.gateway-form label span {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gateway-form label span i {
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.gateway-form input {
+  padding: 14px 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 14px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.25s ease !important;
+}
+
+.gateway-form input:focus {
+  outline: none !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.35) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* --- Sleek Receipt Card --- */
+.gateway-receipt-panel {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.receipt-checkmark {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.18);
+  border: 2px solid #22c55e;
+  color: #22c55e;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px auto;
+  font-size: 2.2rem;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.6); }
+}
+
+.receipt-details {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 28px;
+  text-align: left;
+  margin: 24px 0;
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.receipt-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.status-badge-succeeded {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(34, 197, 94, 0.18);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-weight: 800;
+  font-size: 0.8rem;
+}
