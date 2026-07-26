@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=125" />
+    <link rel="stylesheet" href="styles.css?v=130" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=125" defer></script>
+    <script src="app.js?v=130" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -882,7 +884,7 @@
                     <input type="password" id="gatewayCardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
                   </label>
                 </div>
-                <button class="join-button wide" type="button" id="gatewayPayCardButton">
+                <button class="gateway-pay-btn" type="button" id="gatewayPayCardButton">
                   <span>Pay Securely</span>
                   <i data-lucide="shield-check"></i>
                 </button>

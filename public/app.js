@@ -2360,9 +2360,35 @@ function openGatewayPage(checkoutDetails) {
           };
         }
 
-        if (selectors.receiptPrintButton) {
-          selectors.receiptPrintButton.onclick = () => {
-            window.print();
+        // PDF Download button
+        const pdfBtn = document.getElementById("receiptDownloadPdf");
+        if (pdfBtn) {
+          pdfBtn.onclick = async () => {
+            const el = document.getElementById("receiptPrintableArea");
+            if (!el || !window.html2canvas || !window.jspdf) {
+              window.print();
+              return;
+            }
+            try {
+              pdfBtn.disabled = true;
+              pdfBtn.querySelector("span").textContent = "Generating...";
+              const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+              const imgData = canvas.toDataURL("image/png");
+              const { jsPDF } = window.jspdf;
+              const pdf = new jsPDF("p", "mm", "a4");
+              const pdfW = pdf.internal.pageSize.getWidth() - 20;
+              const pdfH = (canvas.height * pdfW) / canvas.width;
+              pdf.addImage(imgData, "PNG", 10, 10, pdfW, pdfH);
+              const txnId = document.getElementById("receiptTxId")?.textContent || "receipt";
+              pdf.save("FreelanceHub_Receipt_" + txnId + ".pdf");
+              pdfBtn.querySelector("span").textContent = "Download PDF";
+              pdfBtn.disabled = false;
+            } catch (err) {
+              console.error("PDF generation failed:", err);
+              window.print();
+              pdfBtn.querySelector("span").textContent = "Download PDF";
+              pdfBtn.disabled = false;
+            }
           };
         }
       } catch (error) {

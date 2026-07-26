@@ -9880,3 +9880,415 @@ dialog.futuristic-modal#bankOtpModal {
 .receipt-row strong {
   color: var(--ink);
 }
+
+/* ==========================================
+   COLOURFUL GATEWAY + THEME-AWARE OTP + PDF
+   ========================================== */
+
+/* --- Sidebar Accent Bar (Purple-Cyan Gradient Strip) --- */
+.sidebar-accent-bar {
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, #a855f7, #38bdf8, #22c55e);
+  margin: -28px -24px 20px -24px;
+  border-radius: 20px 20px 0 0;
+}
+
+/* --- Lock Icon Ring --- */
+.lock-icon-ring {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.lock-icon-ring i,
+.lock-icon-ring svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gateway-lock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+/* --- Fee Free Badge --- */
+.fee-free {
+  color: #22c55e !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem;
+}
+
+/* --- Total Amount Highlight --- */
+.total-amount-highlight {
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg, #a855f7, #38bdf8) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* --- Trust Badges (Coloured Icons) --- */
+.gateway-trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.trust-badge:nth-child(1) i, .trust-badge:nth-child(1) svg { color: #a855f7; }
+.trust-badge:nth-child(2) i, .trust-badge:nth-child(2) svg { color: #38bdf8; }
+.trust-badge:nth-child(3) i, .trust-badge:nth-child(3) svg { color: #22c55e; }
+
+/* --- Gateway Pay Button (Vibrant Gradient) --- */
+.gateway-pay-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+  transition: all 0.25s ease;
+}
+
+.gateway-pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.55);
+}
+
+.gateway-pay-btn:active {
+  transform: translateY(0);
+}
+
+/* --- Colourful Tab Active State --- */
+.gateway-tab.active {
+  color: #a855f7 !important;
+  background: var(--paper) !important;
+  border: 1px solid rgba(168, 85, 247, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.12) !important;
+}
+
+.gateway-tab i, .gateway-tab svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Colourful Input Focus --- */
+.gateway-form input:focus {
+  outline: none !important;
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+  background: var(--paper) !important;
+}
+
+/* --- Colourful Processing Animation --- */
+.processing-animation {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px auto;
+}
+
+.pulse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(168, 85, 247, 0.3);
+  animation: pulseRing 1.5s infinite ease-out;
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.processing-icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #a855f7;
+  font-size: 2rem;
+}
+
+.processing-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--soft);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.processing-progress-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #38bdf8);
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+/* --- Receipt Checkmark (Green Glow) --- */
+.receipt-checkmark {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  border: 2px solid #22c55e;
+  color: #22c55e;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.2);
+  animation: checkPulse 2s infinite ease-in-out;
+}
+
+@keyframes checkPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.4); }
+}
+
+.gateway-receipt-panel h2 {
+  color: var(--ink);
+}
+
+.receipt-success-text {
+  color: var(--muted);
+}
+
+/* --- Receipt Action Buttons --- */
+.receipt-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.receipt-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.receipt-download-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.2);
+  transform: translateY(-1px);
+}
+
+.receipt-return-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
+  transition: all 0.2s ease;
+}
+
+.receipt-return-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(168, 85, 247, 0.5);
+}
+
+/* --- Status Badge --- */
+.status-badge-succeeded {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  border-radius: 100px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   THEME-AWARE OTP MODAL (Light/Dark)
+   ========================================== */
+
+/* Override hardcoded dark backgrounds with theme variables */
+.futuristic-modal-card,
+.otp-modal-card {
+  background: var(--paper) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
+}
+
+.futuristic-modal-header h2 {
+  color: var(--ink) !important;
+}
+
+.futuristic-badge {
+  background: rgba(168, 85, 247, 0.12) !important;
+  border: 1px solid rgba(168, 85, 247, 0.25) !important;
+  color: #a855f7 !important;
+}
+
+.otp-banner-box {
+  background: rgba(168, 85, 247, 0.08) !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  color: var(--ink) !important;
+}
+
+.otp-banner-box p {
+  color: var(--muted) !important;
+}
+
+.otp-lock-icon {
+  color: #a855f7 !important;
+}
+
+.otp-input-section .control-label {
+  color: var(--ink) !important;
+  font-weight: 700;
+}
+
+.otp-field-wrapper input {
+  background: var(--soft) !important;
+  border: 1px solid var(--line) !important;
+  color: #a855f7 !important;
+  font-weight: 900 !important;
+}
+
+.otp-field-wrapper input:focus {
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+}
+
+.otp-demo-hint {
+  color: var(--muted) !important;
+}
+
+.futuristic-submit-btn,
+#submitBankOtpBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  cursor: pointer;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%) !important;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4) !important;
+  transition: all 0.25s ease;
+}
+
+#submitBankOtpBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.55) !important;
+}
+
+/* OTP Modal Close Button */
+#closeOtpModal {
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: var(--soft);
+}
+
+#closeOtpModal:hover {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+/* --- Dark Mode OTP Modal Fine-Tuning --- */
+[data-theme="dark"] .futuristic-modal-card,
+[data-theme="dark"] .otp-modal-card {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(168, 85, 247, 0.1) !important;
+}
+
+/* --- Gateway Page Accent Glow (Subtle Background) --- */
+.gateway-page::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 400px;
+  background: radial-gradient(circle at 25% 30%, rgba(168, 85, 247, 0.08), transparent 45%),
+              radial-gradient(circle at 75% 60%, rgba(56, 189, 248, 0.06), transparent 45%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- Colourful Card Front Decorative Ring --- */
+.flip-card-front::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.flip-card-front::after {
+  content: "";
+  position: absolute;
+  bottom: -25%;
+  left: -10%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
