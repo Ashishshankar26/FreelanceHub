@@ -8261,3 +8261,64 @@ body.app-mode .marketplace-page .services-section {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Dashboard Next Steps & Workspace Bento Styling */
+.dashboard-next-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+  gap: 16px !important;
+  margin-top: 14px !important;
+}
+
+.dashboard-next-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 16px 20px !important;
+  border-radius: 16px !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: var(--ink) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.dashboard-next-item:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-next-item {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .dashboard-next-item:hover {
+  background: rgba(56, 189, 248, 0.15) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.dashboard-next-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.dashboard-next-item span strong {
+  display: block !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-next-item span small {
+  font-size: 0.78rem !important;
+  color: var(--muted) !important;
+}

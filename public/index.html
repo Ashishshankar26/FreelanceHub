@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=15" />
+    <link rel="stylesheet" href="styles.css?v=18" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=15" defer></script>
+    <script src="app.js?v=18" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -346,8 +346,9 @@
                 <span class="bento-badge badge-green">Active Escrow</span>
               </div>
               <div class="bento-amount" id="dashboardFunds">₹20,000</div>
+              <p class="bento-subcopy" style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">Active funded milestone commitments locked in zero-risk escrow.</p>
               <div class="bento-chart-container">
-                <canvas id="overviewChartCanvas" aria-label="Protected funds activity" style="width:100%;height:130px;"></canvas>
+                <canvas id="overviewChartCanvas" aria-label="Protected funds activity" style="width:100%;height:120px;"></canvas>
               </div>
               <div class="chart-month-labels">
                 <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
@@ -368,7 +369,7 @@
                     <span class="debit-brand">VISA</span>
                   </div>
                   <div class="debit-card-bottom">
-                    <strong class="debit-amount">₹12,200</strong>
+                    <strong class="debit-amount" id="dashboardWalletBalance">₹12,200</strong>
                     <i data-lucide="rss" class="contactless-icon"></i>
                   </div>
                 </div>
@@ -389,6 +390,7 @@
                     <span class="bento-badge badge-green">In Progress</span>
                   </div>
                   <div class="bento-amount-sm" id="dashboardActive">2</div>
+                  <small style="color:var(--muted);font-size:0.78rem;">Orders currently moving forward</small>
                 </div>
                 <div class="mini-bar-graphic cyan-bars">
                   <span style="height:40%"></span><span style="height:65%"></span><span style="height:85%"></span><span style="height:100%"></span>
@@ -401,9 +403,10 @@
                 <div class="mini-metric-info">
                   <div class="bento-card-header">
                     <span class="bento-title">Review Queue</span>
-                    <span class="bento-badge badge-gray">1 Action Required</span>
+                    <span class="bento-badge badge-gray">Action Required</span>
                   </div>
                   <div class="bento-amount-sm" id="dashboardReview">1</div>
+                  <small style="color:var(--muted);font-size:0.78rem;">Deliveries awaiting approval</small>
                 </div>
                 <div class="mini-stripe-graphic pink-stripes">
                   <div class="progress-bar-inner" style="width: 50%;"></div>
@@ -411,9 +414,25 @@
               </div>
             </article>
 
+            <article class="bento-card card-mini-metric">
+              <div class="mini-metric-content">
+                <div class="mini-metric-info">
+                  <div class="bento-card-header">
+                    <span class="bento-title">Unread Messages</span>
+                    <span class="bento-badge badge-green">Live Updates</span>
+                  </div>
+                  <div class="bento-amount-sm" id="dashboardMessages">1</div>
+                  <small style="color:var(--muted);font-size:0.78rem;">New workspace updates</small>
+                </div>
+                <div class="mini-icon-badge" style="width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.15);display:grid;place-items:center;color:#38bdf8;">
+                  <i data-lucide="messages-square"></i>
+                </div>
+              </div>
+            </article>
+
             <article class="bento-card card-tx-history">
               <div class="bento-card-header">
-                <span class="bento-heading-lg">Active Projects</span>
+                <span class="bento-heading-lg">Recent Deliveries</span>
                 <button class="bento-link-btn" type="button" data-app-page-nav="marketplace">Marketplace</button>
               </div>
               <div class="tx-history-list" id="overviewOrdersList">
@@ -435,33 +454,38 @@
           <div class="bento-col col-right">
             <article class="bento-card card-escrow-yield">
               <div class="escrow-yield-content">
-                <span class="escrow-yield-eyebrow"><i data-lucide="sparkles"></i> Freelancer Status</span>
-                <h3 class="escrow-yield-title">Top Rated Seller</h3>
-                <p class="escrow-yield-desc">99.2% Response Rate & 98.5% On-Time Delivery score.</p>
+                <span class="escrow-yield-eyebrow"><i data-lucide="sparkles"></i> Service Impressions</span>
+                <h3 class="escrow-yield-title">4,279 Views</h3>
+                <p class="escrow-yield-desc">+12% increase in gig visibility over the last 30 days.</p>
                 <button class="bento-btn-dark" type="button" data-app-page-nav="marketplace">
-                  View Listings
+                  View Marketplace
                 </button>
               </div>
             </article>
 
             <article class="bento-card card-quick-transfer">
               <div class="bento-card-header">
-                <span class="bento-heading-lg">Client Contacts</span>
-                <button class="bento-icon-link" type="button"><i data-lucide="arrow-up-right"></i></button>
+                <span class="bento-heading-lg">Performance Scores</span>
+                <button class="bento-icon-link" type="button"><i data-lucide="award"></i></button>
               </div>
-              <div class="avatar-transfer-row">
-                <div class="transfer-avatar bg-rose">AS</div>
-                <div class="transfer-avatar bg-cyan">JD</div>
-                <div class="transfer-avatar bg-purple">MK</div>
-                <div class="transfer-avatar bg-amber">RL</div>
-                <button class="add-avatar-btn" type="button" title="Add client"><i data-lucide="plus"></i></button>
+              <div class="perf-scores-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+                <div class="perf-score-box" style="background:rgba(0,0,0,0.04);padding:12px;border-radius:12px;">
+                  <span style="font-size:0.75rem;color:var(--muted);display:block;">Response Rate</span>
+                  <strong style="font-size:1.2rem;color:#22c55e;">99.2%</strong>
+                  <small style="display:block;font-size:0.7rem;color:var(--muted);">&lt; 1hr avg</small>
+                </div>
+                <div class="perf-score-box" style="background:rgba(0,0,0,0.04);padding:12px;border-radius:12px;">
+                  <span style="font-size:0.75rem;color:var(--muted);display:block;">Delivery Rate</span>
+                  <strong style="font-size:1.2rem;color:#38bdf8;">98.5%</strong>
+                  <small style="display:block;font-size:0.7rem;color:var(--muted);">On-time score</small>
+                </div>
               </div>
             </article>
 
             <article class="bento-card card-budget-chart">
               <div class="bento-card-header">
                 <span class="bento-heading-lg">Work Performance</span>
-                <button class="bento-icon-link" type="button"><i data-lucide="arrow-up-right"></i></button>
+                <button class="bento-icon-link" type="button"><i data-lucide="trending-up"></i></button>
               </div>
               <div class="budget-legend">
                 <span class="legend-chip chip-purple"><i></i> Completed</span>
@@ -469,11 +493,24 @@
                 <span class="legend-chip chip-cyan"><i></i> Active</span>
               </div>
               <div class="budget-chart-wrap">
-                <canvas id="overviewBudgetCanvas" aria-label="Work performance chart" style="width:100%;height:170px;"></canvas>
+                <canvas id="overviewBudgetCanvas" aria-label="Work performance chart" style="width:100%;height:150px;"></canvas>
               </div>
             </article>
           </div>
         </div>
+
+        <section class="bento-card dashboard-next" aria-labelledby="nextStepsTitle" style="margin-top:24px;">
+          <div class="panel-heading" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div>
+              <p class="eyebrow" style="font-size:0.78rem;font-weight:700;color:#38bdf8;text-transform:uppercase;">Keep moving</p>
+              <h3 id="nextStepsTitle" style="font-size:1.25rem;font-weight:750;color:var(--ink);margin:4px 0 0;">Your next best moves</h3>
+            </div>
+            <button class="circle-button" id="refreshDashboard" type="button" aria-label="Refresh dashboard" title="Refresh">
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+          <div class="dashboard-next-grid" id="dashboardNextSteps"></div>
+        </section>
 
         <section class="dashboard-activity hidden" id="dashboardActivityPanel">
           <div class="panel-heading">
@@ -496,8 +533,8 @@
           <div class="email-log-list" id="emailLogList"></div>
         </section>
 
-        <div class="dashboard-workspace">
-          <article class="orders-panel">
+        <div class="dashboard-workspace" style="margin-top: 24px;">
+          <article class="bento-card orders-panel">
             <div class="panel-heading">
               <div>
                 <p class="eyebrow">Orders</p>
@@ -508,7 +545,7 @@
             <div class="order-list" id="orderList"></div>
           </article>
 
-          <article class="seller-tools" id="sellerTools">
+          <article class="bento-card seller-tools" id="sellerTools">
             <div class="panel-heading">
               <div>
                 <p class="eyebrow">Seller tools</p>
