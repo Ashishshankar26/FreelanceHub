@@ -448,20 +448,8 @@ function bindEvents() {
       closeEscrowVaultsModal();
     }
 
-    // Futuristic Floating Modal controls
-    if (event.target.closest("#closeFuturisticModal")) {
-      closeFuturisticTopupModal();
-    }
-    const fPreset = event.target.closest("[data-f-amount]");
-    if (fPreset) {
-      const amt = fPreset.dataset.fAmount;
-      const input = document.getElementById("futuristicAmountInput");
-      if (input) input.value = amt;
-      document.querySelectorAll("[data-f-amount]").forEach(b => b.classList.toggle("active", b === fPreset));
-    }
     if (event.target.closest("#futuristicTopupConfirm")) {
       const amt = Number(document.getElementById("futuristicAmountInput")?.value || 2500);
-      closeFuturisticTopupModal();
       openGatewayPage({
         title: "Wallet Cyber Escrow Top-Up",
         amount: amt,
@@ -1312,27 +1300,6 @@ function renderFinance(finance, wallet) {
   drawInteractiveBudgetChart('financeBudgetCanvas', finance?.monthly);
 }
 
-function openFuturisticTopupModal() {
-  const modal = document.getElementById("futuristicTopupModal");
-  if (!modal) return;
-  const currentBalance = state.wallet?.balance || 0;
-  const userName = state.user?.name || "USER ACCOUNT";
-
-  const liveBal = document.getElementById("futuristicLiveBalance");
-  if (liveBal) liveBal.textContent = currency.format(currentBalance);
-
-  const cardHolder = document.getElementById("futuristicCardHolder");
-  if (cardHolder) cardHolder.textContent = userName.toUpperCase();
-
-  modal.showModal();
-  if (window.lucide) lucide.createIcons();
-}
-
-function closeFuturisticTopupModal() {
-  const modal = document.getElementById("futuristicTopupModal");
-  if (modal) modal.close();
-}
-
 function openEscrowVaultsModal() {
   const modal = document.getElementById("escrowVaultsModal");
   if (!modal) return;
@@ -1348,28 +1315,6 @@ function openEscrowVaultsModal() {
 function closeEscrowVaultsModal() {
   const modal = document.getElementById("escrowVaultsModal");
   if (modal) modal.close();
-}
-
-async function submitFuturisticTopup() {
-  const input = document.getElementById("futuristicAmountInput");
-  const amount = Number(input?.value || 500);
-  if (!Number.isFinite(amount) || amount < 50) {
-    showToast("Enter an amount of at least ₹50.");
-    return;
-  }
-  
-  try {
-    const payload = await api("/payments/wallet/top-up", {
-      method: "POST",
-      body: JSON.stringify({ amount }),
-    });
-    
-    closeFuturisticTopupModal();
-    await loadWallet();
-    await loadDashboard();
-  } catch (error) {
-    showToast(error.message || "Failed to top up wallet.");
-  }
 }
 
 function drawInteractiveLineChart(canvasId, monthlyData) {

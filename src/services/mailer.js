@@ -179,7 +179,3 @@ export async function sendPaymentReceiptEmail({ user, amount, transactionId, typ
     text: `Payment Receipt\nTransaction ID: ${transactionId}\nAmount: ${amountFormatted}\nType: ${type}\nDate: ${dateStr}\nAccount: ${user.email}`,
   });
 }
-
-export function isMailerConfigured() {
-  return configured;
-}
