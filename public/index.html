@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=12" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=10" defer></script>
+    <script src="app.js?v=12" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -337,47 +337,143 @@
           </div>
         </div>
 
-        <div class="dashboard-grid">
-          <article class="dashboard-card dashboard-card-mint">
-            <span class="dashboard-stat-icon"><i data-lucide="shield-check"></i></span>
-            <span>Protected funds</span>
-            <strong id="dashboardFunds">$0</strong>
-            <small>Active funded orders</small>
-          </article>
-          <article class="dashboard-card dashboard-card-blue">
-            <span class="dashboard-stat-icon"><i data-lucide="layers-3"></i></span>
-            <span>Active orders</span>
-            <strong id="dashboardActive">0</strong>
-            <small>Currently moving</small>
-          </article>
-          <article class="dashboard-card dashboard-card-amber">
-            <span class="dashboard-stat-icon"><i data-lucide="circle-check-big"></i></span>
-            <span>Review queue</span>
-            <strong id="dashboardReview">0</strong>
-            <small>Awaiting action</small>
-          </article>
-          <article class="dashboard-card dashboard-card-coral">
-            <span class="dashboard-stat-icon"><i data-lucide="messages-square"></i></span>
-            <span>Messages</span>
-            <strong id="dashboardMessages">0</strong>
-            <small>Unread updates</small>
-          </article>
-        </div>
-        
-        <div class="dashboard-widgets-grid" id="dashboardWidgets"></div>
+        <div class="finance-bento-grid overview-bento-grid">
+          <!-- COLUMN 1 -->
+          <div class="bento-col col-left">
+            <article class="bento-card card-total-balance">
+              <div class="bento-card-header">
+                <span class="bento-title">Protected Funds</span>
+                <span class="bento-badge badge-green">Active Escrow</span>
+              </div>
+              <div class="bento-amount" id="dashboardFunds">₹20,000</div>
+              <div class="bento-chart-container">
+                <canvas id="overviewChartCanvas" aria-label="Protected funds activity" style="width:100%;height:130px;"></canvas>
+              </div>
+              <div class="chart-month-labels">
+                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+              </div>
+            </article>
 
-        <section class="dashboard-next" aria-labelledby="nextStepsTitle">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Keep moving</p>
-              <h3 id="nextStepsTitle">Your next best moves</h3>
-            </div>
-            <button class="circle-button" id="refreshDashboard" type="button" aria-label="Refresh dashboard" title="Refresh">
-              <i data-lucide="refresh-cw"></i>
-            </button>
+            <article class="bento-card card-debit-stack">
+              <div class="card-stack-visual">
+                <div class="stacked-card card-cyan"></div>
+                <div class="stacked-card card-yellow"></div>
+                <div class="stacked-card card-pink"></div>
+                <div class="main-debit-card">
+                  <div class="debit-card-top">
+                    <div>
+                      <span class="debit-label">Workspace Card</span>
+                      <small class="debit-num">**** 1092</small>
+                    </div>
+                    <span class="debit-brand">VISA</span>
+                  </div>
+                  <div class="debit-card-bottom">
+                    <strong class="debit-amount">₹12,200</strong>
+                    <i data-lucide="rss" class="contactless-icon"></i>
+                  </div>
+                </div>
+              </div>
+              <button class="bento-btn-dark wide" type="button" data-app-page-nav="wallet">
+                <i data-lucide="plus"></i> Add funds to wallet
+              </button>
+            </article>
           </div>
-          <div class="dashboard-next-grid" id="dashboardNextSteps"></div>
-        </section>
+
+          <!-- COLUMN 2 -->
+          <div class="bento-col col-mid">
+            <article class="bento-card card-mini-metric">
+              <div class="mini-metric-content">
+                <div class="mini-metric-info">
+                  <div class="bento-card-header">
+                    <span class="bento-title">Active Orders</span>
+                    <span class="bento-badge badge-green">In Progress</span>
+                  </div>
+                  <div class="bento-amount-sm" id="dashboardActive">2</div>
+                </div>
+                <div class="mini-bar-graphic cyan-bars">
+                  <span style="height:40%"></span><span style="height:65%"></span><span style="height:85%"></span><span style="height:100%"></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="bento-card card-mini-metric">
+              <div class="mini-metric-content">
+                <div class="mini-metric-info">
+                  <div class="bento-card-header">
+                    <span class="bento-title">Review Queue</span>
+                    <span class="bento-badge badge-gray">1 Action Required</span>
+                  </div>
+                  <div class="bento-amount-sm" id="dashboardReview">1</div>
+                </div>
+                <div class="mini-stripe-graphic pink-stripes">
+                  <div class="progress-bar-inner" style="width: 50%;"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="bento-card card-tx-history">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Active Projects</span>
+                <button class="bento-link-btn" type="button" data-app-page-nav="marketplace">Marketplace</button>
+              </div>
+              <div class="tx-history-list" id="overviewOrdersList">
+                <div class="tx-item">
+                  <div class="tx-icon icon-apple"><i data-lucide="layers-3"></i></div>
+                  <div class="tx-details"><strong>Full-Stack E-Commerce App</strong><small>Delivery in 2 days</small></div>
+                  <div class="tx-amount positive">₹15,000</div>
+                </div>
+                <div class="tx-item">
+                  <div class="tx-icon icon-amazon"><i data-lucide="sparkles"></i></div>
+                  <div class="tx-details"><strong>AI Logo & Brand Identity</strong><small>Under Review</small></div>
+                  <div class="tx-amount positive">₹5,000</div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- COLUMN 3 -->
+          <div class="bento-col col-right">
+            <article class="bento-card card-escrow-yield">
+              <div class="escrow-yield-content">
+                <span class="escrow-yield-eyebrow"><i data-lucide="sparkles"></i> Freelancer Status</span>
+                <h3 class="escrow-yield-title">Top Rated Seller</h3>
+                <p class="escrow-yield-desc">99.2% Response Rate & 98.5% On-Time Delivery score.</p>
+                <button class="bento-btn-dark" type="button" data-app-page-nav="marketplace">
+                  View Listings
+                </button>
+              </div>
+            </article>
+
+            <article class="bento-card card-quick-transfer">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Client Contacts</span>
+                <button class="bento-icon-link" type="button"><i data-lucide="arrow-up-right"></i></button>
+              </div>
+              <div class="avatar-transfer-row">
+                <div class="transfer-avatar bg-rose">AS</div>
+                <div class="transfer-avatar bg-cyan">JD</div>
+                <div class="transfer-avatar bg-purple">MK</div>
+                <div class="transfer-avatar bg-amber">RL</div>
+                <button class="add-avatar-btn" type="button" title="Add client"><i data-lucide="plus"></i></button>
+              </div>
+            </article>
+
+            <article class="bento-card card-budget-chart">
+              <div class="bento-card-header">
+                <span class="bento-heading-lg">Work Performance</span>
+                <button class="bento-icon-link" type="button"><i data-lucide="arrow-up-right"></i></button>
+              </div>
+              <div class="budget-legend">
+                <span class="legend-chip chip-purple"><i></i> Completed</span>
+                <span class="legend-chip chip-pink"><i></i> Review</span>
+                <span class="legend-chip chip-cyan"><i></i> Active</span>
+              </div>
+              <div class="budget-chart-wrap">
+                <canvas id="overviewBudgetCanvas" aria-label="Work performance chart" style="width:100%;height:170px;"></canvas>
+              </div>
+            </article>
+          </div>
+        </div>
 
         <section class="dashboard-activity hidden" id="dashboardActivityPanel">
           <div class="panel-heading">

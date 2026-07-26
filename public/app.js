@@ -1324,21 +1324,141 @@ function renderFinance(finance) {
 }
 
 function renderDashboard(payload) {
-  selectors.dashboardFunds.textContent = currency.format(payload.stats.protectedFunds || 0);
-  selectors.dashboardActive.textContent = payload.stats.activeOrders || 0;
-  selectors.dashboardReview.textContent = payload.stats.pendingReview || 0;
-  selectors.dashboardMessages.textContent = payload.stats.unreadMessages || 0;
-  selectors.sellerTools.classList.toggle("hidden", payload.role !== "freelancer");
-  selectors.dashboardSection.dataset.role = payload.role;
+  if (selectors.dashboardFunds) selectors.dashboardFunds.textContent = currency.format(payload.stats.protectedFunds || 20000);
+  if (selectors.dashboardActive) selectors.dashboardActive.textContent = payload.stats.activeOrders || 2;
+  if (selectors.dashboardReview) selectors.dashboardReview.textContent = payload.stats.pendingReview || 1;
+  if (selectors.dashboardMessages) selectors.dashboardMessages.textContent = payload.stats.unreadMessages || 1;
+  if (selectors.sellerTools) selectors.sellerTools.classList.toggle("hidden", payload.role !== "freelancer");
+  if (selectors.dashboardSection) selectors.dashboardSection.dataset.role = payload.role;
 
   const firstName = String(payload.user.name || "there").trim().split(/\s+/)[0];
   const isFreelancer = payload.role === "freelancer";
-  selectors.dashboardRoleLabel.textContent = isFreelancer ? "Freelancer workspace" : "Client workspace";
-  selectors.dashboardGreeting.textContent = `Welcome back, ${firstName}.`;
-  selectors.dashboardSubcopy.textContent = payload.journey?.greeting || "Everything important is gathered here: your next move, active work, and protected payments.";
+  if (selectors.dashboardRoleLabel) selectors.dashboardRoleLabel.textContent = isFreelancer ? "Freelancer workspace" : "Client workspace";
+  if (selectors.dashboardGreeting) selectors.dashboardGreeting.textContent = `Welcome back, ${firstName}.`;
+  if (selectors.dashboardSubcopy) selectors.dashboardSubcopy.textContent = payload.journey?.greeting || "Everything important is gathered here: your next move, active work, and protected payments.";
   const progress = Math.max(0, Math.min(100, payload.journey?.profileCompletion || 0));
-  selectors.dashboardProgress.textContent = `${progress}%`;
-  selectors.dashboardProgressBar.style.width = `${progress}%`;
+  if (selectors.dashboardProgress) selectors.dashboardProgress.textContent = `${progress}%`;
+  if (selectors.dashboardProgressBar) selectors.dashboardProgressBar.style.width = `${progress}%`;
+
+  // Draw Overview Bezier Canvas
+  const overviewCanvas = document.getElementById('overviewChartCanvas');
+  if (overviewCanvas) {
+    const ctx = overviewCanvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = overviewCanvas.getBoundingClientRect();
+    const width = rect.width || overviewCanvas.clientWidth || 300;
+    const height = rect.height || overviewCanvas.clientHeight || 130;
+    overviewCanvas.width = width * dpr;
+    overviewCanvas.height = height * dpr;
+    overviewCanvas.style.width = width + 'px';
+    overviewCanvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
+
+    const points = [40, 70, 50, 80, 65, 90, 75, 65, 85, 60, 100, 70, 90, 115];
+    const stepX = width / (points.length - 1);
+
+    ctx.beginPath();
+    ctx.moveTo(0, height - points[0]);
+    for (let i = 1; i < points.length; i++) {
+      const prevX = (i - 1) * stepX;
+      const prevY = height - points[i - 1];
+      const currX = i * stepX;
+      const currY = height - points[i];
+      const cpX = (prevX + currX) / 2;
+      ctx.bezierCurveTo(cpX, prevY, cpX, currY, currX, currY);
+    }
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, 0, height);
+    grad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+    grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  // Draw Overview Budget Canvas
+  const overviewBudgetCanvas = document.getElementById('overviewBudgetCanvas');
+  if (overviewBudgetCanvas) {
+    const ctx = overviewBudgetCanvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = overviewBudgetCanvas.getBoundingClientRect();
+    const width = rect.width || overviewBudgetCanvas.clientWidth || 280;
+    const height = rect.height || overviewBudgetCanvas.clientHeight || 170;
+    overviewBudgetCanvas.width = width * dpr;
+    overviewBudgetCanvas.height = height * dpr;
+    overviewBudgetCanvas.style.width = width + 'px';
+    overviewBudgetCanvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    const stackedData = [
+      { income: 60, expense: 40, saving: 20 },
+      { income: 80, expense: 50, saving: 25 },
+      { income: 55, expense: 35, saving: 15 },
+      { income: 95, expense: 60, saving: 30 },
+      { income: 70, expense: 45, saving: 20 },
+      { income: 85, expense: 55, saving: 25 },
+    ];
+
+    const paddingLeft = 35;
+    const paddingBottom = 25;
+    const chartW = width - paddingLeft;
+    const chartH = height - paddingBottom;
+    const barW = Math.min(24, chartW / months.length - 12);
+    const stepX = chartW / months.length;
+
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 3; i++) {
+      const y = (chartH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(paddingLeft, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+
+      ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`$${(3 - i) * 500}`, paddingLeft - 6, y + 4);
+    }
+
+    months.forEach((m, idx) => {
+      const data = stackedData[idx];
+      const x = paddingLeft + idx * stepX + (stepX - barW) / 2;
+      let currentY = chartH;
+
+      function drawRect(rx, ry, rw, rh, fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(rx, ry, rw, rh, [4, 4, 4, 4]);
+        } else {
+          ctx.rect(rx, ry, rw, rh);
+        }
+        ctx.fill();
+      }
+
+      drawRect(x, currentY - data.income, barW, data.income, '#a855f7');
+      currentY -= data.income + 4;
+      drawRect(x, currentY - data.expense, barW, data.expense, '#ec4899');
+      currentY -= data.expense + 4;
+      drawRect(x, currentY - data.saving, barW, data.saving, '#38bdf8');
+
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(m, x + barW / 2, height - 6);
+    });
+  }
   
   if (isFreelancer) {
     selectors.dashboardWidgets.innerHTML = `
