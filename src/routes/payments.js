@@ -8,6 +8,8 @@ import { WalletTransaction } from "../models/WalletTransaction.js";
 import { env } from "../config/env.js";
 import { getWalletSnapshot } from "../services/wallet.js";
 
+import { sendPaymentReceiptEmail } from "../services/mailer.js";
+
 export const paymentsRouter = Router();
 
 const walletTopUpSchema = z.object({
@@ -51,6 +53,16 @@ paymentsRouter.post(
       description: "Demo wallet top-up",
       completedAt: new Date(),
     });
+
+    await sendPaymentReceiptEmail({
+      user: req.user,
+      amount,
+      transactionId: transaction._id,
+      type: "Wallet Top-Up",
+      description: "Escrow Deposit Ledger Top-Up",
+      date: transaction.completedAt,
+    });
+
     const wallet = await getWalletSnapshot(req.user._id);
     return res.status(201).json({
       transactionId: transaction._id,

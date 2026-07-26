@@ -1649,15 +1649,21 @@ function renderDashboard(payload) {
   if (selectors.dashboardActivityPanel && selectors.activityTimeline) {
     if (payload.recentActivity && payload.recentActivity.length > 0) {
       selectors.dashboardActivityPanel.classList.remove("hidden");
-      selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => `
-        <div class="activity-item bento-activity-card">
-          <div class="activity-dot"></div>
-          <div class="activity-content">
-            <h4>${escapeHtml(item.title)}</h4>
-            <span>${new Date(item.date).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+      selectors.activityTimeline.innerHTML = payload.recentActivity.map(item => {
+        const meta = getActivityIconAndColor(item.title);
+        const dateStr = new Date(item.date).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="bento-timeline-item">
+            <div class="timeline-icon-badge ${meta.bgClass} ${meta.colorClass}">
+              <i data-lucide="${meta.icon}"></i>
+            </div>
+            <div class="timeline-item-body">
+              <div class="timeline-item-title">${escapeHtml(item.title)}</div>
+              <div class="timeline-item-date"><i data-lucide="clock"></i> ${dateStr}</div>
+            </div>
           </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     } else {
       selectors.dashboardActivityPanel.classList.add("hidden");
     }
@@ -1685,6 +1691,31 @@ function renderDashboard(payload) {
     selectors.floatingWallet.classList.remove("hidden");
   }
   refreshIcons();
+}
+
+function getActivityIconAndColor(title) {
+  const lower = (title || "").toLowerCase();
+  if (lower.includes("completed") || lower.includes("released") || lower.includes("paid")) {
+    return { icon: "check-circle-2", colorClass: "icon-emerald", bgClass: "bg-emerald" };
+  }
+  if (lower.includes("submitted") || lower.includes("review")) {
+    return { icon: "upload-cloud", colorClass: "icon-cyan", bgClass: "bg-cyan" };
+  }
+  if (lower.includes("started") || lower.includes("funded") || lower.includes("order")) {
+    return { icon: "play-circle", colorClass: "icon-purple", bgClass: "bg-purple" };
+  }
+  return { icon: "activity", colorClass: "icon-blue", bgClass: "bg-blue" };
+}
+
+function getOrderStatusBadge(status) {
+  switch (status) {
+    case "completed": return { badgeClass: "badge-green", icon: "check-circle-2" };
+    case "submitted": return { badgeClass: "badge-amber", icon: "clock" };
+    case "in_progress":
+    case "funded": return { badgeClass: "badge-cyan", icon: "play-circle" };
+    case "disputed": return { badgeClass: "badge-pink", icon: "alert-triangle" };
+    default: return { badgeClass: "badge-gray", icon: "circle" };
+  }
 }
 
 function renderDashboardNextSteps(steps) {
@@ -1736,14 +1767,36 @@ function handleDashboardAction(action) {
 
 function renderOrder(order, role) {
   const otherParty = role === "freelancer" ? order.client?.name : order.freelancer?.name;
+  const statusInfo = getOrderStatusBadge(order.status);
+  const dueStr = order.dueAt ? new Date(order.dueAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "after funding";
   return `
-    <article class="order-item">
-      <div class="order-top">
-        <h4>${escapeHtml(order.title)}</h4>
-        <span class="status-pill status-${order.status}">${formatStatus(order.status)}</span>
+    <article class="order-item bento-order-card">
+      <div class="order-header-row">
+        <div class="order-title-wrap">
+          <div class="order-type-icon"><i data-lucide="package"></i></div>
+          <h4 class="order-title">${escapeHtml(order.title)}</h4>
+        </div>
+        <span class="bento-badge ${statusInfo.badgeClass}">
+          <i data-lucide="${statusInfo.icon}" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i> ${formatStatus(order.status)}
+        </span>
       </div>
-      <p class="order-meta">${currency.format(order.amount)} / ${escapeHtml(otherParty || "FreelanceHub user")} / due ${order.dueAt ? new Date(order.dueAt).toLocaleDateString() : "after funding"}</p>
-      <div class="order-actions">
+      
+      <div class="order-meta-chips">
+        <div class="meta-chip chip-amount">
+          <span class="chip-label">Budget:</span>
+          <strong>${currency.format(order.amount)}</strong>
+        </div>
+        <div class="meta-chip chip-user">
+          <i data-lucide="user"></i>
+          <span>${escapeHtml(otherParty || "FreelanceHub user")}</span>
+        </div>
+        <div class="meta-chip chip-date">
+          <i data-lucide="calendar"></i>
+          <span>Due: ${dueStr}</span>
+        </div>
+      </div>
+      
+      <div class="order-actions-row">
         ${renderOrderActions(order, role)}
       </div>
     </article>
@@ -2351,6 +2404,23 @@ function openGatewayPage(checkoutDetails) {
         if (selectors.receiptTxId) selectors.receiptTxId.textContent = payload.transactionId || `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
         if (selectors.receiptUser) selectors.receiptUser.textContent = state.user?.name || "User Account";
         if (selectors.receiptAmount) selectors.receiptAmount.textContent = currency.format(checkoutDetails.total);
+
+        if (isCard) {
+          const cb = document.getElementById("saveCardCheckbox");
+          if (cb && cb.checked) {
+            const cardNo = document.getElementById("gatewayCardNo")?.value;
+            const cardName = document.getElementById("gatewayCardName")?.value;
+            const expiry = document.getElementById("gatewayCardExpiry")?.value;
+            const cvv = document.getElementById("gatewayCardCvv")?.value;
+            if (cardNo) saveCardToStore({ id: "card_" + Date.now(), number: cardNo, holder: cardName, expiry: expiry, cvv: cvv, network: detectCardNetwork(cardNo)?.name || "CARD", themeClass: "card-theme-" + (detectCardNetwork(cardNo)?.name || "visa").toLowerCase() });
+          }
+        } else {
+          const cb = document.getElementById("saveUpiCheckbox");
+          if (cb && cb.checked) {
+            const vpa = document.getElementById("gatewayUpiVpa")?.value;
+            if (vpa) saveUpiToStore(vpa);
+          }
+        }
 
         // ONLY show success toast AFTER payment completes!
         showToast(`₹${checkoutDetails.total} successfully added to your live wallet!`);

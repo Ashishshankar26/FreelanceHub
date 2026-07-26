@@ -10679,3 +10679,434 @@ dialog.futuristic-modal#bankOtpModal {
   margin: 0 auto 24px auto;
   perspective: 1000px;
 }
+
+/* ==========================================
+   BENTO DASHBOARD TIMELINE & ORDERS REDESIGN
+   ========================================== */
+
+/* Fix Top Header Navigation Capsule Pill Contrast */
+.workspace-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+  padding: 5px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 999px !important;
+  background: #f1f5f9 !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="dark"] .workspace-nav {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.workspace-nav button {
+  display: inline-flex !important;
+  min-height: 36px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: #475569 !important;
+  font-size: 0.85rem !important;
+  font-weight: 650 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-theme="dark"] .workspace-nav button {
+  color: #94a3b8 !important;
+}
+
+.workspace-nav button svg,
+.workspace-nav button i {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+}
+
+.workspace-nav button:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #0f172a !important;
+}
+
+[data-theme="dark"] .workspace-nav button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+.workspace-nav button.active {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.2) !important;
+}
+
+[data-theme="dark"] .workspace-nav button.active {
+  background: #38bdf8 !important;
+  color: #0f172a !important;
+  box-shadow: 0 3px 12px rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Dashboard Workspace Grid Layout Fix */
+.dashboard-workspace {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr) !important;
+  gap: 24px !important;
+  align-items: start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.orders-panel,
+.seller-tools {
+  min-width: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Timeline Section */
+.bento-timeline-grid {
+  display: grid !important;
+  gap: 12px !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.bento-timeline-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 14px 18px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+[data-theme="dark"] .bento-timeline-item {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+.bento-timeline-item:hover {
+  transform: translateX(4px) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+.timeline-icon-badge {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.timeline-icon-badge svg,
+.timeline-icon-badge i {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  fill: none !important;
+}
+
+.timeline-icon-badge.bg-emerald {
+  background: rgba(34, 197, 94, 0.14) !important;
+  color: #15803d !important;
+}
+[data-theme="dark"] .timeline-icon-badge.bg-emerald {
+  color: #4ade80 !important;
+}
+
+.timeline-icon-badge.bg-cyan {
+  background: rgba(14, 165, 233, 0.14) !important;
+  color: #0284c7 !important;
+}
+[data-theme="dark"] .timeline-icon-badge.bg-cyan {
+  color: #38bdf8 !important;
+}
+
+.timeline-icon-badge.bg-purple {
+  background: rgba(168, 85, 247, 0.14) !important;
+  color: #7e22ce !important;
+}
+[data-theme="dark"] .timeline-icon-badge.bg-purple {
+  color: #c084fc !important;
+}
+
+.timeline-icon-badge.bg-blue {
+  background: rgba(99, 102, 241, 0.14) !important;
+  color: #4338ca !important;
+}
+[data-theme="dark"] .timeline-icon-badge.bg-blue {
+  color: #818cf8 !important;
+}
+
+.timeline-item-body {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.timeline-item-title {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  margin-bottom: 4px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.timeline-item-date {
+  font-size: 0.8rem !important;
+  color: #64748b !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="dark"] .timeline-item-date {
+  color: #94a3b8 !important;
+}
+
+.timeline-item-date svg,
+.timeline-item-date i {
+  width: 14px !important;
+  height: 14px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Orders / Recent Work Section */
+.bento-order-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+[data-theme="dark"] .bento-order-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+.bento-order-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(34, 197, 94, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+.order-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+}
+
+.order-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  flex: 1 1 200px !important;
+}
+
+.order-type-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  background: rgba(34, 197, 94, 0.12) !important;
+  color: #15803d !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+[data-theme="dark"] .order-type-icon {
+  color: #4ade80 !important;
+}
+
+.order-type-icon svg,
+.order-type-icon i {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+}
+
+.order-title {
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.bento-badge {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 12px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+}
+
+.bento-badge svg,
+.bento-badge i {
+  width: 13px !important;
+  height: 13px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+}
+
+.order-meta-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.meta-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .meta-chip {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+.meta-chip.chip-amount {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border-color: rgba(34, 197, 94, 0.25) !important;
+  color: #15803d !important;
+}
+
+[data-theme="dark"] .meta-chip.chip-amount {
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  color: #4ade80 !important;
+}
+
+.meta-chip.chip-amount strong {
+  font-weight: 750 !important;
+  font-size: 0.88rem !important;
+}
+
+.meta-chip svg,
+.meta-chip i {
+  width: 14px !important;
+  height: 14px !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+}
+
+.order-actions-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding-top: 4px !important;
+  width: 100% !important;
+}
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #b45309 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+[data-theme="dark"] .badge-amber {
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.badge-cyan {
+  background: rgba(14, 165, 233, 0.12) !important;
+  color: #0369a1 !important;
+  border: 1px solid rgba(14, 165, 233, 0.3) !important;
+}
+[data-theme="dark"] .badge-cyan {
+  background: rgba(56, 189, 248, 0.18) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.badge-green {
+  background: rgba(34, 197, 94, 0.12) !important;
+  color: #15803d !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+[data-theme="dark"] .badge-green {
+  background: rgba(34, 197, 94, 0.18) !important;
+  color: #4ade80 !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.badge-purple {
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #7e22ce !important;
+  border: 1px solid rgba(168, 85, 247, 0.3) !important;
+}
+[data-theme="dark"] .badge-purple {
+  background: rgba(168, 85, 247, 0.18) !important;
+  color: #c084fc !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+
+.badge-pink {
+  background: rgba(244, 63, 94, 0.12) !important;
+  color: #be123c !important;
+  border: 1px solid rgba(244, 63, 94, 0.3) !important;
+}
+[data-theme="dark"] .badge-pink {
+  background: rgba(244, 63, 94, 0.18) !important;
+  color: #fb7185 !important;
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+
+

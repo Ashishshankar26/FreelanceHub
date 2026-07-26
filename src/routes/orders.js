@@ -8,7 +8,7 @@ import { Message } from "../models/Message.js";
 import { Order } from "../models/Order.js";
 import { Service } from "../models/Service.js";
 import { WalletTransaction } from "../models/WalletTransaction.js";
-import { sendOrderEmail } from "../services/mailer.js";
+import { sendOrderEmail, sendPaymentReceiptEmail } from "../services/mailer.js";
 import { getWalletSnapshot } from "../services/wallet.js";
 
 export const ordersRouter = Router();
@@ -162,6 +162,14 @@ ordersRouter.post(
         title: "Payment secured",
         message: `Your demo payment for "${order.title}" is funded and protected until delivery is approved.`,
       }),
+      sendPaymentReceiptEmail({
+        user: req.user,
+        amount,
+        transactionId: order._id,
+        type: "Order Escrow Funding",
+        description: `Milestone Escrow Funding for: ${order.title}`,
+        date: order.fundedAt,
+      }),
       sendOrderEmail({
         user: service.seller,
         subject: "New funded demo order",
@@ -280,6 +288,14 @@ ordersRouter.post(
         subject: "Demo funds released",
         title: "Funds released",
         message: `${order.client.name} released demo payment for "${order.title}".`,
+      }),
+      sendPaymentReceiptEmail({
+        user: order.freelancer,
+        amount: order.freelancerAmount,
+        transactionId: order._id,
+        type: "Freelancer Payout Released",
+        description: `Escrow Earnings Released for: ${order.title}`,
+        date: order.completedAt,
       }),
       sendOrderEmail({
         user: order.client,
