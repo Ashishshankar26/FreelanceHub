@@ -7595,6 +7595,8 @@ body.app-mode .marketplace-page .services-section {
   background: rgba(45, 212, 191, 0.12) !important;
   border: 1px solid rgba(45, 212, 191, 0.25) !important;
   color: #2dd4bf !important;
+}
+
 [data-theme="dark"] .escrow-flow span.done {
   background: rgba(45, 212, 191, 0.22) !important;
   color: #2dd4bf !important;
