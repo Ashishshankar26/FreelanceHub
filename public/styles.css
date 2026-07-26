@@ -8322,3 +8322,380 @@ body.app-mode .marketplace-page .services-section {
   font-size: 0.78rem !important;
   color: var(--muted) !important;
 }
+
+/* ── Transaction History Internal Scrollbar ── */
+.tx-history-list {
+  max-height: 290px !important;
+  overflow-y: auto !important;
+  padding-right: 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.tx-history-list::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.tx-history-list::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.tx-history-list::-webkit-scrollbar-thumb {
+  background: var(--line, rgba(255, 255, 255, 0.15)) !important;
+  border-radius: 4px !important;
+}
+
+/* ── Interactive Chart Canvas Floating Tooltip ── */
+.chart-tooltip {
+  position: fixed !important;
+  z-index: 10000 !important;
+  pointer-events: none !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  background: rgba(15, 23, 42, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  transition: opacity 0.15s ease, transform 0.15s ease !important;
+  transform: translate(-50%, -120%) !important;
+}
+
+.chart-tooltip strong {
+  display: block !important;
+  color: #38bdf8 !important;
+  font-size: 0.85rem !important;
+  font-weight: 750 !important;
+}
+
+/* ── Futuristic Credit Card Top-Up Modal ── */
+.futuristic-modal {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  max-width: 540px !important;
+  width: 90vw !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
+  overflow: visible !important;
+}
+
+.futuristic-modal::backdrop {
+  background: rgba(8, 12, 22, 0.82) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+.futuristic-modal-card {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-radius: 24px !important;
+  padding: 28px !important;
+  color: #f8fafc !important;
+  position: relative !important;
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.futuristic-modal-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 24px !important;
+}
+
+.futuristic-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 10px !important;
+  border-radius: 20px !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.futuristic-badge.badge-cyan {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #10b981 !important;
+}
+
+.futuristic-modal-header h2 {
+  margin: 6px 0 0 !important;
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  color: #f8fafc !important;
+}
+
+/* 3D Holographic Debit Card */
+.futuristic-card-stage {
+  perspective: 1000px !important;
+  margin-bottom: 24px !important;
+}
+
+.futuristic-debit-card {
+  height: 200px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 20px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(56, 189, 248, 0.2) !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease !important;
+  transform-style: preserve-3d !important;
+}
+
+.futuristic-debit-card:hover {
+  transform: translateY(-4px) rotateX(4deg) rotateY(-4deg) !important;
+  box-shadow: 0 20px 45px rgba(56, 189, 248, 0.3), inset 0 0 30px rgba(168, 85, 247, 0.3) !important;
+}
+
+.card-glow-overlay {
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 60%) !important;
+  pointer-events: none !important;
+}
+
+.sim-chip {
+  width: 38px !important;
+  height: 28px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.chip-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.contactless-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transform: rotate(90deg) !important;
+}
+
+.card-brand {
+  font-weight: 900 !important;
+  font-size: 1.3rem !important;
+  letter-spacing: 1px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.card-num-label, .card-holder-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 1px !important;
+}
+
+.card-number-display {
+  font-family: monospace !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 3px !important;
+  color: #f8fafc !important;
+  margin-top: 2px !important;
+}
+
+.card-bottom {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+}
+
+.card-holder-name {
+  display: block !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.card-live-balance {
+  display: block !important;
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  color: #38bdf8 !important;
+}
+
+/* Controls inside Modal */
+.futuristic-controls {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.control-label {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.futuristic-presets {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
+}
+
+.f-preset {
+  padding: 10px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #f8fafc !important;
+  font-weight: 750 !important;
+  font-size: 0.9rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.f-preset:hover, .f-preset.active {
+  background: rgba(56, 189, 248, 0.2) !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2) !important;
+}
+
+.futuristic-input-wrap {
+  position: relative !important;
+}
+
+.curr-symbol {
+  position: absolute !important;
+  left: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  color: #38bdf8 !important;
+}
+
+.futuristic-input-wrap input {
+  width: 100% !important;
+  padding: 14px 14px 14px 34px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  box-sizing: border-box !important;
+}
+
+.futuristic-submit-btn {
+  width: 100% !important;
+  padding: 14px !important;
+  border-radius: 14px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 50%, #6366f1 100%) !important;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.futuristic-submit-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6) !important;
+}
+
+.futuristic-note {
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+}
+
+/* Escrow Modal Details */
+.escrow-vault-overview {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+  margin-bottom: 24px !important;
+}
+
+.escrow-stat-box {
+  padding: 16px !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.escrow-stat-box span {
+  display: block !important;
+  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+}
+
+.escrow-stat-box strong {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: #38bdf8 !important;
+  margin-top: 4px !important;
+}
+
+.escrow-features-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.escrow-feature-item {
+  display: flex !important;
+  gap: 14px !important;
+  align-items: flex-start !important;
+}
+
+.feat-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.escrow-feature-item strong {
+  display: block !important;
+  font-size: 0.92rem !important;
+  font-weight: 750 !important;
+  color: #f8fafc !important;
+}
+
+.escrow-feature-item p {
+  margin: 4px 0 0 !important;
+  font-size: 0.8rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+}

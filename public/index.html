@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FreelanceHub | Escrow-backed freelance services</title>
-    <link rel="stylesheet" href="styles.css?v=25" />
+    <link rel="stylesheet" href="styles.css?v=30" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="app.js?v=25" defer></script>
+    <script src="app.js?v=30" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -1216,6 +1216,125 @@
       </form>
     </dialog>
 
+    <!-- ── Futuristic Credit Card Top-Up Modal ── -->
+    <dialog class="auth-dialog futuristic-modal" id="futuristicTopupModal">
+      <div class="futuristic-modal-card">
+        <div class="futuristic-modal-header">
+          <div class="header-title">
+            <span class="futuristic-badge"><i data-lucide="zap"></i> Instant Cyber Vault</span>
+            <h2>Add Funds to Wallet</h2>
+          </div>
+          <button class="circle-button" type="button" id="closeFuturisticModal" aria-label="Close modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="futuristic-modal-body">
+          <!-- 3D Interactive Card Showcase -->
+          <div class="futuristic-card-stage" id="futuristicCardStage">
+            <div class="futuristic-debit-card" id="futuristicDebitCard">
+              <div class="card-glow-overlay"></div>
+              <div class="card-top">
+                <div class="chip-wrap">
+                  <div class="sim-chip"></div>
+                  <i data-lucide="rss" class="contactless-icon"></i>
+                </div>
+                <span class="card-brand">VISA</span>
+              </div>
+              <div class="card-middle">
+                <span class="card-num-label">CARD NUMBER</span>
+                <div class="card-number-display">4920 •••• •••• 1092</div>
+              </div>
+              <div class="card-bottom">
+                <div class="card-holder-wrap">
+                  <span class="card-holder-label">CARD HOLDER</span>
+                  <strong class="card-holder-name" id="futuristicCardHolder">USER ACCOUNT</strong>
+                </div>
+                <div class="card-balance-wrap">
+                  <span class="card-holder-label">LIVE WALLET BALANCE</span>
+                  <strong class="card-live-balance" id="futuristicLiveBalance">₹0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top-Up Form Controls -->
+          <div class="futuristic-controls">
+            <label class="control-label">Select Top-Up Amount</label>
+            <div class="futuristic-presets">
+              <button type="button" class="f-preset active" data-f-amount="500">₹500</button>
+              <button type="button" class="f-preset" data-f-amount="1000">₹1,000</button>
+              <button type="button" class="f-preset" data-f-amount="2500">₹2,500</button>
+              <button type="button" class="f-preset" data-f-amount="5000">₹5,000</button>
+            </div>
+
+            <div class="futuristic-input-wrap">
+              <span class="curr-symbol">₹</span>
+              <input id="futuristicAmountInput" type="number" min="50" max="100000" step="100" value="500" placeholder="Enter amount" />
+            </div>
+
+            <button class="futuristic-submit-btn" type="button" id="futuristicTopupConfirm">
+              <i data-lucide="shield-check"></i>
+              <span>Confirm Instant Top-Up</span>
+            </button>
+            <p class="futuristic-note"><i data-lucide="lock"></i> End-to-end 256-bit SSL encrypted. Funds credited instantly to MongoDB database.</p>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- ── Escrow Security Vaults Modal ── -->
+    <dialog class="auth-dialog futuristic-modal" id="escrowVaultsModal">
+      <div class="futuristic-modal-card">
+        <div class="futuristic-modal-header">
+          <div class="header-title">
+            <span class="futuristic-badge badge-cyan"><i data-lucide="shield-check"></i> Escrow Protection</span>
+            <h2>Active Escrow Security Vaults</h2>
+          </div>
+          <button class="circle-button" type="button" id="closeEscrowModal" aria-label="Close modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="futuristic-modal-body">
+          <div class="escrow-vault-overview">
+            <div class="escrow-stat-box">
+              <span>Total Protected Funds</span>
+              <strong id="escrowModalProtected">₹0</strong>
+            </div>
+            <div class="escrow-stat-box">
+              <span>Security Index</span>
+              <strong style="color:#10b981;"><i data-lucide="shield"></i> 100% Guaranteed</strong>
+            </div>
+          </div>
+
+          <div class="escrow-features-list">
+            <div class="escrow-feature-item">
+              <div class="feat-icon"><i data-lucide="lock"></i></div>
+              <div>
+                <strong>Zero-Risk Milestone Vaults</strong>
+                <p>Client funds are locked securely when an order starts and released only after final work is verified and approved.</p>
+              </div>
+            </div>
+            <div class="escrow-feature-item">
+              <div class="feat-icon"><i data-lucide="scale"></i></div>
+              <div>
+                <strong>Fair Dispute Resolution</strong>
+                <p>If any milestone requirements are unmet, our automated arbitration panel guarantees transparent refund protection.</p>
+              </div>
+            </div>
+            <div class="escrow-feature-item">
+              <div class="feat-icon"><i data-lucide="zap"></i></div>
+              <div>
+                <strong>Instant Payouts</strong>
+                <p>Approved earnings transfer directly to your wallet balance within seconds of buyer sign-off.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
     <div class="floating-wallet hidden" id="floatingWallet">
       <button class="floating-wallet-toggle" id="floatingWalletToggle" aria-label="Toggle wallet menu">
         <i data-lucide="wallet"></i>
@@ -1226,10 +1345,12 @@
           <strong id="floatingWalletBalance">₹0</strong>
         </div>
         <div class="floating-wallet-actions">
-          <button type="button" data-app-page-nav="wallet">Add Funds</button>
+          <button type="button" id="floatingWalletBtn"><i data-lucide="plus-circle"></i> Add Funds</button>
         </div>
       </div>
     </div>
+
+    <div class="chart-tooltip hidden" id="chartTooltip"></div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>

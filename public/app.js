@@ -420,6 +420,32 @@ function bindEvents() {
     if (topupBtn) {
       addWalletFunds();
     }
+
+    // Escrow Security Modal
+    if (event.target.closest("#escrowVaultsBtn")) {
+      openEscrowVaultsModal();
+    }
+    if (event.target.closest("#closeEscrowModal")) {
+      closeEscrowVaultsModal();
+    }
+
+    // Futuristic Floating Credit Card Top-Up Modal
+    if (event.target.closest("#floatingWalletBtn") || event.target.closest("[data-open-futuristic]")) {
+      openFuturisticTopupModal();
+    }
+    if (event.target.closest("#closeFuturisticModal")) {
+      closeFuturisticTopupModal();
+    }
+    const fPreset = event.target.closest("[data-f-amount]");
+    if (fPreset) {
+      const amt = fPreset.dataset.fAmount;
+      const input = document.getElementById("futuristicAmountInput");
+      if (input) input.value = amt;
+      document.querySelectorAll("[data-f-amount]").forEach(b => b.classList.toggle("active", b === fPreset));
+    }
+    if (event.target.closest("#futuristicTopupConfirm")) {
+      submitFuturisticTopup();
+    }
   });
   
   if (selectors.chartLineBtn) {
@@ -1211,25 +1237,99 @@ function renderFinance(finance, wallet) {
       </div>
     `).join("");
     if (window.lucide) lucide.createIcons();
+  }  // Interactive Chart Canvas Drawing
+  drawInteractiveLineChart('financeChartCanvas', finance?.monthly);
+  drawInteractiveBudgetChart('financeBudgetCanvas', finance?.monthly);
+}
+
+function openFuturisticTopupModal() {
+  const modal = document.getElementById("futuristicTopupModal");
+  if (!modal) return;
+  const currentBalance = state.wallet?.balance || 0;
+  const userName = state.user?.name || "USER ACCOUNT";
+
+  const liveBal = document.getElementById("futuristicLiveBalance");
+  if (liveBal) liveBal.textContent = currency.format(currentBalance);
+
+  const cardHolder = document.getElementById("futuristicCardHolder");
+  if (cardHolder) cardHolder.textContent = userName.toUpperCase();
+
+  modal.showModal();
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeFuturisticTopupModal() {
+  const modal = document.getElementById("futuristicTopupModal");
+  if (modal) modal.close();
+}
+
+function openEscrowVaultsModal() {
+  const modal = document.getElementById("escrowVaultsModal");
+  if (!modal) return;
+  const protectedVal = state.dashboard?.stats?.protectedFunds || state.dashboard?.finance?.protectedFunds || 0;
+
+  const protectedEl = document.getElementById("escrowModalProtected");
+  if (protectedEl) protectedEl.textContent = currency.format(protectedVal);
+
+  modal.showModal();
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeEscrowVaultsModal() {
+  const modal = document.getElementById("escrowVaultsModal");
+  if (modal) modal.close();
+}
+
+async function submitFuturisticTopup() {
+  const input = document.getElementById("futuristicAmountInput");
+  const amount = Number(input?.value || 500);
+  if (!Number.isFinite(amount) || amount < 50) {
+    showToast("Enter an amount of at least ₹50.");
+    return;
   }
+  
+  try {
+    const payload = await api("/payments/wallet/top-up", {
+      method: "POST",
+      body: JSON.stringify({ amount }),
+    });
+    showToast(`₹${amount} added to your live wallet!`);
+    closeFuturisticTopupModal();
+    await loadWallet();
+    await loadDashboard();
+  } catch (error) {
+    showToast(error.message || "Failed to top up wallet.");
+  }
+}
 
-  // 1. Total Balance Line Chart Canvas
-  const canvas = document.getElementById('financeChartCanvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    const width = rect.width || canvas.clientWidth || 300;
-    const height = rect.height || canvas.clientHeight || 130;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    ctx.scale(dpr, dpr);
+function drawInteractiveLineChart(canvasId, monthlyData) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const width = rect.width || canvas.clientWidth || 300;
+  const height = rect.height || canvas.clientHeight || 130;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  ctx.scale(dpr, dpr);
+
+  const months = (monthlyData && monthlyData.length > 0)
+    ? monthlyData.map(m => m.label || "Month")
+    : ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+
+  const rawValues = (monthlyData && monthlyData.length > 0)
+    ? monthlyData.map(m => (m.incoming || 0) + 1000)
+    : [3000, 6500, 4500, 7500, 12000, 8500];
+
+  const maxVal = Math.max(...rawValues, 10000);
+  const points = rawValues.map(v => (v / maxVal) * (height - 40) + 20);
+  const stepX = width / (points.length - 1);
+
+  function render(hoverIdx = -1) {
     ctx.clearRect(0, 0, width, height);
-
-    const points = [30, 65, 45, 75, 60, 85, 70, 60, 78, 55, 95, 65, 80, 110];
-    const stepX = width / (points.length - 1);
 
     ctx.beginPath();
     ctx.moveTo(0, height - points[0]);
@@ -1242,12 +1342,10 @@ function renderFinance(finance, wallet) {
       ctx.bezierCurveTo(cpX, prevY, cpX, currY, currX, currY);
     }
 
-    // Line stroke
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Line gradient fill
     ctx.lineTo(width, height);
     ctx.lineTo(0, height);
     ctx.closePath();
@@ -1256,43 +1354,82 @@ function renderFinance(finance, wallet) {
     grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
     ctx.fillStyle = grad;
     ctx.fill();
+
+    for (let i = 0; i < points.length; i++) {
+      const px = i * stepX;
+      const py = height - points[i];
+      const isHovered = (i === hoverIdx);
+
+      ctx.beginPath();
+      ctx.arc(px, py, isHovered ? 7 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = isHovered ? '#ffffff' : '#38bdf8';
+      ctx.fill();
+      ctx.strokeStyle = isHovered ? '#0284c7' : '#ffffff';
+      ctx.lineWidth = isHovered ? 3 : 1.5;
+      ctx.stroke();
+    }
   }
 
-  // 2. Budget Stacked Bar Chart Canvas
-  const budgetCanvas = document.getElementById('financeBudgetCanvas');
-  if (budgetCanvas) {
-    const ctx = budgetCanvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = budgetCanvas.getBoundingClientRect();
-    const width = rect.width || budgetCanvas.clientWidth || 280;
-    const height = rect.height || budgetCanvas.clientHeight || 170;
-    budgetCanvas.width = width * dpr;
-    budgetCanvas.height = height * dpr;
-    budgetCanvas.style.width = width + 'px';
-    budgetCanvas.style.height = height + 'px';
-    ctx.scale(dpr, dpr);
+  render();
+
+  const tooltip = document.getElementById("chartTooltip");
+  canvas.onmousemove = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - r.left;
+    const hoverIdx = Math.max(0, Math.min(points.length - 1, Math.round(mouseX / stepX)));
+    render(hoverIdx);
+
+    if (tooltip) {
+      const mLabel = months[hoverIdx];
+      const val = rawValues[hoverIdx];
+      tooltip.innerHTML = `<strong>${mLabel} Monthly Trend</strong>Total Inflow: ${currency.format(val)}`;
+      tooltip.style.left = `${e.clientX}px`;
+      tooltip.style.top = `${e.clientY}px`;
+      tooltip.classList.remove("hidden");
+    }
+  };
+
+  canvas.onmouseleave = () => {
+    render(-1);
+    if (tooltip) tooltip.classList.add("hidden");
+  };
+}
+
+function drawInteractiveBudgetChart(canvasId, monthlyData) {
+  const budgetCanvas = document.getElementById(canvasId);
+  if (!budgetCanvas) return;
+  const ctx = budgetCanvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = budgetCanvas.getBoundingClientRect();
+  const width = rect.width || budgetCanvas.clientWidth || 280;
+  const height = rect.height || budgetCanvas.clientHeight || 170;
+  budgetCanvas.width = width * dpr;
+  budgetCanvas.height = height * dpr;
+  budgetCanvas.style.width = width + 'px';
+  budgetCanvas.style.height = height + 'px';
+  ctx.scale(dpr, dpr);
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  const stackedData = [
+    { income: 60, expense: 40, saving: 20, rawInc: 12000, rawExp: 5000, rawSav: 7000 },
+    { income: 80, expense: 50, saving: 25, rawInc: 16000, rawExp: 6500, rawSav: 9500 },
+    { income: 55, expense: 35, saving: 15, rawInc: 11000, rawExp: 4200, rawSav: 6800 },
+    { income: 95, expense: 60, saving: 30, rawInc: 19000, rawExp: 7800, rawSav: 11200 },
+    { income: 70, expense: 45, saving: 20, rawInc: 14000, rawExp: 5800, rawSav: 8200 },
+    { income: 85, expense: 55, saving: 25, rawInc: 17000, rawExp: 7000, rawSav: 10000 },
+  ];
+
+  const paddingLeft = 42;
+  const paddingBottom = 25;
+  const chartW = width - paddingLeft;
+  const chartH = height - paddingBottom;
+  const barW = Math.min(24, chartW / months.length - 12);
+  const stepX = chartW / months.length;
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+  function render(hoverIdx = -1) {
     ctx.clearRect(0, 0, width, height);
 
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-    const stackedData = [
-      { income: 60, expense: 40, saving: 20 },
-      { income: 80, expense: 50, saving: 25 },
-      { income: 55, expense: 35, saving: 15 },
-      { income: 95, expense: 60, saving: 30 },
-      { income: 70, expense: 45, saving: 20 },
-      { income: 85, expense: 55, saving: 25 },
-    ];
-
-    const paddingLeft = 35;
-    const paddingBottom = 25;
-    const chartW = width - paddingLeft;
-    const chartH = height - paddingBottom;
-    const barW = Math.min(24, chartW / months.length - 12);
-    const stepX = chartW / months.length;
-
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-
-    // Y-Axis grid lines
     ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= 3; i++) {
@@ -1305,15 +1442,19 @@ function renderFinance(finance, wallet) {
       ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
       ctx.font = '10px sans-serif';
       ctx.textAlign = 'right';
-      ctx.fillText(`$${(3 - i) * 500}`, paddingLeft - 6, y + 4);
+      ctx.fillText(`₹${(3 - i) * 5000}`, paddingLeft - 6, y + 4);
     }
 
-    // Draw Stacked Bars
     months.forEach((m, idx) => {
       const data = stackedData[idx];
       const x = paddingLeft + idx * stepX + (stepX - barW) / 2;
-
+      const isHovered = (idx === hoverIdx);
       let currentY = chartH;
+
+      if (isHovered) {
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+        ctx.fillRect(paddingLeft + idx * stepX, 0, stepX, chartH);
+      }
 
       function drawRect(rx, ry, rw, rh, fillStyle) {
         ctx.fillStyle = fillStyle;
@@ -1326,27 +1467,51 @@ function renderFinance(finance, wallet) {
         ctx.fill();
       }
 
-      // Income bar (Purple)
       drawRect(x, currentY - data.income, barW, data.income, '#a855f7');
       currentY -= data.income + 4;
-
-      // Expense bar (Pink)
       drawRect(x, currentY - data.expense, barW, data.expense, '#ec4899');
       currentY -= data.expense + 4;
-
-      // Saving bar (Cyan)
       drawRect(x, currentY - data.saving, barW, data.saving, '#38bdf8');
 
-      // Month Label
-      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-      ctx.font = '10px sans-serif';
+      ctx.fillStyle = isHovered ? '#38bdf8' : (isDark ? '#94a3b8' : '#64748b');
+      ctx.font = isHovered ? 'bold 11px sans-serif' : '10px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(m, x + barW / 2, height - 6);
     });
   }
+
+  render();
+
+  const tooltip = document.getElementById("chartTooltip");
+  budgetCanvas.onmousemove = (e) => {
+    const r = budgetCanvas.getBoundingClientRect();
+    const mouseX = e.clientX - r.left - paddingLeft;
+    const hoverIdx = Math.max(0, Math.min(months.length - 1, Math.floor(mouseX / stepX)));
+    render(hoverIdx);
+
+    if (tooltip && hoverIdx >= 0) {
+      const d = stackedData[hoverIdx];
+      const mName = months[hoverIdx];
+      tooltip.innerHTML = `<strong>${mName} Budget Performance</strong>
+        <span style="color:#a855f7;">Income: ${currency.format(d.rawInc)}</span><br>
+        <span style="color:#ec4899;">Expense: ${currency.format(d.rawExp)}</span><br>
+        <span style="color:#38bdf8;">Saving: ${currency.format(d.rawSav)}</span>`;
+      tooltip.style.left = `${e.clientX}px`;
+      tooltip.style.top = `${e.clientY}px`;
+      tooltip.classList.remove("hidden");
+    }
+  };
+
+  budgetCanvas.onmouseleave = () => {
+    render(-1);
+    if (tooltip) tooltip.classList.add("hidden");
+  };
 }
 
 function renderDashboard(payload) {
+  state.dashboard = payload;
+  state.role = payload.role;
+
   if (selectors.dashboardFunds) selectors.dashboardFunds.textContent = currency.format(payload.stats.protectedFunds || 20000);
   if (selectors.dashboardActive) selectors.dashboardActive.textContent = payload.stats.activeOrders || 2;
   if (selectors.dashboardReview) selectors.dashboardReview.textContent = payload.stats.pendingReview || 1;
@@ -1363,67 +1528,6 @@ function renderDashboard(payload) {
   if (selectors.dashboardProgress) selectors.dashboardProgress.textContent = `${progress}%`;
   if (selectors.dashboardProgressBar) selectors.dashboardProgressBar.style.width = `${progress}%`;
 
-  // Draw Overview Bezier Canvas
-  const overviewCanvas = document.getElementById('overviewChartCanvas');
-  if (overviewCanvas) {
-    const ctx = overviewCanvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = overviewCanvas.getBoundingClientRect();
-    const width = rect.width || overviewCanvas.clientWidth || 300;
-    const height = rect.height || overviewCanvas.clientHeight || 130;
-    overviewCanvas.width = width * dpr;
-    overviewCanvas.height = height * dpr;
-    overviewCanvas.style.width = width + 'px';
-    overviewCanvas.style.height = height + 'px';
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, width, height);
-
-    const points = [40, 70, 50, 80, 65, 90, 75, 65, 85, 60, 100, 70, 90, 115];
-    const stepX = width / (points.length - 1);
-
-    ctx.beginPath();
-    ctx.moveTo(0, height - points[0]);
-    for (let i = 1; i < points.length; i++) {
-      const prevX = (i - 1) * stepX;
-      const prevY = height - points[i - 1];
-      const currX = i * stepX;
-      const currY = height - points[i];
-      const cpX = (prevX + currX) / 2;
-      ctx.bezierCurveTo(cpX, prevY, cpX, currY, currX, currY);
-    }
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
-    ctx.closePath();
-    const grad = ctx.createLinearGradient(0, 0, 0, height);
-    grad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
-    grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
-    ctx.fillStyle = grad;
-    ctx.fill();
-  }
-
-  // Draw Overview Budget Canvas
-  const overviewBudgetCanvas = document.getElementById('overviewBudgetCanvas');
-  if (overviewBudgetCanvas) {
-    const ctx = overviewBudgetCanvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = overviewBudgetCanvas.getBoundingClientRect();
-    const width = rect.width || overviewBudgetCanvas.clientWidth || 280;
-    const height = rect.height || overviewBudgetCanvas.clientHeight || 170;
-    overviewBudgetCanvas.width = width * dpr;
-    overviewBudgetCanvas.height = height * dpr;
-    overviewBudgetCanvas.style.width = width + 'px';
-    overviewBudgetCanvas.style.height = height + 'px';
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, width, height);
-
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-    const stackedData = [
-      { income: 60, expense: 40, saving: 20 },
-      { income: 80, expense: 50, saving: 25 },
       { income: 55, expense: 35, saving: 15 },
       { income: 95, expense: 60, saving: 30 },
       { income: 70, expense: 45, saving: 20 },
