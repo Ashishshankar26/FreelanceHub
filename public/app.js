@@ -1063,6 +1063,17 @@ async function openAppPage(page, { scroll = true, skipLoad = false } = {}) {
   if (nextPage === "finance") {
     await Promise.allSettled([loadDashboard(), loadWallet()]);
   }
+
+  setTimeout(() => {
+    if (nextPage === "overview" && state.dashboard) {
+      drawInteractiveLineChart('overviewChartCanvas', state.dashboard.finance?.monthly);
+      drawInteractiveBudgetChart('overviewBudgetCanvas', state.dashboard.finance?.monthly);
+    } else if (nextPage === "finance" && state.dashboard?.finance) {
+      drawInteractiveLineChart('financeChartCanvas', state.dashboard.finance?.monthly);
+      drawInteractiveBudgetChart('financeBudgetCanvas', state.dashboard.finance?.monthly);
+    }
+  }, 100);
+
   if (scroll) document.querySelector(`[data-app-page="${nextPage}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -1305,9 +1316,11 @@ async function submitFuturisticTopup() {
 function drawInteractiveLineChart(canvasId, monthlyData) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height || rect.width <= 0 || rect.height <= 0) return;
+
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
   const width = rect.width || canvas.clientWidth || 300;
   const height = rect.height || canvas.clientHeight || 130;
   canvas.width = width * dpr;
@@ -1398,9 +1411,11 @@ function drawInteractiveLineChart(canvasId, monthlyData) {
 function drawInteractiveBudgetChart(canvasId, monthlyData) {
   const budgetCanvas = document.getElementById(canvasId);
   if (!budgetCanvas) return;
+  const rect = budgetCanvas.getBoundingClientRect();
+  if (!rect.width || !rect.height || rect.width <= 0 || rect.height <= 0) return;
+
   const ctx = budgetCanvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-  const rect = budgetCanvas.getBoundingClientRect();
   const width = rect.width || budgetCanvas.clientWidth || 280;
   const height = rect.height || budgetCanvas.clientHeight || 170;
   budgetCanvas.width = width * dpr;
