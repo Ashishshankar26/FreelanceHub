@@ -1138,37 +1138,56 @@
       </footer>
     </main>
 
-    <dialog class="market-dialog" id="joinDialog">
+    <dialog class="market-dialog auth-dialog-modern" id="joinDialog">
       <form method="dialog" id="authForm">
+        <!-- Decorative orb -->
+        <div class="auth-orb" aria-hidden="true"></div>
+        <div class="auth-particles" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+
         <div class="dialog-header">
           <div>
-            <p class="eyebrow" id="authEyebrow">Create your account</p>
-            <h2 id="authTitle">Join FreelanceHub</h2>
+            <p class="eyebrow" id="authEyebrow" style="color:#a855f7;font-weight:700;">Create your account</p>
+            <h2 id="authTitle" style="font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;">Join FreelanceHub</h2>
           </div>
           <button class="circle-button" type="button" formnovalidate data-close-dialog aria-label="Close" title="Close">
             <i data-lucide="x"></i>
           </button>
         </div>
+
         <div class="auth-tabs" aria-label="Authentication mode">
           <button class="active" type="button" data-auth-mode="signup">Sign up</button>
           <button type="button" data-auth-mode="login">Log in</button>
         </div>
-        <label data-signup-only>
-          <span>Name</span>
-          <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" placeholder="Your name" />
+
+        <!-- Google first (social login priority) -->
+        <div id="googleAuthButton" class="google-auth-wrapper"></div>
+        <div class="auth-divider"><span>or continue with email</span></div>
+
+        <label data-signup-only class="auth-input-modern">
+          <span><i data-lucide="user" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;opacity:0.5;"></i>Full name</span>
+          <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" placeholder="Enter your name" />
         </label>
-        <label>
-          <span>Email</span>
+        <label class="auth-input-modern">
+          <span><i data-lucide="mail" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;opacity:0.5;"></i>Email address</span>
           <input type="email" name="email" autocomplete="email" required placeholder="you@example.com" />
         </label>
-        <label>
-          <span>Password</span>
+        <label class="auth-input-modern">
+          <span><i data-lucide="lock" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;opacity:0.5;"></i>Password</span>
           <input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters" />
         </label>
-        <button class="join-button wide" type="submit" value="default" id="authSubmit">Create account</button>
-        
-        <div class="auth-divider"><span>or</span></div>
-        <div id="googleAuthButton" class="google-auth-wrapper"></div>
+
+        <button class="auth-submit-modern" type="submit" value="default" id="authSubmit">
+          <span>Create account</span>
+          <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+        </button>
+
+        <div class="auth-trust-strip">
+          <span><i data-lucide="shield-check" style="width:12px;height:12px;"></i> Encrypted</span>
+          <span><i data-lucide="fingerprint" style="width:12px;height:12px;"></i> 2FA Ready</span>
+          <span><i data-lucide="globe" style="width:12px;height:12px;"></i> GDPR</span>
+        </div>
       </form>
     </dialog>
 

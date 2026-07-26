@@ -6124,7 +6124,315 @@ body.app-mode .marketplace-page .services-section {
   border-bottom: 1px solid var(--line);
 }
 .auth-divider span {
-  padding: 0 10px;
+  padding: 0 14px;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Modern Auth Dialog
+   ═══════════════════════════════════════════════════════ */
+
+.auth-dialog-modern {
+  width: min(460px, calc(100vw - 32px));
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: 20px;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.06),
+    0 24px 80px rgba(29, 31, 36, 0.22),
+    0 0 60px rgba(168, 85, 247, 0.08);
+  overflow: hidden;
+}
+
+.auth-dialog-modern::backdrop {
+  background: rgba(8, 8, 14, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.auth-dialog-modern form {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 32px 28px 24px;
+}
+
+/* ── Decorative orb ── */
+.auth-orb {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(56, 189, 248, 0.12) 50%, transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+  animation: authOrbPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes authOrbPulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.15); }
+}
+
+/* ── Floating particles ── */
+.auth-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: authFloat 6s ease-in-out infinite;
+}
+
+.auth-particles span:nth-child(1) {
+  background: #a855f7;
+  top: 20%;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.auth-particles span:nth-child(2) {
+  background: #38bdf8;
+  top: 60%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.auth-particles span:nth-child(3) {
+  background: #22c55e;
+  bottom: 15%;
+  left: 40%;
+  animation-delay: 4s;
+}
+
+@keyframes authFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+  50% { transform: translateY(-12px) scale(1.5); opacity: 0.5; }
+}
+
+/* ── Header ── */
+.auth-dialog-modern .dialog-header {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-dialog-modern .dialog-header h2 {
+  background: linear-gradient(135deg, var(--ink) 40%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Auth tabs (modern pill) ── */
+.auth-dialog-modern .auth-tabs {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.auth-dialog-modern .auth-tabs button {
+  border-radius: 11px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 10px 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.auth-dialog-modern .auth-tabs button.active {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.18);
+}
+
+.auth-dialog-modern .auth-tabs button:hover:not(.active) {
+  color: var(--ink);
+  background: rgba(168, 85, 247, 0.08);
+}
+
+/* ── Modern inputs ── */
+.auth-input-modern {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-input-modern span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-modern input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+  font-size: 0.92rem;
+  color: var(--ink);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.auth-input-modern input:focus {
+  border-color: #a855f7;
+  background: var(--paper);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1), 0 2px 8px rgba(168, 85, 247, 0.08);
+}
+
+.auth-input-modern input::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* ── Submit button ── */
+.auth-submit-modern {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.25);
+  letter-spacing: 0.01em;
+}
+
+.auth-submit-modern:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(168, 85, 247, 0.35);
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 50%, #4f46e5 100%);
+}
+
+.auth-submit-modern:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2);
+}
+
+/* ── Trust strip ── */
+.auth-trust-strip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.auth-trust-strip span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  opacity: 0.7;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ── Google button in modern dialog ── */
+.auth-dialog-modern .google-auth-wrapper {
+  position: relative;
+  z-index: 1;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.auth-dialog-modern .auth-divider {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0;
+}
+
+/* ── Dark mode overrides ── */
+[data-theme="dark"] .auth-dialog-modern {
+  background: var(--paper);
+  border-color: rgba(168, 85, 247, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.1),
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(168, 85, 247, 0.1);
+}
+
+[data-theme="dark"] .auth-dialog-modern .dialog-header h2 {
+  background: linear-gradient(135deg, #e2e8f0 40%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="dark"] .auth-dialog-modern .auth-tabs {
+  background: rgba(168, 85, 247, 0.08);
+}
+
+[data-theme="dark"] .auth-dialog-modern .auth-tabs button.active {
+  background: rgba(168, 85, 247, 0.9);
+  color: #fff;
+}
+
+[data-theme="dark"] .auth-input-modern input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .auth-input-modern input:focus {
+  background: rgba(168, 85, 247, 0.06);
+  border-color: #a855f7;
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
+}
+
+[data-theme="dark"] .auth-orb {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(56, 189, 248, 0.15) 50%, transparent 70%);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .auth-dialog-modern {
+    width: calc(100vw - 16px);
+    border-radius: 16px;
+  }
+  .auth-dialog-modern form {
+    padding: 24px 20px 20px;
+    gap: 12px;
+  }
+  .auth-trust-strip {
+    gap: 10px;
+  }
 }
 
 .activity-timeline {

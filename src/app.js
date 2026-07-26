@@ -31,12 +31,12 @@ export function createApp() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "https://unpkg.com", "https://accounts.google.com"],
-          styleSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
+          scriptSrc: ["'self'", "https://unpkg.com", "https://accounts.google.com", "https://apis.google.com"],
+          styleSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://fonts.googleapis.com"],
           frameSrc: ["'self'", "https://accounts.google.com"],
-          imgSrc: ["'self'", "data:", "https://*.googleusercontent.com", "https://ssl.gstatic.com"],
-          connectSrc: ["'self'", "https://accounts.google.com"],
-          fontSrc: ["'self'"],
+          imgSrc: ["'self'", "data:", "https://*.googleusercontent.com", "https://ssl.gstatic.com", "https://lh3.googleusercontent.com"],
+          connectSrc: ["'self'", "https://accounts.google.com", "https://oauth2.googleapis.com"],
+          fontSrc: ["'self'", "https://fonts.gstatic.com"],
           objectSrc: ["'none'"],
           baseUri: ["'self'"],
           formAction: ["'self'"],
