@@ -2677,6 +2677,8 @@ function renderSavedCardsStack() {
 
   const cards = getSavedCards();
   if (countBadge) countBadge.textContent = cards.length;
+  const indicator = document.getElementById("stackNavIndicator");
+  if (indicator) indicator.textContent = (activeCardStackIndex % Math.max(1, cards.length) + 1) + "/" + cards.length;
 
   if (!cards || cards.length === 0) {
     container.innerHTML = `<div class="empty-stack-msg" style="text-align:center; padding:20px; color:var(--muted); font-size:0.85rem;">No saved cards yet.</div>`;
@@ -2800,4 +2802,19 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSavedCardsStack();
     renderSavedUpiChips();
   }, 300);
+});
+
+
+document.addEventListener("click", (e) => {
+  const cards = getSavedCards();
+  if (!cards || cards.length === 0) return;
+
+  if (e.target.closest("#btnStackNext")) {
+    activeCardStackIndex = (activeCardStackIndex + 1) % cards.length;
+    renderSavedCardsStack();
+  }
+  if (e.target.closest("#btnStackPrev")) {
+    activeCardStackIndex = (activeCardStackIndex - 1 + cards.length) % cards.length;
+    renderSavedCardsStack();
+  }
 });

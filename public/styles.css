@@ -10540,3 +10540,142 @@ dialog.futuristic-modal#bankOtpModal {
   background: rgba(168, 85, 247, 0.1);
   box-shadow: 0 2px 10px rgba(168, 85, 247, 0.15);
 }
+
+/* ==========================================
+   SIDE-BY-SIDE GATEWAY CARD SPLIT & STACK NAV
+   ========================================== */
+.gateway-card-split-container {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .gateway-card-split-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.saved-cards-side-column {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.cards-stack-interactive-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Staggered Cards Stack Dimensions (Standard 1.586 Credit Card Aspect Ratio) */
+.cards-stack-wrapper {
+  position: relative;
+  width: 245px;
+  height: 165px;
+  perspective: 1000px;
+  flex: 1;
+}
+
+.stacked-card-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  aspect-ratio: 1.586;
+  border-radius: 16px;
+  padding: 14px 16px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+.stacked-card-item[data-stack-pos="0"] {
+  z-index: 3;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  box-shadow: 0 14px 32px rgba(168, 85, 247, 0.38);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.stacked-card-item[data-stack-pos="1"] {
+  z-index: 2;
+  transform: translateY(12px) scale(0.93);
+  opacity: 0.82;
+  filter: brightness(0.85);
+}
+
+.stacked-card-item[data-stack-pos="2"] {
+  z-index: 1;
+  transform: translateY(24px) scale(0.86);
+  opacity: 0.6;
+  filter: brightness(0.7);
+}
+
+.stacked-card-item:hover {
+  transform: translateY(-6px) scale(1.03) !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+  filter: brightness(1.05) !important;
+}
+
+/* Side Navigation Up / Down Buttons */
+.cards-stack-nav-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stack-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stack-nav-btn:hover {
+  border-color: #a855f7;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  transform: scale(1.08);
+}
+
+.stack-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.stack-nav-indicator {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+/* Fix main interactive credit card preview aspect ratio */
+.flip-card {
+  width: 100%;
+  max-width: 380px;
+  height: 220px;
+  aspect-ratio: 1.586;
+  margin: 0 auto 24px auto;
+  perspective: 1000px;
+}
