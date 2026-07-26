@@ -11621,29 +11621,31 @@ dialog.futuristic-modal#bankOtpModal {
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STRICT MOBILE OVERFLOW LOCKDOWN & SMARTPHONE OPTIMIZATION
-   Prevents horizontal sliding, side-scrolling, and off-screen overflow.
+   MOBILE OVERFLOW LOCKDOWN (< 768px)
+   Prevents horizontal sliding and off-screen overflow on small screens only.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-html, body {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-  position: relative !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
+@media (max-width: 768px) {
+  html, body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
-#appRoot, main, .app-shell, .dashboard-section, .workspace-page, .finance-page, section {
-  max-width: 100% !important;
-  width: 100% !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
-}
+  #appRoot, main, .app-shell, .dashboard-section, .workspace-page, .finance-page, section {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
 
-*, *::before, *::after {
-  max-width: 100%;
-  box-sizing: border-box;
+  *, *::before, *::after {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 900px) {
